@@ -54,6 +54,7 @@
 \newcommand{\GL}{\Lambda}
 \newcommand{\Gl}{\lambda}
 \newcommand{\GO}{\Omega}
+\newcommand{\I}{\mf{I}}
 
 %% macros for acronyms 
 \newcommand{\MIP}{\textsf{MIP}}
@@ -223,7 +224,10 @@ It is well-known that both cut admissibility \cite{moot:categorial:2012} and Mae
 \end{theorem}
 \begin{proof}
   Proof proceeds by structural induction on the second premise and the complexity of the cut formula.
-  The cases are straightforward when the second premise is $\ax$, a conclusion of a right rule, or a conclusion of a left rule but the cut formula is different from the principal formula.
+  % The cases are straightforward when the second premise is $\ax$, a conclusion of a right rule, or a conclusion of a left rule but the cut formula is different from the principal formula.
+  If the second premise $\ax$, then $\cut\ (f , \ax) = f$. 
+  If the second premise is a conclusion of a right rule, or a conclusion of a left rule but the cut formula is different from the principal formula, then we permute the corresponding rule down and continue recursively.
+  
   We perform a further induction on the first premise when the cut formula coincides with the principal formula of a left rule.
   If the principal formula is not the cut formula in the first premise, then we permute the rule down and continue recursively.
   If the principal formula is the cut formula, then we do the following:
@@ -421,7 +425,7 @@ Intuitively, these two derivations should be considered equal in \L\ since the o
 
 The set of derivations in \L\ are then quotiented by the equivalence relation $\circeq$ that is defined by a collection of equations of derivations.
 The collection contains the following data: ($i$) the relation is an equivalence relation; ($ii$) the congruence of each logical rule, e.g.\ $\Rr \ f \circeq \Rr \ f'$ if $f \circeq f'$ and $\Rl ~ (f , f_1) \circeq \Rl ~ (f' , f'_1)$ if $f \circeq f'$ and $f_1 ~ f'_1$; ($iii$) $\eta$-expansion of $\ax$, i.e.\ an instance of $\ax$ of a compound formula is equivalent to the expansion with left and right rules applying on instances of $\ax$ of simpler formulae, e.g.\ $\ax$ of $A \Rarr B$ expands to $\Rr \ (\Rl \ (\ax ,\ax))$ with $\ax$ of $A$ and $\ax$ of $B$ in Figure \ref{fig:conv}; ($iv$) left and right introduction rules can always be permuted, e.g.\ $\tr$ permutes with $\Rl$ in Figure \ref{fig:conv}; ($v$) consecutive application of left rules is associative, e.g.\ two $\Rl$ instances permute with each other in Figure \ref{fig:conv}, where $B$ and $B'$ are in \emph{different} sequents; ($vi$) consecutive application of left rules is commutative, e.g.\ two $\Rl$ instances permute with each other in Figure \ref{fig:conv}, where $B$ and $B'$ are in the \emph{same} sequent.
-\begin{figure}
+\begin{figure}[t]
 \normalsize
   % \[
   % \begin{array}{l}
@@ -665,7 +669,7 @@ The collection contains the following data: ($i$) the relation is an equivalence
       \infer[\Rl]{\GG , B , \GL , \GD_1 , A' \Rarr B', \GO \vd C}{
         \deduce{\GD_1 \vd A'}{f'}
         &
-        \deduce{\GG , B , \GL , \GD_1 , B', \GO \vd C}{f''}
+        \deduce{\GG , B , \GL , B', \GO \vd C}{f''}
       }
     }
   }
@@ -677,10 +681,10 @@ The collection contains the following data: ($i$) the relation is an equivalence
     \infer[\Rl]{\GG , \GD_0 , A \Rarr B , \GL , \GD_1 , A' \Rarr B', \GO \vd C}{
       \deduce{\GD_1 \vd A'}{f'}
       &
-      \infer[\Rl]{\GG , \GD_0 , B , \GL , B', \GO \vd C}{
+      \infer[\Rl]{\GG , \GD_0 , A \Rarr B , \GL , B', \GO \vd C}{
         \deduce{\GD_0 \vd A}{f}
         &
-        \deduce{\GG , B , \GL , \GD_1 , B', \GO \vd C}{f''}
+        \deduce{\GG , B , \GL , B', \GO \vd C}{f''}
       }
     }
   }
@@ -690,15 +694,106 @@ The collection contains the following data: ($i$) the relation is an equivalence
 \label{fig:conv}
 \end{figure}
 
-\begin{lemma}\label{lem:cut:cong}
-  For any derivations $f$, $f'$, $g$ and $g'$, if $f \circeq f'$ and $g \circeq g'$, then $\cut \ (f ,g) \circeq \cut \ (f' , g')$.
-\end{lemma}
-\begin{proof}
-  Proof proceeds by induction on all possible equations in \L.
-\end{proof}
+% \begin{lemma}\label{lem:cut:cong}
+%   For any derivations $f$, $f'$, $g$ and $g'$, if $f \circeq f'$ and $g \circeq g'$, then $\cut \ (f ,g) \circeq \cut \ (f' , g')$.
+% \end{lemma}
+% \begin{proof}
+%   Proof proceeds by induction on all possible equations in \L.
+% \end{proof}
 \begin{lemma}\label{lem:left:rules:cut}
   The following equations of derivations are admissible in \L:
-  \[
+  % \[
+  % \begin{array}{l}
+  %   \multicolumn{1}{c}{
+  %     \proofbox{
+  %     \infer[\cut]{\GG , A , \GL \vd C}{
+  %       \infer[\ax]{A \vd A}{}
+  %       &
+  %       \deduce{\GG , A , \GL \vd C}{g}
+  %     }
+  %   }
+  %   \quad\circeq\quad
+  %   \proofbox{
+  %     \deduce{\GG , A , \GL \vd C}{g}
+  %   }
+  %   }
+  %   \\[5pt]
+  %   \proofbox{
+  %     \infer[\cut]{\GG , \GD_0 , A \ot B , \GD_1 , \GL \vd C}{
+  %       \infer[\tl]{\GD_0 , A \ot B , \GD_1 \vd A'}{
+  %         \deduce{\GD_0 , A , B , \GD_1 \vd A'}{f}
+  %       }
+  %       &
+  %       \deduce{\GG , A' , \GL \vd C}{g}
+  %     }
+  %   }
+  %   \\
+  %   \hspace*{4cm}
+  %   \circeq\quad
+  %   \proofbox{
+  %     \infer[\tl]{\GG , \GD_0 , A \ot B , \GD_1 , \GL \vd C}{
+  %     \infer[\cut]{\GG , \GD_0 , A , B , \GD_1 , \GL \vd C}{
+  %       \deduce{\GD_0 , A , B , \GD_1 \vd A'}{f}
+  %       &
+  %       \deduce{\GG , A' , \GL \vd C}{g}
+  %     }
+  %   }
+  %   }
+  %   \\[5pt]
+  %   \proofbox{
+  %     \infer[\cut]{\GG_0 , \GG_1 , \GD , A \Rarr B , \GL_0 , \GL_1 \vd C}{
+  %       \infer[\Rl]{\GG_1 , \GD , A \Rarr B , \GL_0 \vd A'}{
+  %         \deduce{\GD \vd A}{f'}
+  %         &
+  %         \deduce{\GG_1 , B , \GL_0 \vd C}{f''}
+  %       }
+  %       &
+  %       \deduce{\GG_0 , A', \GL_1 \vd C}{g}
+  %     }
+  %   }
+  %   \\
+  %   \hspace*{4cm}
+  %   \circeq\quad
+  %   \proofbox{
+  %     \infer[\Rl]{\GG_0 , \GG_1 , \GD , A \Rarr B , \GL_0 , \GL_1 \vd C}{
+  %       \deduce{\GD \vd A}{f'}
+  %       &
+  %       \infer[\cut]{\GG_0 , \GG_1 , B , \GL_0 , \GL_1 \vd C}{
+  %         \deduce{\GG_1 , B , \GL_0 \vd C}{f''}
+  %         &
+  %         \deduce{\GG_0 , A', \GL_1 \vd C}{g}
+  %       }
+  %     }
+  %   }
+  %   \\[5pt]
+  %   \proofbox{
+  %     \infer[\cut]{\GG_0 , \GG_1 , B \Larr A , \GD , \GL_0 , \GL_1 \vd C}{
+  %       \infer[\Ll]{\GG_1 , B \Larr A , \GD , \GL_0 \vd A'}{
+  %         \deduce{\GD \vd A}{f'}
+  %         &
+  %         \deduce{\GG_1 , B , \GL_0 \vd C}{f''}
+  %       }
+  %       &
+  %       \deduce{\GG_0 , A', \GL_1 \vd C}{g}
+  %     }
+  %   }
+  %   \\
+  %   \hspace*{4cm}
+  %   \circeq\quad
+  %   \proofbox{
+  %     \infer[\Ll]{\GG_0 , \GG_1 , B \Larr A , \GD , \GL_0 , \GL_1 \vd C}{
+  %       \deduce{\GD \vd A}{f'}
+  %       &
+  %       \infer[\cut]{\GG_0 , \GG_1 , B , \GL_0 , \GL_1 \vd C}{
+  %         \deduce{\GG_1 , B , \GL_0 \vd C}{f''}
+  %         &
+  %         \deduce{\GG_0 , D, \GL_1 \vd C}{g}
+  %       }
+  %     }
+  %   }
+  % \end{array}
+  % \]
+    \[
   \begin{array}{l}
     \multicolumn{1}{c}{
       \proofbox{
@@ -761,7 +856,10 @@ The collection contains the following data: ($i$) the relation is an equivalence
         }
       }
     }
-    \\[5pt]
+  \end{array}
+  \]
+  \[
+  \begin{array}{l}
     \proofbox{
       \infer[\cut]{\GG_0 , \GG_1 , B \Larr A , \GD , \GL_0 , \GL_1 \vd C}{
         \infer[\Ll]{\GG_1 , B \Larr A , \GD , \GL_0 \vd A'}{
@@ -805,7 +903,7 @@ In this section, we are interested in the interaction between the interpolation 
 A similar question for intuitionistic logic with disjunction has been considered by \cub in the 90s \cite{vcubric1993results,Cubric1994}. Recently Saurin and his colleagues studied proof-relevant interpolation for (extensions) of classical linear logic \cite{Saurin2024} and generalize to non-cut-free sequent calculi and proof net \cite{Saurin2025}.
 Veltri and Wan also studied proof-relevant interpolation for a skew logic \cite{VW2025} and nonassociative Lambek calculus \cite{VW2025Tableaux}.
 
-\begin{theorem}
+\begin{theorem}[Proof-relevant interpolation]
   For derivations $g : \GG , D , \GL \vd C$ and $h : \GD \vd D$ obtained by interpolating the derivation $f : \GG , \GD , \GL \vd C$, $\cut \ (h , g) \circeq f$.
 \end{theorem}
 \begin{proof}
@@ -834,7 +932,7 @@ Veltri and Wan also studied proof-relevant interpolation for a skew logic \cite{
       \\
       = \cut \ (h' , \cut \ (\Rl \ (g' , h'') , g'')) & \text{(by definition of $\cut$)}
       \\
-      \circeq \cut \ (h' , \Rl \ (g' , \cut \ (h'' , g''))) & \text{(by Lemma)}
+      \circeq \cut \ (h' , \Rl \ (g' , \cut \ (h'' , g''))) & \text{(by Lemma \ref{lem:left:rules:cut})}
       \\
       = \Rl \ (\cut \ (h' , g') , \cut \ (h'' , g'')) & \text{(by definition of $\cut$)}
       \\
@@ -848,11 +946,11 @@ Veltri and Wan also studied proof-relevant interpolation for a skew logic \cite{
 % Veltri and Wan showed that Maehara interpolation procedure is well-defined wrt. equivalence relation on derivations in nonassociative Lambek calculus \cite{VW2025Tableaux}.
 % In particular, consider two interpolant triples $(D , g , h)$ and $(D' , g' , h')$ which are obtained by Maehara interpolation on two derivations $f$ and $f'$, respectively. If $f \circeq f'$, then $D = D'$, $g \circeq g'$ and $h \circeq h'$.
 In nonassociative Lambek calculus (\NL) two interpolant triples $(D , g , h)$ and $(D' , g' , h')$ are considered to equivalent if $D = D'$, $g \circeq g'$ and $h \circeq h'$. 
-Veltri and Wan showed that Maehara interpolation procedure is well-defined wrt. equivalence relation on derivations in \NL \cite{VW2025Tableaux}, i.e. if two derivations a $\circeq$-related, then their interpolation triples are equivalent.
+Veltri and Wan showed that Maehara interpolation procedure is well-defined wrt. equivalence relation on derivations in \NL\ \cite{VW2025Tableaux}, i.e. if two derivations a $\circeq$-related, then their interpolant triples are equivalent.
 
 However, this is not the case for \L. Consider the permutative conversion between $\tr$ and $\Rl$ (the second item in Figure \ref{fig:conv}).
 If the interpolant context splits $\GD$ and $\GO$, i.e. $\GD = \GD_0 , \GD_1$, $\GO = \GO_0 , \GO_1$ and the interpolant context is $\GD_1 , A \Rarr B , \GL , \GO_0$, i.e.\
-\[
+\begin{equation}\label{eq:ct:example}
   \begin{array}{l}
     \proofbox{\infer[\tr]{\GG , \GD_0 , \tred{\GD_1 , A \Rarr B , \GL , \GO_0} , \GO_1 \vd A' \ot B'}{
     \infer[\Rl]{\GG , \GD_0 , \tred{\GD_1 , A \Rarr B , \GL} \vd A'}{
@@ -865,7 +963,7 @@ If the interpolant context splits $\GD$ and $\GO$, i.e. $\GD = \GD_0 , \GD_1$, $
   }
   }
   \\
-  \hspace*{4cm}\circeq\qquad
+  \hspace*{2cm}\circeq\qquad
   \proofbox{\infer[\Rl]{\GG , \GD_0 , \tred{\GD_1 , A \Rarr B , \GL , \GO_0} , \GO_1 \vd A' \ot B'}{
     \deduce{\GD_0 , \tred{\GD_1} \vd \tred{A}}{f}
     &
@@ -877,11 +975,78 @@ If the interpolant context splits $\GD$ and $\GO$, i.e. $\GD = \GD_0 , \GD_1$, $
   }
   }
   \end{array}
-\]
-By running the interpolation on both derivation, we will obtain two interpolant formulae, $(D \Rarr E) \ot F$ for the top derivation and $D \Rarr (E \ot F)$ for the bottom one, given that $D$, $E$ and $F$ are interpolant formulae from $f$, $f'$, and $f''$, respectively.
-The two formulae are not logically equivalent and in fact there is only way of provability (notice that the derivation is not unique):
+\end{equation}
+By running the interpolation on derivations in (\ref{eq:ct:example}), we first obtain the following interpolant triples for $f$, $f'$ and $f''$, respectively:
 \[
-  \infer[\Rr]{(D \Rarr E) \ot F \vd D \Rarr (E \ot F)}{
+\begin{array}{l}
+(D , g : D , \GD_1 \vd A , h : \GD_0 \vd D)
+\\[3pt]
+ (E , g' : \GG , E \vd A' , h' : B , \GL \vd E)
+\\[3pt]
+ (F , g'' : F , \GO_1 \vd B' , h'' : \GO_0 \vd F)
+%  (D ,& g : D , \GD_1 \vd A ,& h : \GD_0 \vd D)
+% \\[3pt]
+%  (E ,& g' : \GG , E \vd A' ,& h' : B , \GL \vd E)
+% \\[3pt]
+%  (F ,& g'' : F , \GO_1 \vd B' ,& h'' : \GO_0 \vd F)
+% & f' 
+% & f''
+% \\
+% \hline
+% D & E & F
+% \\
+% \hline
+% g : D , \GD_1 \vd A & g' : \GG , E \vd A' & g'' : F , \GO_1 \vd B'
+% \\
+% \hline
+% h : \GD_0 \vd D & h' : B , \GL \vd E & h'' : \GO_0 \vd F
+\end{array}
+\]
+Then the interpolant triples of the derivations in (\ref{eq:ct:example}) are:
+\[
+\begin{array}{lr}
+\arraycolsep=20pt
+  % \begin{array}{c}
+  %   (D \Rarr E) \ot F
+  %   \\
+  %   \tl \ (\tr \ (\Rl \ (h , g') , g'')) : \GG , \GD_0 , (D \Rarr E) \ot F , \GO_1 \vd A' \ot B'
+  %   \\
+  %   \tr\ (\Rr \ (\Rl \ (g , h')), h'') : \GD_1 , A \Rarr B , \GL , \GO_0 \vd (D \Rarr E) \ot F
+  % \end{array}
+  % \\[0.5cm]
+  % \begin{array}{c}
+  %   D \Rarr (E \ot F)
+  %   \\
+  %   \Rl \ (h , \tl \ (\tr \ (g' , g''))) : \GG , \GD_0 , D \Rarr (E \ot F) , \GO_1 \vd A' \ot B'
+  %   \\
+  %   \Rr \ (\Rl \ (g , \tr \ (h' , h''))) : \GD_1 , A \Rarr B , \GL , \GO_0 \vd D \Rarr (E \ot F)
+  % \end{array}
+  \begin{array}{c}
+    \text{(for the top derivation)}
+    \\
+    (D \Rarr E) \ot F
+    \\
+    \tl \ (\tr \ (\Rl \ (h , g') , g'')) 
+    \\
+    \tr\ (\Rr \ (\Rl \ (g , h')), h'')
+  \end{array}
+  &
+  \begin{array}{c}
+    \text{(for the bottom derivation)}
+    \\
+    D \Rarr (E \ot F)
+    \\
+    \Rl \ (h , \tl \ (\tr \ (g' , g'')))
+    \\
+    \Rr \ (\Rl \ (g , \tr \ (h' , h'')))
+  \end{array}
+\end{array}
+\]
+% two interpolant formulae, $(D \Rarr E) \ot F$ for the top derivation and $D \Rarr (E \ot F)$ for the bottom one, given that $D$, $E$ and $F$ are interpolant formulae from $f$, $f'$, and $f''$, respectively.
+The two interpolant formulae are not logically equivalent and in fact there is only way of derivability (notice that the derivation is not unique):
+\begin{equation}\label{eq:t:example}
+  \proofbox{
+    \infer[\Rr]{(D \Rarr E) \ot F \vd D \Rarr (E \ot F)}{
     \infer[\tl]{D , (D \Rarr E) \ot F \vd E \ot F}{
       \infer[\tr]{D , D \Rarr E , F \vd E \ot F}{
         \infer[\Rl]{D , D \Rarr E \vd E}{
@@ -894,24 +1059,225 @@ The two formulae are not logically equivalent and in fact there is only way of p
       }
     }
   }
-\]
-This example triggers a relaxed notion of equivalence on interpolant triples.
+  }
+\end{equation}
+This example leads to a relaxed notion of equivalence on interpolant triples.
 \begin{definition}
   Two interpolant triples $(D , g , h)$ and $(D' , g' , h')$ are equivalent, denoted as $(D , g , h) \sim (D' , g' , h')$, if
   \begin{itemize}
-    \item there exist a derivation $t : D \vd D'$, $g \circeq \cut \ (t , g')$ and $\cut \ (h , t) \circeq h'$ or
-    \item there exist a derivation $t : D' \vd D$, $g' \circeq \cut \ (t , g)$ and $\cut \ (h' , t) \circeq h$.
+    \item there exist a derivation $t : D \vd D'$, such that $g \circeq \cut \ (t , g')$ and $\cut \ (h , t) \circeq h'$ or
+    \item there exist a derivation $t : D' \vd D$, such that $g' \circeq \cut \ (t , g)$ and $\cut \ (h' , t) \circeq h$.
   \end{itemize}
 \end{definition}
-Intuitively, two interpolant triples are equivalent if there exists a proof $t$ between the two interpolant formulae and we obtain equivalent derivations when we substitute one interpolant formula for the other appropriately.
+Intuitively, two interpolant triples are considered to be equivalent if there exists a proof $t$ between the two interpolant formulae and we obtain equivalent derivations when we substitute one interpolant formula for the other appropriately.
 
-\begin{theorem}
+Let us check whether the interpolant triples in the example above are equivalent.
+The derivation (\ref{eq:t:example}) is a witness of the sequent $(D \Rarr E) \ot F \vd D \Rarr (E \ot F)$.
+We then check the equivalence of derivations.
+The first case is:
+\[
+  \begin{array}{lr}
+    \cut \ (\Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax) , \ax))), \Rl \ (h , \tl \ (\tr \ (g' , g'')))) &
+    \\
+    = \cut \ (h , \cut \ (\tl \ (\tr \ (\Rl \ (\ax , \ax) , \ax)) , \tl \ (\tr \ (g' , g'')))) &
+    \\ & \hspace*{-2cm}\text{(by definition of $\cut$)}
+    \\
+    = \cut \ (h , \tl \ (\cut \ (\tr \ (\Rl \ (\ax , \ax) , \ax) , \tl \ (\tr \ (g' , g''))))) &
+    \\ & \hspace*{-2cm}\text{(by definition of $\cut$)}
+    \\
+    = \cut \ (h , \tl \ (\cut \ (\Rl \ (\ax , \ax), \cut \ (\ax , \tr \ (g' , g''))))) &
+    \\ & \hspace*{-2cm}\text{(by definition of $\cut$)}
+    \\
+    \circeq \cut \ (h , \tl \ (\cut \ (\Rl \ (\ax , \ax), \tr \ (g' , g'')))) &
+     \hspace*{-2cm}\text{(by Lemma \ref{lem:left:rules:cut})}
+    \\
+    = \cut \ (h , \tl \ (\tr \ (\cut \ (\Rl \ (\ax , \ax) , g') , g''))) &
+     \hspace*{-2cm}\text{(by definition of $\cut$)}
+    \\
+    \circeq \cut \ (h , \tl \ (\tr \ (\Rl \ (\ax , \cut \ (\ax , g')) , g''))) &
+     \hspace*{-2cm}\text{(by Lemma \ref{lem:left:rules:cut})}
+    \\
+    \circeq \cut \ (h , \tl \ (\tr \ (\Rl \ (\ax , g') , g''))) &
+     \hspace*{-2cm}\text{(by Lemma \ref{lem:left:rules:cut})}
+    \\
+    = \tl \ (\tr \ (\Rl \ (\cut \ (h , \ax) , g'), g'')) &
+     \hspace*{-2cm}\text{(by definition of $\cut$)}
+    \\
+    = \tl \ (\tr \ (\Rl \ (h , g'), g'')) &
+     \hspace*{-2cm}\text{(by definition of $\cut$)}
+  \end{array}
+\]
+The second case is:
+\[
+  \begin{array}{lr}
+    \cut \ (\tr \ (\Rr \ (\Rl \ (g , h')) , h'') , \Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax) , \ax)))) &
+    % \\ & \hspace*{-2cm}\text{(by definition of $\cut$)}
+    \\
+    = \Rr \ (\cut \ (\tr \ (\Rr \ (\Rl \ (g , h')) , h'')  , \tl \ (\tr \ (\Rl \ (\ax , \ax) , \ax)))) &
+    \\ & \hspace*{-2cm}\text{(by definition of $\cut$)}
+    \\
+    = \Rr \ (\cut \ (\Rr \ (\Rl \ (g , h')) , \cut \ (h'' , \tr \ (\Rl \ (\ax , \ax), \ax)))) &
+    \\ & \hspace*{-2cm}\text{(by definition of $\cut$)}
+    \\
+    = \Rr \ (\cut \ (\Rr \ (\Rl \ (g , h')) , \tr \ (\cut \ (\Rl \ (\ax , \ax) , \cut \ (h'' , \ax))))) &
+    \\ & \hspace*{-2cm}\text{(by definition of $\cut$)}
+    \\
+    = \Rr \ (\cut \ (\Rr \ (\Rl \ (g , h')) , \tr \ (\cut \ (\Rl \ (\ax , \ax) , h'')))) &
+    \\ & \hspace*{-2cm}\text{(by definition of $\cut$)}
+    \\
+    = \Rr \ (\tr \ (\cut \ (\Rr \ (\Rl \ (g , h')) , \Rl \ (\ax , \ax)), h'')) &
+    \\ & \hspace*{-2cm}\text{(by definition of $\cut$)}
+    \\
+    = \Rr \ (\tr \ (\cut \ (\ax , \cut \ (\Rl \ (g , h') , \ax)) , h'')) &
+    \hspace*{-2cm}\text{(by definition of $\cut$)}
+    \\
+    =\Rr \ (\tr \ (\Rl \ (g , h')) , h'') &
+    \hspace*{-4cm}\text{(by definition of $\cut$ and Lemma \ref{lem:left:rules:cut})}
+    \\
+    \circeq \Rr \ (\Rl \ (g , \tr \ (h' , h''))) & \hspace*{-2cm}\text{(by definition of $\circeq$)}
+  \end{array}
+\]
+\begin{theorem}\label{thm:welldef:L}
   For any two derivations $f , f' : \GG , \GD , \GL \vd C$ and their interpolant triples $(D , g , h)$ and $(D' , g' , h')$, if $f \circeq f'$, then $(D , g , h) \sim (D' , g' , h')$.
 \end{theorem}
 \begin{proof}
   Proof proceeds by examining all equations in the equivalence relation $\circeq$.
+  We show the case of the equation that two instances of $\Rl$ are commutative (the last item in Figure \ref{fig:conv}) while other cases are similar.
+  The cases are divided into three groups:
+  \begin{enumerate}
+    \item The interpolant context is ($i$) contained in $\GG$, $\GD_0$, $\GL$, $\GD_1$, or $\GO$, ($ii$) it contains $\GD_0 , A\Rarr B$ but not $\GD_1 , A' \Rarr B'$ and the other way around or ($iii$) it contains $\GD_0 , A \Rarr B , \GL , \GD_1 , A' \Rarr B'$. 
+    % \begin{itemize}
+    %   \item contained in $\GG$, $\GD_0$, $\GL$, $\GD_1$, or $\GO$ or
+    %   \item it contains $\GD_0 , A\Rarr B$ but not $\GD_1 , A' \Rarr B'$ and the other way around or
+    %   \item it contains $\GD_0 , A \Rarr B , \GL , \GD_1 , A' \Rarr B'$. 
+    % \end{itemize}
+    The interpolant triples of the two derivations in the equation are dictated by one of the derivations in $f$, $f'$ and $f''$. The triples will have the same interpolant formulae and the equivalence of derivations are witnessed by the equations in $\circeq$.
+    For example, if the interpolant context is contained in $\GD_0$, then the interpolant triples are $(D , \Rl \ (g,\Rl\ (f' , f'')) , h)$ and $(D , \Rl \ (f' , \Rl \ (g , f'')) , h)$ where $(D , g ,h)$ is the interpolant triple of $f$. The interpolant formulae and derivation $h$ are the same and $\Rl \ (g,\Rl\ (f' , f'')) \circeq \Rl \ (f' , \Rl \ (g , f''))$ is an instance of the commutativity of $\Rl$. Therefore, the two interpolant triples are equivalent. 
+    \item The interpolant context splits ($i$) $\GG$ and $\GD_0$, ($ii$) $\GG$ and $\GD_1$, ($iii$) $\GD_0$ and $\GL$, ($iv$) $\GD_0$ and $\GO$, ($v$) $\GL$ and $\GD_1$, or ($vi$) $\GD_1$ and $\GO$.
+    % \begin{itemize}
+    %   \item $\GG$ and $\GD_0$, %(tensor of $f$ and $f''$), 
+    %   \item $\GG$ and $\GD_1$, %($\Rarr$ of $f'$ and $f''$),
+    %   \item $\GD_0$ and $\GO$, %($\Rarr$ of $f$ and $f''$),
+    %   \item $\GL$ and $\GD_1$, or %(tensor of $f'$ and $f''$) or
+    %   \item $\GD_1$ and $\GO$. %($\Rarr$ of $f'$ and $f''$)
+    % \end{itemize}
+    In the these cases, the interpolant triples of the two derivations in the equation is dictated by two of the derivations in $f$, $f'$ and $f''$.
+    Again, the triples will have the same interpolant formulae and the equivalence of derivations are witnessed by the equations in $\circeq$.
+    For example, if the interpolant context splits $\GG$ and $\GD_1$, then the interpolant triples of the derivations in the equation are dictated only by $f'$ and $f''$. Assume that the interpolant triples of $f'$ and $f''$ are $(E , g' , h')$ and $(F , g'' , h'')$, respectively.
+    The interpolant triples of derivations in the equation are:
+    \[
+    \begin{array}{l}
+      (F \ot E , \tl \ (\Rl \ (g' , g'')) , \Rl \ (f , \tr\ (h' , h''))) 
+      \\
+      % \text{and}
+      % \\
+      (F \ot E , \tl \ (\Rl \ (g' , g'')) , \tr \ (h' , \Rl \ (f , h'')))
+    \end{array}
+    \] 
+    % The interpolant formulae and the derivation $\tl \ (\Rl \ (g' , g''))$ are the same and 
+    The equation $\Rl \ (f , \tr\ (h' , h'')) \circeq \tr \ (h' , \Rl \ (f , h''))$ is an instance of permutation between $\Rl$ and the second premise of $\tr$. Therefore, the two interpolant triples are equivalent.
+    % splits $\GG$ and $\GD_0$ (tensor of $f$ and $f''$), splits $\GD_0$ and $\GL$ ($\Rarr$ of $f$ and $f''$), splits $\GD_0$ and $\GO$, ($\Rarr$ of $f$ and $f''$), splits $\GL$ and $\GD_1$ (tensor of $f'$ and $f''$), splits $\GD_1$ and $\GO$ ($\Rarr$ of $f'$ and $f''$)
+    \item The last one is the interpolant context splits $\GD_0$ and $\GD_1$, i.e. the interpolant context is $\GD''_0 , A \Rarr B , \GL , \GD'_1$ where $\GD_0 = \GD'_0 , \GD''_0$, $\GD_1 = \GD'_1 , \GD''_1$. Similar to the case for (\ref{eq:ct:example}), we first run the interpolation procedure to the left and right derivations in the equation to obtain the following data:
+    \[
+      \begin{array}{rl}
+      \begin{array}{r}
+        \text{(interpolant triples}
+        \\
+        \text{of $f$, $f'$, and $f''$)}
+      \end{array}
+      &
+      \begin{array}{l}
+        (D , g : D , \GD''_0 \vd A , h : \GD'_0 \vd D)
+      \\[3pt]
+      (E , g' : E , \GD''_1 \vd A' , h' : \GD'_1 \vd E)
+      \\[3pt]
+      (F , g'' : \GG , F , B' , \GO \vd C , h'' : B , \GL \vd F)
+      \end{array}
+      % & f' 
+      % & f''
+      % \\
+      % \hline
+      % D & E & F
+      % \\
+      % \hline
+      % g : D , \GD_1 \vd A & g' : \GG , E \vd A' & g'' : F , \GO_1 \vd B'
+      % \\
+      % \hline
+      % h : \GD_0 \vd D & h' : B , \GL \vd E & h'' : \GO_0 \vd F
+      \end{array}
+    \]
+    \[
+      \begin{array}{lr}
+      \arraycolsep=20pt
+        \begin{array}{c}
+          \text{(for the top derivation)}
+          \\
+          D \Rarr (F \ot E)
+          \\
+          \Rl (h , \tl \ (\Rl \ (g' , g'')))
+          \\
+          \Rr \ (\Rl \ (g , (\tr \ (h'' , h'))))
+        \end{array}
+        &
+        \begin{array}{c}
+          \text{(for the bottom derivation)}
+          \\
+          (D \Rarr F) \ot E
+          \\
+          \tl \ (\Rl \ (g' , \Rl (h , g'')))
+          \\
+          \tr \ (\Rr \ (\Rl \ (g , h'')), h')
+        \end{array}
+      \end{array}
+    \]
+    The two interpolant formulae are not logically equivalent but there exists a derivation $\Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax))) : (D \Rarr F) \ot E \vd D \Rarr (F \ot E)$ such that the following two equation hold:
+    % We then check the equivalence of derivations. The first case is:
+    % \[
+    %   \begin{array}{lr}
+    %     \cut \ (\Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax))) , \Rl (h , \tl \ (\Rl \ (g' , g'')))) &
+    %     \\
+    %     hi
+    %   \end{array}
+    % \]
+    \[
+    \begin{array}{l}
+      \tl \ (\Rl \ (g' , \Rl (h , g''))) 
+      \\
+      \hspace*{1.4cm} \circeq \cut \ (\Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax))) , \Rl (h , \tl \ (\Rl \ (g' , g''))))
+      \\[5pt]
+      \cut\ (\tr \ (\Rr \ (\Rl \ (g , h'')), h') , \Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax)))) 
+      \\
+      \hspace*{1.4cm} \circeq  \Rr \ (\Rl \ (g , (\tr \ (h'' , h'))))
+    \end{array}
+    \]
+    The chains of reasoning are similar to the ones in the proof of equivalence of interpolant triples of (\ref{eq:ct:example}).
+  \end{enumerate} 
 \end{proof}
-\section{Proof-relevant Maehara Multi Interpolation of Product-free Lambek Calculus}
+\section{Formalization in Agda}
+As the readers might have noticed, the proof of Theorem \ref{thm:welldef:L} requires enormous amount of case distinction. It makes the proof error-prone and demanding to human. Therefore we formalize the $\Rarr,\ot$ fragment of \L\ in the Agda proof assistant as an experiment to test our calculation on pen and paper.
+
+The formalization includes the syntax of the $\Rarr,\ot$ fragment of \L, the equivalence relation of derivations and the proofs of cut admissibility, Maehara interpolation and well-definedness of interpolation.
+
+% Therefore we formalize the $\Rarr,\ot$ fragment of \L\ and verify its cut admissibility, Maehara interpolation, proof-relevant interpolation and well-definedness of interpolation.
+
+\underline{N. B.} In the formalization, to work with the sequents with lists of formulae as their antecedents, we include the multiplicative unit $\I$ and its left and right introduction rules. In this setting, we can smoothly prove Maehara interpolation following exactly the same strategy in the proof of Theorem \ref{thm:MIP} without dealing with with non-empty list in Agda.
+
+\[
+\begin{array}{rl}
+  \multicolumn{2}{l}{\record \:\:  \MIP ~ (\GG ~ \GD ~ \GL : \mf{Cxt}) ~ (C : \Fma) : \Set \:\: \where} \\
+  \multicolumn{2}{l}{\quad \mf{constructor} ~ \mf{intrp}} \\
+  \multicolumn{2}{l}{\quad \field} \\
+  \;\; \quad D &: \Fma \\[2pt]
+  \;\; \quad g &: \GG , D , \GL \vd C \\[2pt]
+  \;\; \quad h &: \GD \vd D 
+\end{array}
+\]
+Elements of type $\MIP ~ \GG ~ \GD ~ \GL ~ C$ are triples consisting of a formula $D$ and two derivations $g$ and $h$.
+
+The equivalence of interpolant triples is defined in two steps.
+
+
+\section{Proof-relevant Maehara Multi-Interpolation of Product-free Lambek Calculus}
 The formulae of \LPfree\ are obtained by excluding the formulae of the shape $A \ot B$ from the set of formulae of \L.
 
 \begin{theorem}
