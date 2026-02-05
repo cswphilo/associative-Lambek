@@ -67,9 +67,6 @@ postulate
     → (g : Ω ⊢ C) 
     → (eq : Ω ≡ Γ ++ D ∷ Λ)
     → cut Γ (⇒L f f₁) g eq ≗ ⇒L {Γ ++ Δ₀} f (cut Γ f₁ g eq)
-  cutaxA-right : ∀ {Γ A}
-    → (f : Γ ⊢ A)
-    → cut [] f ax refl ≗ f
   cutaxA-left : (Γ : Cxt) → ∀ {Λ Ω A C}
     → (f : Ω ⊢ C)
     → (eq : Ω ≡ Γ ++ A ∷ Λ)
@@ -96,6 +93,10 @@ postulate
 -- cutaxA-right {A = A ⊗ A₁} f = {!   !}
 -- cutaxA-right {A = A ⇒ A₁} f = {!   !}
 
+cutaxA-right : ∀ {Γ A}
+    → (f : Γ ⊢ A)
+    → cut [] f ax refl ≗ f
+cutaxA-right f = refl
 cut⊗L-cases++₁ : (Γ₀ Γ₁ Λ : Cxt) → ∀ {Δ A B C D}
   → {f : Δ ⊢ D} {g : Γ₀ ++ A ∷ B ∷ Γ₁ ++ D ∷ Λ ⊢ C}
   → ⊗L (cut (Γ₀ ++ A ∷ B ∷ Γ₁) f g refl) ≡ cut (Γ₀ ++ A ⊗ B ∷ Γ₁) f (⊗L g) refl

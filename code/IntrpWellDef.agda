@@ -19,14 +19,14 @@ Maehara interpolation procedure is well-defined wrt. ≗
 -}
 
 
-module _ (Γ Δ Λ : Cxt) (C : Fma) (m m' : MIP Γ Δ Λ C) where
-  open MIP m 
-  open MIP m' renaming (D to D')
+-- module _ (Γ Δ Λ : Cxt) (C : Fma) (n n' : MIP Γ Δ Λ C) where
+--   open MIP n 
+--   open MIP n'
           
-  record MIP≗ : Set where
-    constructor intrp≗
-    field
-      eq : m ~ m'
+record MIP≗ (Γ Δ Λ : Cxt) (C : Fma) (n n' : MIP Γ Δ Λ C) : Set where
+  constructor intrp≗
+  field
+    eq : n ~ n'
 
 mip≗ : ∀ Γ Δ Λ {Ω} {C}
   → {f f' : Ω ⊢ C}
