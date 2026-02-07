@@ -772,7 +772,7 @@ In this section, we discuss proof-relevant interpolation properties of \L, inclu
 % The proof of \ref{thm:cut:intrp:L} is standard as the proofs for other substructural logics, such as classical (intuitionistic) logic \cite{Saurin2024} and nonassociative Lambek calculus \cite{VW2025Tableaux}.
 % However, the well-definedness of Mae
 
-\begin{theorem}\label{thm:cut:intrp:L}[Proof-relevant interpolation for \L]
+\begin{theorem}[Proof-relevant interpolation for \L]\label{thm:cut:intrp:L}
 ~
 \\
   For derivations $g : \GG , D , \GL \vd C$ and $h : \GD \vd D$ obtained by interpolating the derivation $f : \GG , \GD , \GL \vd C$, $\cut \ (h , g) \circeq f$.
@@ -1008,7 +1008,7 @@ The second case is:
     \circeq \Rr \ (\Rl \ (g , \tr \ (h' , h''))) & \hspace*{-2cm}\text{(by definition of $\circeq$)}
   \end{array}
 \]
-\begin{theorem}\label{thm:welldef:L}
+\begin{theorem}[Well-definedness of \MIP]\label{thm:welldef:L}
   For any two derivations $f , f' : \GG , \GD , \GL \vd C$ and their interpolant triples $(D , g , h)$ and $(D' , g' , h')$, if $f \circeq f'$, then $(D , g , h) \sim (D' , g' , h')$.
 \end{theorem}
 \begin{proof}
@@ -1346,7 +1346,7 @@ Proofs of the equations both proceed by structural induction on derivations, fol
   The desired partition of $\GD'_1 , A \Rarr B , \GL'_1$ is $\langle (\GD'_1, A \Rarr B , \GL''_{01}), \GL'_{02}, \dots \GL'_{0m}\rangle$ and the list of interpolant formulae is $[[D_i] \Rs E_1 , E_2 , \dots , E_j]$. The desired derivations are $\Rsl \ ([h'_i] , g'')$ and $[\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m]$.
   The variable condition is easy to check.
 \end{proof}
-\begin{theorem}[Proof-relevant interpolation for \LPfree]
+\begin{theorem}[Proof-relevant multi-interpolation for \LPfree]
 ~
 \\
   For derivations $g : \GG , D_1, \dots, D_n , \GL \vd C$ and $h_i : \GD \vd D$ for $i \in [1 ,\dots, n]$ obtained by interpolating the derivation $f : \GG , \GD , \GL \vd C$, $\cuts \ ([h_i] , g) \circeq f$.
@@ -1399,7 +1399,7 @@ The data of \MmIP\ consist of a quadruple and their equivalence is defined by ad
     \item or the other way around.
   \end{itemize}
 \end{definition}
-\begin{theorem}\label{thm:welldef:LPfree}
+\begin{theorem}[Well-definedness of \MmIP]\label{thm:welldef:LPfree}
   For any two derivations, $f,f' : \GG , \GD , \GL \vd C$ and their interpolant quadruples $(\langle \GD_i\rangle , [D_i] , g , [h_i])$, $i \in [1,\dots,n]$ and $(\langle \GD'_j\rangle , [D'_j] , g' , [h'_j])$, $j \in [1,\dots,m]$, if $f \circeq f'$, then $(\langle \GD_i\rangle , [D_i] , g , [h_i]) \sim (\langle \GD'_j\rangle , [D'_j] , g' , [h'_j])$.
 \end{theorem}
 \begin{proof}
@@ -1705,15 +1705,15 @@ Therefore the two interpolant quadruples are equivalent. Other cases are similar
 In this work, we have provided a detailed analysis of proof-relevant interpolation for the Lambek calculus (\L) and its product-free variant (\LPfree). 
 We established their Maehara interpolation procedures (\MIP and \MmIP) are right inverses to the admissible cut rules, respectively and demonstrated that both \MIP\ and \MmIP\ are well-defined with respect to $\circeq$, the equivalence of derivations.
 
-A crucial finding is the discrepancy between non-associative (\NL) and associative Lambek calculi.
+A crucial finding is the discrepancy between non-associative (\NL) and associative Lambek calculi (\L\ and \LPfree).
 In \NL, the equivalence of interpolant triples is strict, i.e.\ The interpolant formulae are exactly the same and the derivations are pair-wisely equivalent.
-We resolved this by introducing a relaxed ``zig-zag'' equivalence relation on interpolant triples, defined by the existence of a derivation between interpolant formulae that equates derivations after cut.
+We resolved this by introducing a relaxed zig-zag equivalence relation on interpolant triples, defined by the existence of a derivation between interpolant formulae that equates derivations after cut.
 
-The definitions and results we had in this work, including \MIP\ (\MmIP) being a right inverse of the admissible cut, definition of equivalence of interpolant triples, and \MIP\ (\MmIP) being well-defined wrt.\ $\circeq$ can all be generalized to Lambek calculus with multiplicative unit and additive connectives.
+The definitions and results we had in this work, including \MIP\ (\MmIP) being a right inverse of the admissible cut, definition of equivalence of interpolant triples, and \MIP\ (\MmIP) being well-defined wrt.\ $\circeq$ can all be generalized to Lambek calculus with multiplicative unit and additive multiplication, disjunction and their units.
 
-For the future, it will be interesting to see the computational behavior of equivalent interpolant triples. This would require us to work in a term assignment calculus either in the sense of term assignment for sequent calculus \cite{Herbelin1995,Kanazawa2006} or Curien-Herbelin's $\lambda\mu\tilde{\mu} $ calculus \cite{Curien2000,Saurin2024}.
-We would also like to study the well-definedness of interpolant triples, which can also be understood as an equational theory on the set of interpolant triples in a more general setting, e.g.\ sequent calculi with cuts \cite{Saurin2025} and complete calculi in \cite{Hetzl2024}.
-It will also be interesting to have a general theory on well-definedness of families of calculi from a universal proof-theoretic perspective \cite{tabatabai2018,Tabatabai2025}.
+For the future, it will be interesting to see the computational behavior of equivalent interpolant triples. This would lead us to work in a term assignment calculus either in the sense of term assignment for sequent calculus \cite{Herbelin1995,Kanazawa2006} or Curien-Herbelin's $\lambda\mu\tilde{\mu} $ calculus \cite{Curien2000,Saurin2024}.
+We would also like to study the well-definedness of interpolant triples in more permissive systems, e.g.\ sequent calculi with cuts \cite{Saurin2025} and complete calculi in \cite{Hetzl2024}.
+It will also be interesting to have a general theory on well-definedness of families of calculi from the universal proof-theoretic perspective \cite{tabatabai2018,Tabatabai2025}.
 % For the future, it will be interesting to see what should be the correct notion of equivalence on interpolant triples for the complete calculi in the sense of Hetzl and Jalali \cite{Hetzl2024}. 
 
 % will the interpolant triples in complete calculi by \cite{Hetzl2024} are just collection of logically equivalent formulae?
