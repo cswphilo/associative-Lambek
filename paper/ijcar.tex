@@ -195,8 +195,9 @@ We call $(D , g , h)$ the interpolant triple of $f : \GG , \GD , \GL \vd C$ if i
 However, \MIP\ only tells us about the \emph{existence} of the interpolant formula and corresponding derivations.
 
 In this paper, we are interested in the interaction between the interpolation procedure, derivations, and equivalence of derivations.
-A similar question for intuitionistic logic with disjunction has been considered by \cub\ in the 90s \cite{vcubric1993results,Cubric1994}. Recently Saurin and his colleagues studied proof-relevant interpolation for (extensions) of classical linear logic \cite{Saurin2024} and generalized to non-cut-free sequent calculi and proof net \cite{Saurin2025}.
+A similar question for intuitionistic logic with disjunction has been considered by \cub\ in the 90s \cite{vcubric1993results,Cubric1994}. Recently Saurin and his colleagues studied proof-relevant interpolation for (extensions) of classical linear logic \cite{Saurin2024} and generalized to sequent calculi with cuts and proof net \cite{Saurin2025}.
 Veltri and Wan also studied proof-relevant interpolation for a skew logic \cite{VW2025} and nonassociative Lambek calculus (\NL) \cite{VW2025Tableaux}.
+
 In \cite{VW2025Tableaux}, Veltri and Wan discussed the equivalence
 between interpolant triples in \NL. Two interpolant triples, $(D , g, h)$ and $(D' , g', h')$ are equivalent if $D = D$, $g \circeq g'$ and $h \circ h'$.
 The well-definedness of \MIP\ wrt.\ $\circeq$ is stated as: for any $f$ and $f'$, if $f \circeq f'$, then their interpolant triples are equivalent.
@@ -1486,43 +1487,44 @@ We then check the equivalence of derivations. The first cases is:
     \\
     = \cuts \ ([\Rsr (\Rl \ (g, h'_1)), \dots, h'_m], \cut\ (\Rsl\ ([\ax], \Lsl \ ([\ax],\ax)),g''))&
     \\
-    &\hspace*{-7cm}\text{(by definition of $\cut$)}
+    &\hspace*{-3.5cm}\text{(by definition of $\cut$)}
     \\
     \circeq \cuts \ ([\Rsr (\Rl \ (g, h'_1)), \dots, h'_m], \Rsl \ ([\ax], \cut\ (\Lsl \ ([\ax], \ax),g'')))
     &
     \\
-    &\hspace*{-7cm}\text{(by Lemma \ref{lem:left:rules:cut})}
-    \end{array}
-\]
-\[    
-    \begin{array}{lr}
+    &\hspace*{-3.5cm}\text{(by Lemma \ref{lem:left:rules:cut})}
+    \\
     \circeq \cuts \ ([\Rsr (\Rl \ (g, h'_1)), \dots, h'_m],\Rsl\ ([\ax], \Lsl \ ([\ax], g'')))
     \\
-    &\hspace*{-7cm}\text{(by Lemma \ref{lem:left:rules:cut})}
+    &\hspace*{-3.5cm}\text{(by Lemma \ref{lem:left:rules:cut})}
     \\
     = \cuts\ ([h'_2,\dots,h'_m], (\cut \ (\Rsr \ (\Rl \ (g,h'_1)), \Rsl \ ([\ax], \Lsl \ ([\ax], g'')))))
     &
     \\
-    &\hspace*{-7cm}\text{(by (\ref{eq:cut:comm}))}
-    \\
+    &\hspace*{-3.5cm}\text{(by (\ref{eq:cut:comm}))}
+        \end{array}
+\]
+\[    
+    \begin{array}{lr}
     \circeq \cuts\ ([h'_2,\dots,h'_m],\cut\ (\Rl \ (g, h'_1), \Lsl \ ([\ax], g'')))
     \\
     &\hspace*{-7cm}\text{(by definition of $\cut$ and Lemma \ref{lem:left:rules:cut})}
     \\
     = \cuts\ ([h'_2,\dots,h'_m],\Lsl \ ([\Rl \ (g, h'_1), \ax,\dots,\ax], g''))
-    &\hspace*{-7cm}\text{(by definition of $\cut$)}
+    \\
+    &\hspace*{-1cm}\text{(by definition of $\cut$)}
     \\
     = \Lsl \ ([\Rl \ (g, h'_1), h'_2,\dots,h'_m], g'') 
-    &\hspace*{-7cm}\text{(by definition of $\cut$)}
+    &\hspace*{-1cm}\text{(by definition of $\cut$)}
     \\
     = \Ll \ (\Rl \ (g,h'_1) , \Lsl \ ([h'_2,\dots,h'_m],g''))
-    &\hspace*{-7cm}\text{(by definition of $\Lsl$)}
+    &\hspace*{-1cm}\text{(by definition of $\Lsl$)}
     \\
     \circeq \Rl \ (g, \Ll \ (h'_1, \Lsl\ ([h'_2,\dots,h'_m],g'')))
-    &\hspace*{-7cm}\text{(by (\ref{eq:rl:ll:assoc}))}
+    &\hspace*{-1cm}\text{(by (\ref{eq:rl:ll:assoc}))}
     \\
     = \Rl \ (g, \Lsl \ ([h'_j], g''))
-    &\hspace*{-7cm}\text{(by definition of $\Lsl$)}
+    &\hspace*{-1cm}\text{(by definition of $\Lsl$)}
     % &\hspace*{-10cm}
   \end{array}
 \]
@@ -1709,7 +1711,9 @@ We resolved this by introducing a relaxed ``zig-zag'' equivalence relation on in
 
 The definitions and results we had in this work, including \MIP\ (\MmIP) being a right inverse of the admissible cut, definition of equivalence of interpolant triples, and \MIP\ (\MmIP) being well-defined wrt.\ $\circeq$ can all be generalized to Lambek calculus with multiplicative unit and additive connectives.
 
-For the future, it will be interesting to see the computational behavior of equivalent interpolant triples. This would require us to work in a term assignment calculus either in the sense of usual $\lambda$-calculus \cite{Kanazawa2006} or Curien-Herbelin's $\lambda\mu\tilde{\mu} $ calculus \cite{Curien2000,Saurin2024}.
+For the future, it will be interesting to see the computational behavior of equivalent interpolant triples. This would require us to work in a term assignment calculus either in the sense of term assignment for sequent calculus \cite{Herbelin1995,Kanazawa2006} or Curien-Herbelin's $\lambda\mu\tilde{\mu} $ calculus \cite{Curien2000,Saurin2024}.
+We would also like to study the well-definedness of interpolant triples, which can also be understood as an equational theory on the set of interpolant triples in a more general setting, e.g.\ sequent calculi with cuts \cite{Saurin2025} and complete calculi in \cite{Hetzl2024}.
+It will also be interesting to have a general theory on well-definedness of families of calculi from a universally proof-theoretic perspective \cite{tabatabai2018,Tabatabai2025}.
 % For the future, it will be interesting to see what should be the correct notion of equivalence on interpolant triples for the complete calculi in the sense of Hetzl and Jalali \cite{Hetzl2024}. 
 
 % will the interpolant triples in complete calculi by \cite{Hetzl2024} are just collection of logically equivalent formulae?
