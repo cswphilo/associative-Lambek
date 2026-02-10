@@ -854,7 +854,7 @@ In this section, we discuss proof-relevant interpolation properties of \L, inclu
 In nonassociative Lambek calculus (\NL) two interpolant triples $(D , g , h)$ and $(D' , g' , h')$ are considered to be equivalent if $D = D'$, $g \circeq g'$ and $h \circeq h'$. 
 In \cite{VW2025Tableaux}, we showed that \MIP\ is well-defined wrt. equivalence relation on derivations in \NL, i.e. if two derivations a $\circeq$-related, then their interpolant triples are equivalent.
 
-However, this is not the case for \L. Consider the permutative conversion between $\tr$ and $\Rl$ (\ref{eq:tr:rl:comm}).
+However, this is not an appropriate definition for interpolant triples in \L. Consider the permutative conversion between $\tr$ and $\Rl$ (\ref{eq:tr:rl:comm}).
 If the interpolant context splits $\GD$ and $\GO$, i.e. $\GD = \GD_0 , \GD_1$, $\GO = \GO_0 , \GO_1$ and the interpolant context of the endsequent is $\GD_1 , A \Rarr B , \GL , \GO_0$ (the red text traces the flow of the interpolant context in the derivation):
 \begin{equation}\label{eq:ct:example}
   \begin{array}{l}
@@ -1741,13 +1741,13 @@ Therefore the two interpolant quadruples are equivalent. Other cases are similar
 
 \section{Conclusion}
 In this work, we have provided a detailed analysis of proof-relevant interpolation for the Lambek calculus (\L) and its product-free variant (\LPfree). 
-We established their Maehara interpolation procedures (\MIP and \MmIP) are right inverses to the admissible cut rules, respectively and demonstrated that both \MIP\ and \MmIP\ are well-defined with respect to $\circeq$, the equivalence of derivations.
+We established their Maehara interpolation procedures (\MIP\ and \MmIP) are right inverses to the admissible cut rules, respectively and demonstrated that both \MIP\ and \MmIP\ are well-defined wrt\ $\circeq$, the equivalence relation of derivations.
 
 A crucial finding is the discrepancy between non-associative (\NL) and associative Lambek calculi (\L\ and \LPfree).
 In \NL, the equivalence of interpolant triples is strict, i.e.\ the interpolant formulae are exactly the same and the derivations are pairwise equivalent.
 We resolved this by introducing a relaxed zig-zag equivalence relation on interpolant triples, defined by the existence of a derivation between interpolant formulae that equates derivations after cut.
 
-The definitions and results we had in this work, including \MIP\ (\MmIP) being a right inverse of the admissible cut, definition of equivalence of interpolant triples, and \MIP\ (\MmIP) being well-defined wrt.\ $\circeq$ can all be generalized to Lambek calculus with multiplicative unit and additive multiplication, disjunction and their units.
+The definitions and results we had in this work, including \MIP\ (\MmIP) being a right inverse of the admissible cut, definition of equivalence of interpolant triples (quadruples), and \MIP\ (\MmIP) being well-defined wrt.\ $\circeq$ can all be generalized to Lambek calculus with multiplicative unit and additive multiplication, disjunction and their units.
 
 For the future, it will be interesting to see the computational behavior of equivalent interpolant triples. This would lead us to work in a term assignment calculus either in the sense of term assignment for sequent calculus \cite{Herbelin1995,Kanazawa2006} or Curien-Herbelin's $\lambda\mu\tilde{\mu} $ calculus \cite{Curien2000,Saurin2024}.
 We would also like to study the well-definedness of interpolant triples in more permissive systems, e.g.\ sequent calculi with cuts \cite{Saurin2025} and complete calculi in \cite{Hetzl2024}.
@@ -1865,8 +1865,8 @@ Well-definedness of \MIP\ wrt.\ $\circeq$ is then witnessed by the construction 
 The function is constructed by pattern-matching on $p$, the proof of equivalence of the derivations $f$ and $f'$. 
 
 \underline{N. B.} 
-The formalization postulates the admissible equations in Lemma \ref{lem:left:rules:cut} and congruence of $\cut$ wrt. $\circeq$. These equations are provable in Agda but we chose to postulate them and leave for the future.
-We also include the multiplicative unit $\I$ and its left and right introduction rules to work with the sequents with lists of formulae as their antecedents. In this setting, we can smoothly prove \MIP\ following exactly the same strategy in the proof of Theorem \ref{thm:MIP} without dealing with with non-empty list in Agda. The equations of derivations related to $\I$ are not included as well. The variable condition is also not considered in the formalization.
+The formalization postulates the admissible equations in Lemma \ref{lem:left:rules:cut} and congruence of $\cut$ wrt. $\circeq$. These equations are provable in Agda but we chose to postulate them and leave the proofs for the future.
+We also include the multiplicative unit $\I$ and its left and right introduction rules to work with the sequents with lists of formulae as their antecedents. In this setting, we can smoothly prove \MIP\ following exactly the same strategy in the proof of Theorem \ref{thm:MIP} without dealing with non-empty list in Agda. The equations of derivations related to $\I$ are not included as well. The variable condition is also not considered in the formalization.
 
 The code is available at \url{https://github.com/cswphilo/associative-Lambek/tree/main/code}.
 \end{document}
