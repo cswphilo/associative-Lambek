@@ -149,7 +149,7 @@
 %
 \title{Proof-relevance and Well-definedness of Maehara Interpolation in the Lambek Calculus}
 %
-\titlerunning{Proof-relevant Interpolation of Lambek Calculi}
+\titlerunning{Proof-relevant Maehara Interpolation in the Lambek Calculus}
 % If the paper title is too long for the running head, you can set
 % an abbreviated paper title here
 %
@@ -1368,6 +1368,7 @@ Their proof proceeds by structural induction on derivations, following the cut a
     \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG'_0 , B , \GL' , C}$
   \end{itemize}
   The desired partition of $\GG'_1, \GD'_0$ is $\langle \GG'_{11}, \dots , \GG'_{1m}, \GD'_{01}, \dots , \GD'_{0n}\rangle$ and the list of interpolant formulae is $[E_1 , \dots, E_m, D_1,\dots, D_n]$. The desired derivations are \linebreak $\Rl \ (g' , g'')$ and $[h''_1, \dots, h''_m, h'_1, \dots, h'_n]$.
+  The variable condition is easy to check.
 
   The second case is when the interpolant context splits both $\GD'$ and $\GL'$ and contains $A \Rarr B$. By inductive hypothesis, we obtain:
   \begin{itemize}
@@ -1398,16 +1399,16 @@ Their proof proceeds by structural induction on derivations, following the cut a
       \cuts \ ([\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m], \Rsl \ ([h'_i] , g''))
       &
       \\
-      \cuts \ ([h''_2,\dots,h''_m] , \cut \ (\Rsr \ (\Rl \ (g',h''_1), \Rsl \ ([h'_i],g'')))) 
+      =\cuts \ ([h''_2,\dots,h''_m] , \cut \ (\Rsr \ (\Rl \ (g',h''_1), \Rsl \ ([h'_i],g'')))) 
       &
       \\
-      &\hspace*{-1cm}\text{(by (\ref{eq:cut:comm})}
+      &\hspace*{-1cm}\text{(by (\ref{eq:cut:comm}))}
       \\
-      \cuts \ ([h''_2,\dots,h''_m] , \cuts \ ([h'_i], \cut \ (\Rl \ (g' , h''_1), g''))) & \hspace*{-1cm}\text{(by definition of $\cut$)}
+      =\cuts \ ([h''_2,\dots,h''_m] , \cuts \ ([h'_i], \cut \ (\Rl \ (g' , h''_1), g''))) & \hspace*{-1cm}\text{(by definition of $\cut$)}
       \\
-      \cuts \ ([h''_2,\dots,h''_m] , \cuts \ ([h'_i],\Rl \ (g' , \cut \ (h''_1,g''))))& \hspace*{-1cm}\text{(by Lemma \ref{lem:left:rules:cut})}
+      \circeq \cuts \ ([h''_2,\dots,h''_m] , \cuts \ ([h'_i],\Rl \ (g' , \cut \ (h''_1,g''))))& \hspace*{-1cm}\text{(by Lemma \ref{lem:left:rules:cut})}
       \\
-      \cuts \ ([h''_2,\dots,h''_m] ,\Rl \ (\cuts \ ([h'_i],g'), \cut \ (h''_1,g'')))& \hspace*{-1cm}\text{(by definition of $\cut$)}
+      = \cuts \ ([h''_2,\dots,h''_m] ,\Rl \ (\cuts \ ([h'_i],g'), \cut \ (h''_1,g'')))& \hspace*{-1cm}\text{(by definition of $\cut$)}
       \\
       \circeq \cuts \ ([h''_2,\dots,h''_m] ,\Rl \ (f', \cut \ (h''_1,g'')))& \hspace*{-1cm}\text{(by ind. hyp. on $f'$)}
       \\
