@@ -85,7 +85,7 @@
 \newcommand{\MIPeq}{{\textsf{MIP}{\circeq}}}
 \newcommand{\FL}{$\mathtt{FL}$}
 \renewcommand{\L}{$\mathtt{L}$}
-\newcommand{\LPfree}{$\mathtt{L}_{(\Rarr, \Larr)}$}
+\newcommand{\LPfree}{$\mathtt{L_{pf}}$}%{$\mathtt{L}_{(\Rarr, \Larr)}$}
 \newcommand{\NL}{$\mathtt{NL}$}
 
 %% macros for derivations
@@ -147,7 +147,7 @@
 
 \begin{document}
 %
-\title{Proof-relevant Interpolation of Lambek Calculi}
+\title{Proof-relevance and Well-definedness of Maehara Interpolation in the Lambek Calculus}
 %
 \titlerunning{Proof-relevant Interpolation of Lambek Calculi}
 % If the paper title is too long for the running head, you can set
@@ -182,55 +182,74 @@ Cheng-Syuan Wan \orcidID{0000-0003-2053-1688}}
 %
 
 \section{Introduction}\label{sec:intro}
-\emph{Substructural logics} are logical systems having a finer control on the use of formulae. A notable instance is \emph{Lambek's syntactic calculus} \cite{lambek:mathematics:58}, which forbids the structural rules of weakening, contraction and exchange, 
-%The sequent calculus formulation of Lambek calculus (\L) has the sequents of the form $\GG \vd C$ where the $\GG$ is an oredered list of formulae.
-which has been extensively studied in the literature for its linguistic applications \cite{Pentus1997,moot:categorial:2012}.
-Another well-known instance is linear logic, which (usually) does not forbid exchange and it has application to resource-sensitive programming languages.
+%\emph{Substructural logics} are logical systems allowing a fine control on the use and production of formulae/resources. A notable instance is \emph{Lambek's syntactic calculus} \cite{lambek:mathematics:58}, which forbids the structural rules of weakening, contraction and exchange, 
+%%The sequent calculus formulation of Lambek calculus (\L) has the sequents of the form $\GG \vd C$ where the $\GG$ is an oredered list of formulae.
+%and has been extensively studied in the literature for its linguistic applications \cite{Pentus1997,moot:categorial:2012}.
+%%Another well-known instance is linear logic, which (usually) does not forbid exchange and it has application to resource-sensitive programming languages \niccolo{Citation}.
 
-\emph{Craig interpolation} is a fundamental logical property of logical systems \cite{craig:interpolation:1957}.
+In most of the systems investigated by proof theorists, such as the sequent calculus and natural deduction, proofs are represented as finite trees, which are built inductively from a set of deductive rules.
+But proof theorists are not only interested in in the way in which proofs can be constructed, they also care about \emph{equality of proofs}, i.e. deductive systems are specified by a set of deductive rules and a set of equality rules. The latter typically consist of $\beta$- and $\eta$-equivalences plus a large number of permutative conversions.
+Proof theorists can produce these set of equations, which generate an equivalence relation $\circeq$ on derivations, in various ways. Possibly as an axiomatization of equality in categorical models, e.g. two derivations (or terms) $f,f'$ in intuitionistic logic should be considered equal, i.e. $f \circeq f'$, iff the intepretations of $f$ and $f'$ are equal in every Cartesian closed category. Alternatively, the equality rules can be obtained by studiying geometric representations of proofs, e.g. in linear logic $f \circeq f'$ iff $f$ and $f'$ have the same proof net \niccolo{Citation}.
+
+In this paper, we are interested in the relationship between equivalence of derivations and interpolation properties, such as Craig interpolation and its generalizations, in substructural logics, i.e. logical systems allowing a fine control on the use and production of formulae/resources. Concretely, we study this relationship in the sequent calculus formulation of \emph{Lambek's syntactic calculus} (\L) \cite{lambek:mathematics:58}, which forbids the structural rules of weakening, contraction and exchange,
+%The sequent calculus formulation of Lambek calculus (\L) has the sequents of the form $\GG \vd C$ where the $\GG$ is an oredered list of formulae.
+and has been extensively studied for its linguistic applications \cite{Pentus1997,moot:categorial:2012}.
+
+\emph{Craig interpolation} is a fundamental property of logical systems \cite{craig:interpolation:1957}.
 It has been studied for various logics including, e.g.\ classical logic \cite{craig:interpolation:1957}, intermediate logics \cite{Maksimova1977}, and substructural logics \cite{Galatos2007}.
 A logic $\mc{L}$ enjoys Craig interpolation if for any theorem $A \to C$ (where $\to$ is the implication connective in $\mc{L}$), there exists an intermediate formula $B$ such that both $A \to B$ and $B \to C$ are theorems in $\mc{L}$ and $\vars{B}\subseteq \vars{A} \cap \vars{C}$, where $\vars{A}$ denotes the set of atomic formulae appearing in $A$.
-Deductive interpolation is a generalized property, where the role of implication $\to$ is replaced by the consequence relation $\vd$. %For any formula $A$ and $C$, if $A \vd C$, then there exists a formula $B$ such that $A \vd B$, $B \vd C$ and $\vars{B}\subseteq \vars{A} \cap \vars{C}$.
-
-A further generalization is \emph{Maehara interpolation} (\MIP), also known as strong deductive interpolation. In substructural logics, this property states that for a derivation $f : \GG , \GD , \GL \vd C$ with a specified sublist $\GD$ of the antecedent, there exist a formula $D$ and two derivations $g : \GG, D, \GL \vdash C$ and $h : \GD \vdash D$ such that $\vars{D} \subseteq \vars{\GD} \cap \vars{\GG, \GL, C}$.
+%Deductive interpolation is a generalized property, where the role of implication $\to$ is replaced by the consequence relation $\vd$.
+%For any formula $A$ and $C$, if $A \vd C$, then there exists a formula $B$ such that $A \vd B$, $B \vd C$ and $\vars{B}\subseteq \vars{A} \cap \vars{C}$.
+A generalization of Craig interpolation is \emph{Maehara interpolation} (\MIP), also known as strong deductive interpolation. In \L, this property states that for a derivation $f : \GG , \GD , \GL \vd C$ with a specified sublist $\GD$ of the antecedent, there exist a formula $D$ and two derivations $g : \GG, D, \GL \vdash C$ and $h : \GD \vdash D$ such that $\vars{D} \subseteq \vars{\GD} \cap \vars{\GG, \GL, C}$.
 The property \MIP\ is usually proved by Maehara's method \cite{maehara1961}, i.e.\ by induction on the derivation $f$, which we will refer to as \emph{(Maehara) interpolation procedure}.
 The applicability of the method relies on the existence of a cut-free  sequent calculus for the logic under investigation.
-We call the triple $(D,g,h)$ of a formula $D$ and derivations $f$ and $g$ outputted by the interpolation procedure as \emph{interpolation triples}.
+We call the triple $(D,g,h)$ of a formula $D$ and derivations $g$ and $h$ outputted by the interpolation procedure as \emph{interpolation triples}.
+
 
 %given a derivation $f : \Gamma$ further allows the antecedent of the consequence relation to be a set, a multiset or a list, depending on $\mc{L}$.
 %For example, Theorem \ref{thm:MIP} is \MIP\ for \L.
 %We call $(D , g : \GG , D , \GL \vd C , h : \GD \vd D)$ the interpolant triple of $f : \GG , \GD , \GL \vd C$ if it is obtained by applying \MIP\ on $f$.
  
-So far, \MIP\ only tells us about the \emph{existence} of the interpolant formula and corresponding derivations.
+Traditionally, \MIP\ only states the \emph{mere existence} of an interpolant triple, but it does not say how the input derivation relates to this triple.
+In this work, we are interested in a \emph{proof-relevant} version of  Maehara interpolation, also known as \emph{Maehara-\cub\ interpolation}, that exhibits such relationship.
+In \L, proof-relevant interpolation states that, if the interpolation procedure on $f$ produces an interpolation triple $(D,g,h)$, then $\cut \ (h , g) \circeq f$, where $\cut$ is the admissible cut rule.
+In other words, \MIP\ is a right inverse of the admissible cut up to $\circeq$.
+This line of work has been initiated in the 90s by \cub~\cite{vcubric1993results,Cubric1994}, who proved proof-relevant interpolation for the simply typed $\lambda$-calculus with sum types,
+%and its relation to categorical models.
+and has been recently revived by Saurin, who proved proof-relevant interpolation for (extensions) of classical linear logic \cite{Saurin2024} and considered generalizations to sequent calculi with primitive cut rule and to proof nets \cite{Saurin2025}.
+In previous work we also contributed to this line of research, by studying proof-relevant interpolation for a semi-associative fragment of \L~\cite{VW2025}, as well as for the nonassociative Lambek calculus (\NL) \cite{VW2025Tableaux}.
 
-In this work, we are interested in proof-relevant interpolation or Maehara-\cub \ interpolation that takes the interaction between the interpolation procedure, derivations, and equivalence of derivations ($\circeq$) into account.
+In \cite{VW2025Tableaux}, we also raised the question of \emph{well-definedness} of the Maehara interpolation procedure.
+When a deductive system comes equipped with an equivalence of derivations $\circeq$, so that equivalent proofs are to be considered equal, then the interpolation procedure should send equivalent derivations to equivalent interpolation triples.
+But what is the right notion of equivalence for these triples that makes the interpolation procedure well-defined?
+For \NL, we showed  that two interpolant triples $(D , g, h)$ and $(D' , g', h')$ can be considered equivalent if $D = D$, $g \circeq g'$ and $h \circeq h'$ \cite{VW2025Tableaux}. In particular, the interpolant formulae $D$ and $D'$ produced by equivalent derivations $f \circeq f'$ are the same.
+%Then a question arises: is the equivalence of derivations preserved by \MIP? In other words, for any $f$ and $f'$, if $f \circeq f'$, then are their interpolant triples are equivalent? We call this \emph{well-definedness} of \MIP.
+%In \NL, the answer is positive and the definition of equivalent interpolant triples is appropriate. 
 
-In the 90s \cite{vcubric1993results,Cubric1994}, \cub\ has considered proof-relevant interpolation for simply typed $\lambda$-calculus with sum type and its relation to categorical models. Recently Saurin and his colleagues studied proof-relevant interpolation for (extensions) of classical linear logic \cite{Saurin2024} and generalized to sequent calculi with cuts and proof net \cite{Saurin2025}.
-Veltri and Wan also studied proof-relevant interpolation for a skew logic \cite{VW2025} and nonassociative Lambek calculus (\NL) \cite{VW2025Tableaux}.
-In a sequent calculus, proof-relevant interpolation is stated as: if $g$ and $h$ are obtained by applying \MIP\ on $f$, then $\cut \ (h , g) \circeq f$, where $\cut$ is the admissible cut in the calculus.
-In other words, \MIP\ is a right inverse of the admissible cut.
+However, this notion of equivalence of interpolant triples is not appropriate in \L. It is possible to show that there exist equivalent derivations $f \circeq f'$ that have distinct interpolation formulae $D \not= D'$ . Even more, $D$ and $D'$ may not even be logically equivalent.
+%Consider the example equation of derivations $\tr \ (\Rl \ (f , f'),f'') \circeq \Rl \ (f, \tr \ (f',f''))$ in (\ref{eq:ct:example}). The interpolant formulae of the two derivations are $(D \Rarr E) \ot F$ and $D \Rarr (E \ot F)$, respectively.
+%Therefore it leads to a more relaxed equivalence on interpolant triples.
+We therefore propose a different \emph{zig-zag} equivalence of interpolant triples which implies the well-definedness of the interpolation procedure in \L. The equivalence of triples $(D , g, h) \sim (D' , g', h')$ is the symmetric-transitive closure of the relation stating that there exists a derivation $t : D \vd D'$ such that $g \circeq \cut \ (t , g')$ and $\cut \ (h , t) \circeq t'$. This might look like an unusual notion of
+equality between interpolants, but it is in fact very natural
+from a category-theoretic perspective, since it characterizes the collection of interpolant triples as some kind of colimit/coend \niccolo{Citation}.
 
-In \cite{VW2025Tableaux}, Veltri and Wan discussed the equivalence
-between interpolant triples in \NL, i.e.\ the equational theory on the set of interpolant triples generated by \MIP.  Two interpolant triples, $(D , g, h)$ and $(D' , g', h')$, are equivalent if $D = D$, $g \circeq g'$ and $h \circeq h'$.
-Then a question arises: is the equivalence of derivations preserved by \MIP? In other words, for any $f$ and $f'$, if $f \circeq f'$, then are their interpolant triples are equivalent? We call this \emph{well-definedness} of \MIP.
-In \NL, the answer is positive and the definition of equivalent interpolant triples is appropriate. 
+Finally, we look at the \emph{product-free} Lambek calculus (\LPfree), i.e. the fragment of \L\ without multiplicative conjunction.
+Pentus showed that \LPfree\ does not enjoy Maehara interpolation, but Craig interpolation can still be proved using a more complex \emph{Maehara multi-interpolation} property. We conclude our paper by establishing a proof-relevant version of Pentus' multi-interpolation and studying an appropiate equivalence of interpolant quadruples (not triples, in this more complex situation) that implies well-definedness of the multi-interpolation procedure. 
 
-However, this is not the case in \L. Consider the example equation of derivations $\tr \ (\Rl \ (f , f'),f'') \circeq \Rl \ (f, \tr \ (f',f''))$ in (\ref{eq:ct:example}). The interpolant formulae of the two derivations are $(D \Rarr E) \ot F$ and $D \Rarr (E \ot F)$, respectively.
-Therefore it leads to a more relaxed equivalence on interpolant triples.
+%\paragraph{Contributions} In this paper, we establish the following results: 
+%\begin{enumerate}
+%  \item \MIP\ is a right inverse of the admissible cut rule in \L\ (Theorem \ref{thm:cut:intrp:L}).
+%  \item We introduce an equivalence relation interpolant triples and then show that \MIP\ is well-defined wrt.\ $\circeq$, the equivalence relation on derivations in \L\ (Theorem \ref{thm:welldef:L}).
+%  \item The aforementioned results are extended to the product-free Lambek calculus (\LPfree) with Maehara multi-interpolation (\MmIP) \cite{Pentus1997} (Theorems \ref{thm:cut:intrp:LPfree} and \ref{thm:welldef:LPfree}).
+%\end{enumerate}  
+%\vspace*{-0.5cm}
 
-In this paper, we propose a zig-zag equivalence on interpolant triples (Definition \ref{def:equiv:intrp:triples}). An equivalence $(D , g, h) \sim (D' , g', h')$ can be updated to $(D'',g'',h'') \sim (D' , g', h')$ if there exists a derivation $t : D \vd D''$ such that $g \circeq \cut \ (t , g'')$ and $\cut \ (h , t') \circeq t''$ or from the other direction, there exists a derivation $t' : D'' \vd D$ satisfying similar equations.
-
-\paragraph{Contributions} In this paper, we establish the following results: 
-\begin{enumerate}
-  \item \MIP\ is a right inverse of the admissible cut rule in \L\ (Theorem \ref{thm:cut:intrp:L}).
-  \item We introduce an equivalence relation interpolant triples and then show that \MIP\ is well-defined wrt.\ $\circeq$, the equivalence relation on derivations in \L\ (Theorem \ref{thm:welldef:L}).
-  \item The aforementioned results are extended to the product-free Lambek calculus (\LPfree) with Maehara multi-interpolation (\MmIP) \cite{Pentus1997} (Theorems \ref{thm:cut:intrp:LPfree} and \ref{thm:welldef:LPfree}).
-\end{enumerate}  
-\vspace*{-0.5cm}
 \section{Sequent Calculus of Lambek calculus}\label{sec:seqcalc}
-Formulae of \L\ are inductively generated by the grammar $A, B ::= X \ | \ A \Rarr B \ | \ B \Larr A \ | \ A \ot B$, where $X$ is drawn from a set $\mathsf{At}$ of atomic formulae.
-The sequents in \L\ are of the form $\GG \vd C$ where the antecedent $\GG$ is a list of formulae and $C$ is a single formula. In the rest of the paper, we sometimes call $\GG$ a context.
+We briefly recall the sequent calculus for the Lambek calculus (\L), especially the effective procedures for proving cut admissibility \cite{moot:categorial:2012} and Maehara interpolation \cite{roorda1991,ono:proof:nonclassical:1998,moot:categorial:2012}, which will be employed in later sections.
 
+Formulae of \L\ are inductively generated by the grammar $A, B ::= X \ | \ A \Rarr B \ | \ B \Larr A \ | \ A \ot B$, where $X$ is drawn from a set $\mathsf{At}$ of atomic formulae, ${\Larr}$ and ${\Rarr}$ are implications/residuals and ${\ot}$ is fusion/multiplicative conjunction.
+Sequents in \L\ have the form $\GG \vd C$ where the antecedent (or context) $\GG$ is a (possibly empty) list of formulae and $C$ is a single formula.
+%In the rest of the paper, we sometimes call $\GG$ a context.
 Derivations of \L\ are inductively generated by the following rules:
 
 \begin{equation*}\label{eq:seqcalc}
@@ -264,8 +283,6 @@ Derivations of \L\ are inductively generated by the following rules:
   }
 \end{array}
 \end{equation*}
-
-It is well-known that both cut admissibility \cite{moot:categorial:2012} and Maehara interpolation \cite{roorda1991,ono:proof:nonclassical:1998,moot:categorial:2012} hold in \L. Here we state the properties and present some cases in the proof that will be used in later sections.
 
 \begin{theorem}[Cut admissibility for \L]\label{thm:cut}
   The cut rule
