@@ -1350,7 +1350,7 @@ Their proof proceeds by structural induction on derivations, following the cut a
 \begin{theorem}[Maehara multi-interpolation for \LPfree\ \cite{Pentus1997}]\label{thm:MIP:LPfree}
 ~
 \\
-  Given a derivation $f : \GG , \GD , \GL \vd C$, there exist a partition $\langle \GD_1, \dots, \GD_n\rangle$ of $\GD$, a list of formulae $[D_i]$ for $i\in[1,\dots,n]$ a derivation $g : \GG, [D_i], \GL \vdash C$ and a list of derivations $[h_i : \GD_i \vdash D_i]$ such that $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD} \cap \vars{\GG, \GL, C}$.
+  Given a derivation $f : \GG , \GD , \GL \vd C$, there exist a partition $\langle \GD_1, \dots, \GD_n\rangle$ of $\GD$, a list of formulae $[D_i]$ for $i\in\{1,\dots,n\}$ a derivation $g : \GG, [D_i], \GL \vdash C$ and a list of derivations $[h_i : \GD_i \vdash D_i]$ such that $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD} \cap \vars{\GG, \GL, C}$.
 \end{theorem}
 \begin{proof}
   Proof proceeds similarly as the proof of Theorem \ref{thm:MIP}.
@@ -1358,12 +1358,12 @@ Their proof proceeds by structural induction on derivations, following the cut a
   The first case is when the interpolant context splits $\GG'$ and $\GD'$ where the interpolant formula was a tensor formula. 
   In this case, we apply inductive hypothesis on $f'$ and $f''$ respectively to obtain:
   \begin{itemize}
-    \item a partition $\langle \GD'_{01}, \dots , \GD'_{0n}\rangle$ of $\GD'_0$ and a list of formulae $[D_i]$ for $i\in[1,\dots,n]$,
+    \item a partition $\langle \GD'_{01}, \dots , \GD'_{0n}\rangle$ of $\GD'_0$ and a list of formulae $[D_i]$ for $i\in\{1,\dots,n\}$,
     \item a derivation $g' : [D_i] , \GD'_1 \vd A$, a list of derivations $[h'_i : \GD'_{0i} \vdash D_i]$ such that
     \item $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD'_0} \cap \vars{\GD'_1, A}$
   \end{itemize}
   \begin{itemize}
-    \item a partition $\langle \GG'_{11}, \dots , \GG'_{1m}\rangle$ of $\GG'_1$ and a list of formulae $[E_j]$ for $j\in[1,\dots,m]$,
+    \item a partition $\langle \GG'_{11}, \dots , \GG'_{1m}\rangle$ of $\GG'_1$ and a list of formulae $[E_j]$ for $j\in\{1,\dots,m\}$,
     \item a derivation $g'' : \GG'_0 , [E_j], B , \GL' \vd A$, a list of derivations $[h''_j : \GG'_{1j} \vdash E_j]$ such that
     \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG'_0 , B , \GL' , C}$
   \end{itemize}
@@ -1372,12 +1372,12 @@ Their proof proceeds by structural induction on derivations, following the cut a
 
   The second case is when the interpolant context splits both $\GD'$ and $\GL'$ and contains $A \Rarr B$. By inductive hypothesis, we obtain:
   \begin{itemize}
-    \item a partition $\langle \GD'_{01}, \dots , \GD'_{0n}\rangle$ of $\GD'_0$ and a list of formulae $[D_i]$ for $i\in[1,\dots,n]$,
+    \item a partition $\langle \GD'_{01}, \dots , \GD'_{0n}\rangle$ of $\GD'_0$ and a list of formulae $[D_i]$ for $i\in\{1,\dots,n\}$,
     \item a derivation $g' : [D_i] , \GD'_1 \vd A$, a list of derivations $[h'_i : \GD'_{0i} \vdash D_i]$ such that
     \item $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD'_0} \cap \vars{\GD'_1, A}$
   \end{itemize}
   \begin{itemize}
-    \item a partition $\langle \GL'_{01}, \dots , \GL'_{0m}\rangle$ of $\GL'_0$, where $\GL'_{01} = B , \GL''_{01}$ for some $\GL''_{01}$ and a list of formulae $[E_j]$ for $j\in[1,\dots,m]$,
+    \item a partition $\langle \GL'_{01}, \dots , \GL'_{0m}\rangle$ of $\GL'_0$, where $\GL'_{01} = B , \GL''_{01}$ for some $\GL''_{01}$ and a list of formulae $[E_j]$ for $j\in\{1,\dots,m\}$,
     \item a derivation $g'' : \GG' , [E_j], \GL'_1 \vd A$, a list of derivations $[h''_j : \GL'_{0j} \vdash E_j]$ such that
     \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG,  \GL'_1 , C}$
   \end{itemize}
@@ -1387,7 +1387,7 @@ Their proof proceeds by structural induction on derivations, following the cut a
 \begin{theorem}[Proof-relevant multi-interpolation for \LPfree]\label{thm:cut:intrp:LPfree}
 ~
 \\
-  For derivations $g : \GG , D_1, \dots, D_n , \GL \vd C$ and $h_i : \GD \vd D$ for $i \in [1 ,\dots, n]$ obtained by interpolating the derivation $f : \GG , \GD , \GL \vd C$, $\cuts \ ([h_i] , g) \circeq f$.
+  For derivations $g : \GG , D_1, \dots, D_n , \GL \vd C$ and $h_i : \GD \vd D$ for $i \in \{1 ,\dots, n\}$ obtained by interpolating the derivation $f : \GG , \GD , \GL \vd C$, $\cuts \ ([h_i] , g) \circeq f$.
 \end{theorem}
 \begin{proof}
   Proof proceeds by induction on $f$.
@@ -1426,7 +1426,7 @@ Their proof proceeds by structural induction on derivations, following the cut a
 \end{proof}
 The data of \MmIP\ consist of a quadruple and their equivalence is defined by additionally considering the relationship between partitions.
 \begin{definition}\label{def:equiv:intrp:triples:LPfree}
-  Two interpolant quadruples $(\langle \GD_i\rangle , [D_i] , g , [h_i])$, $i \in [1,\dots,n]$ and $(\langle \GD'_j\rangle , [D'_j] , g' , [h'_j])$, $j \in [1,\dots,m]$ are equivalent, denoted as $(\langle \GD_i\rangle , [D_i] , g , [h_i]) \sim (\langle \GD'_j\rangle , [D'_j] , g' , [h'_j])$, if
+  Two interpolant quadruples $(\langle \GD_i\rangle , [D_i] , g , [h_i])$, $i \in \{1,\dots,n\}$ and $(\langle \GD'_j\rangle , [D'_j] , g' , [h'_j])$, $j \in \{1,\dots,m\}$ are equivalent, denoted as \\$(\langle \GD_i\rangle , [D_i] , g , [h_i]) \sim (\langle \GD'_j\rangle , [D'_j] , g' , [h'_j])$, if
   \begin{itemize}
     \item we can associate an additional subscript to each $\GD_i$ such that for any $\GD'_j$, $[ \GD_{ij} ] = \GD'_j$, i.e.\ $\langle\GD_i\rangle$ is a partition of $\langle\GD'_j\rangle$,
     \item for each $D'_j$, there exists a derivation $t_j : [ D_{ij} ]\vd D'_j$ such that 
@@ -1438,7 +1438,7 @@ The data of \MmIP\ consist of a quadruple and their equivalence is defined by ad
   \end{itemize}
 \end{definition}
 \begin{theorem}[Well-definedness of \MmIP]\label{thm:welldef:LPfree}
-  For any two derivations, $f,f' : \GG , \GD , \GL \vd C$ and their interpolant quadruples $(\langle \GD_i\rangle , [D_i] , g , [h_i])$, $i \in [1,\dots,n]$ and $(\langle \GD'_j\rangle , [D'_j] , g' , [h'_j])$, $j \in [1,\dots,m]$, if $f \circeq f'$, then $(\langle \GD_i\rangle , [D_i] , g , [h_i]) \sim (\langle \GD'_j\rangle , [D'_j] , g' , [h'_j])$.
+  For any two derivations, $f,f' : \GG , \GD , \GL \vd C$ and their interpolant quadruples $(\langle \GD_i\rangle , [D_i] , g , [h_i])$, $i \in \{1,\dots,n\}$ and $(\langle \GD'_j\rangle , [D'_j] , g' , [h'_j])$, $j \in \{1,\dots,m\}$, if $f \circeq f'$, then $(\langle \GD_i\rangle , [D_i] , g , [h_i]) \sim (\langle \GD'_j\rangle , [D'_j] , g' , [h'_j])$.
 \end{theorem}
 \begin{proof}
   Proof proceeds by examining all equations in the equivalence relation $\circeq$.
@@ -1453,11 +1453,11 @@ The data of \MmIP\ consist of a quadruple and their equivalence is defined by ad
       % \end{array}
       % &
       \begin{array}{l}
-        (\langle \GD'_{01},\dots,\GD'_{0n}\rangle, [D_i] , g : [D_i] , \GD''_0 \vd A , [h_i : \GD'_{0i} \vd D_i]), i \in [1, \dots, n]
+        (\langle \GD'_{01},\dots,\GD'_{0n}\rangle, [D_i] , g : [D_i] , \GD''_0 \vd A , [h_i : \GD'_{0i} \vd D_i]), i \in \{1, \dots, n\}
       \\[3pt]
-      (\langle \GL_{1}, \dots,\GL_{m}\rangle, [E_j] , g' : \GG, [E_j] \vd A' , [h'_j : \GL_j \vd E_j]), j \in[1, \dots, m]
+      (\langle \GL_{1}, \dots,\GL_{m}\rangle, [E_j] , g' : \GG, [E_j] \vd A' , [h'_j : \GL_j \vd E_j]), j \in\{1, \dots, m\}
       \\[3pt]
-      (\langle \GG'_{11}, \dots, \GG'_{1l}\rangle,[F_k] , g'' : \GG'_0 , [F_k] , \GL' \vd C , [h''_l : \GG'_{1k} \vd F_k]), k \in [1, \dots, l]
+      (\langle \GG'_{11}, \dots, \GG'_{1l}\rangle,[F_k] , g'' : \GG'_0 , [F_k] , \GL' \vd C , [h''_l : \GG'_{1k} \vd F_k]), k \in \{1, \dots, l\}
       \end{array}
       % & f' 
       % & f''
