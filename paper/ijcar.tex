@@ -1481,8 +1481,12 @@ The proof of Theorem \ref{thm:MIP:LPfree} describes the construction of a functi
 The appropriate notion of equivalence of multi-interpolant tuples in \LPfree\ is obtained as a modification of the equivalence of interpolant tuples in \L\ by additionally considering the relationship between partitions of $\GD$.
 \begin{definition}\label{def:equiv:intrp:triples:LPfree}
   Equivalence of multi-interpolant tuples, written $(n,[\GD_i], [D_i] , g , [h_i]) \sim (m,[\GD'_j] , [D'_j] , g' , [h'_j])$, is the symmetric-transitive closure of the following relation:
-  there exists a partition $n = n_1+n_2+\dots+n_m$ such that $\GD'_j = \GD_{n_{j-1}+1},\dots,\GD_{n_{j}}$ for $j \in \{1,\dots,m\}$ (where $n_0$ is assumed to be 0), and there exist derivations $t_j : D_{n_{j-1}+1},\dots,D_{n_{j}} \vd D'_j$ such that  $g \circeq \cuts \ ([t_j] , g')$ and 
+  % there exists a partition $[\GD_i] = [\GD_{(1-i_1)_1}], \dots, [\GD_{(i_{j-1}-n)_m}]$ such that $[\GD_{i_j}] = \GD'_j$ for $j \in \{1,\dots,m\}$
+  there exists a partition $[\GD_i] = (\GD_1,\dots,\GD_{n_1}), \dots,(\GD_{n_{m-1}+1},\dots,\GD_{n_m})$ such that $\GD'_j = \GD_{n_{j-1}+1},\dots,\GD_{n_{j}}$ (notice that $n_m = n$) for $j \in \{1,\dots,m\}$ (where $n_0$ is assumed to be 0), and there exist derivations $t_j : D_{n_{j-1}+1},\dots,D_{n_{j}} \vd D'_j$ such that  $g \circeq \cuts \ ([t_j] , g')$ and 
 $\cuts \ ([h_k] , t_j) \circeq h'_j$ where index $k \in \{n_{j-1}+1,\dots,n_j \}$.
+  % there exists a partition $n = n_1+n_2+\dots+n_m$ such that $\GD'_j = \GD_{n_{j-1}+1},\dots,\GD_{n_{j}}$ for $j \in \{1,\dots,m\}$ (where $n_0$ is assumed to be 0), 
+%   and there exist derivations $t_j : D_{n_{j-1}+1},\dots,D_{n_{j}} \vd D'_j$ such that  $g \circeq \cuts \ ([t_j] , g')$ and 
+% $\cuts \ ([h_k] , t_j) \circeq h'_j$ where index $k \in \{n_{j-1}+1,\dots,n_j \}$.
 \end{definition}
 %%   \begin{definition}\label{def:equiv:intrp:triples:LPfree}
 %%     Two interpolant quadruples $(\langle \GD_i\rangle , [D_i] , g , [h_i])$, $i \in \{1,\dots,n\}$ and $(\langle \GD'_j\rangle , [D'_j] , g' , [h'_j])$, $j \in \{1,\dots,m\}$ are equivalent, denoted as \\$(\langle \GD_i\rangle , [D_i] , g , [h_i]) \sim (\langle \GD'_j\rangle , [D'_j] , g' , [h'_j])$, if
@@ -1512,11 +1516,11 @@ $\cuts \ ([h_k] , t_j) \circeq h'_j$ where index $k \in \{n_{j-1}+1,\dots,n_j \}
       % \end{array}
       % &
       \begin{array}{l}
-        (\langle \GD'_{01},\dots,\GD'_{0n}\rangle, [D_i] , g : [D_i] , \GD''_0 \vd A , [h_i : \GD'_{0i} \vd D_i]), i \in \{1, \dots, n\}
+        (\langle \GD'_{0_1},\dots,\GD'_{0_n}\rangle, [D_i] , g : [D_i] , \GD''_0 \vd A , [h_i : \GD'_{0i} \vd D_i]), i \in \{1, \dots, n\}
       \\[3pt]
       (\langle \GL_{1}, \dots,\GL_{m}\rangle, [E_j] , g' : \GG, [E_j] \vd A' , [h'_j : \GL_j \vd E_j]), j \in\{1, \dots, m\}
       \\[3pt]
-      (\langle \GG'_{11}, \dots, \GG'_{1l}\rangle,[F_k] , g'' : \GG'_0 , [F_k] , \GL' \vd C , [h''_l : \GG'_{1k} \vd F_k]), k \in \{1, \dots, l\}
+      (\langle \GG'_{1_1}, \dots, \GG'_{1_l}\rangle,[F_k] , g'' : \GG'_0 , [F_k] , \GL' \vd C , [h''_l : \GG'_{1k} \vd F_k]), k \in \{1, \dots, l\}
       \end{array}
       % & f' 
       % & f''
@@ -1531,14 +1535,14 @@ $\cuts \ ([h_k] , t_j) \circeq h'_j$ where index $k \in \{n_{j-1}+1,\dots,n_j \}
       % h : \GD_0 \vd D & h' : B , \GL \vd E & h'' : \GO_0 \vd F
       \end{array}$}
     \]
-where $\GL_1 = B , \GL'_1$ for some $\GL'_1$ and $\GG'_{1l} = \GG''_{1l} , B'$ for some $\GG''_{1l}$ and
+where $\GL_1 = B , \GL'_1$ for some $\GL'_1$ and $\GG'_{1_l} = \GG''_{1_l} , B'$ for some $\GG''_{1_l}$ and
   \[
       \begin{array}{c}
       % \arraycolsep=20pt
       \begin{array}{c}
           \text{(interpolation quadruple for $\Rl \ (f , \Ll \ (f',f''))$)}
           \\[3pt]
-          (\langle \GG'_{11}, \dots, \GG'_{1l-1}, (\GG''_{1l} , B'\Larr A',\GG,\GD'_{01},\dots,\GD'_{0n})\rangle,
+          (\langle \GG'_{1_1}, \dots, \GG'_{1_{l-1}}, (\GG''_{1_l} , B'\Larr A',\GG,\GD'_{0_1},\dots,\GD'_{0_n})\rangle,
           \\[3pt]
           ~[F_1,\dots,F_{l-1}, F_l \Ls [[D_i] \Rs E_1,E_2,\dots,E_m]],
           \\[3pt]
@@ -1550,7 +1554,7 @@ where $\GL_1 = B , \GL'_1$ for some $\GL'_1$ and $\GG'_{1l} = \GG''_{1l} , B'$ f
         \begin{array}{c}
           \text{(interpolation quadruple for $\Ll \ (\Rl \ (f , f'), f'')$)}
           \\[3pt]
-          (\langle \GG'_{11}, \dots, \GG'_{1l-1}, (\GG''_{1l} , B'\Larr A',\GG),\GD'_{01},\dots,\GD'_{0n}\rangle,
+          (\langle \GG'_{1_1}, \dots, \GG'_{1_{l-1}}, (\GG''_{1_l} , B'\Larr A',\GG),\GD'_{0_1},\dots,\GD'_{0_n}\rangle,
           \\[3pt]
           ~ [F_1, \dots, F_{l-1}, F_l \Ls [E_j] , D_1, \dots, D_n],
           \\[3pt]
@@ -1560,7 +1564,7 @@ where $\GL_1 = B , \GL'_1$ for some $\GL'_1$ and $\GG'_{1l} = \GG''_{1l} , B'$ f
         \end{array}
       \end{array}
     \]
-Notice that $\langle (\GG''_{1l} , B'\Larr A',\GG),\GD'_{01},\dots,\GD'_{0n}\rangle$ is a partition of\newline $(\GG''_{1l} , B'\Larr A',\GG,\GD'_{01},\dots,\GD'_{0n})$ and there exists a derivation:
+Notice that $\langle (\GG''_{1_l} , B'\Larr A',\GG),\GD'_{0_1},\dots,\GD'_{0_n}\rangle$ is a partition of\newline $(\GG''_{1_l} , B'\Larr A',\GG,\GD'_{0_1},\dots,\GD'_{0_n})$ and there exists a derivation:
 \[
   \infer[\Lsr]{F_l \Ls [E_j], D_1, \dots, D_n \vd F_l \Ls [[D_i] \Rs E_1, E_2,\dots,E_m]}{
     \infer[\Rsl]{F_l \Ls [E_j], D_1, \dots, D_n, [D_i]\Rs E_1, E_2,\dots, E_m \vd F_l}{
@@ -1810,7 +1814,11 @@ The zig-zag relation might look like an unusual notion, but it is actually very 
 
 %The definitions and results we had in this work, including \MIP\ (\MmIP) being a right inverse of the admissible cut, definition of equivalence of interpolant triples (quadruples), and \MIP\ (\MmIP) being well-defined wrt.\ $\circeq$ can all be generalized to Lambek calculus with multiplicative unit and additive multiplication, disjunction and their units.
 
-For the future, it will be interesting to see the computational behavior of equivalent interpolant triples. This would lead us to work in a term assignment calculus either in the sense of term assignment for sequent calculus \cite{Herbelin1995,Kanazawa2006} or Curien-Herbelin's $\lambda\mu\tilde{\mu} $ calculus \cite{Curien2000,Saurin2024}.
+For the future, it will be interesting to see the computational behavior of equivalent interpolant triples.
+As Saurin mentioned in \cite{Saurin2024}, for a closed term $\Gl .t : A \to B$, the interpolant type $C$ can be seen as an interface between types $A$ and $B$ in processing the computation $t$.
+In particular, it only involves the data shared in both $A$ and $B$.
+Equivalent interpolant triples of two closed terms $\Gl.t,\Gl. t : A \to B$ then can be seen as bridges between interfaces in processing computations $t$ and $t'$.
+This would lead us to work in a sequent calculus that will be variants of Curien-Herbelin's $\lambda\mu\tilde{\mu} $ calculus \cite{Curien2000}.
 We would also like to study the well-definedness of interpolant triples in more permissive systems, e.g.\ sequent calculi with cuts \cite{Saurin2025} and complete calculi in \cite{Hetzl2024}.
 It will also be interesting to have a general theory on well-definedness of families of calculi from the universal proof-theoretic perspective \cite{tabatabai2018,Tabatabai2025}.
 % For the future, it will be interesting to see what should be the correct notion of equivalence on interpolant triples for the complete calculi in the sense of Hetzl and Jalali \cite{Hetzl2024}. 
