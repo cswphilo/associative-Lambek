@@ -1228,16 +1228,18 @@ We can prove that $\cut \ (t , g_1) \circeq g_0$ and $\cut \ (h_0 , t) \circeq h
   The proof proceeds by induction on the proof of $f \circeq f'$ (remember that $\circeq$ is an inductively defined congruence).
   We only show the case of the generating equation in (\ref{eq:rl:comm}), other cases are similar.
   We do proceed in different ways, depending on the location of $\GD$ inside the context $\GG , \GD_0 , A \Rarr B , \GL , \GD_1 , A' \Rarr B', \GO$, which is the antecedent in the conclusion of both derivations.
-  We can identify three main situations.
+  There are 15 possible cases, but we can identify three main situations.
 
-Case $(i)$: $\GD$ is contained in $\GD_0$. Computing $\mf{mip}$ by looking at the proof of Theorem \ref{thm:MIP} gives two interpolant triples
+Situation $(i)$: $\GD$ is contained in $\GD_0$. Computing $\mf{mip}$ by looking at the proof of Theorem \ref{thm:MIP} gives two interpolant triples
 $$(D , \ \ \Rl \ (g',\Rl\ (f' , f'')) , \ \ h') \qquad (D , \ \ \Rl \ (f' , \Rl \ (g' , f'')) , \ \ h')$$
 where $\mf{mip} \ (\GD,f) = (D,g',h')$.
 The triple are equivalent by (\ref{eq:rl:comm}).
-Other cases are treated similarly: when $\GD$ is contained in $\GG$, in $\Lambda$, in $\GD_1$ or in $\GO$; when $\GD$ contains $\GD_0 , A\Rarr B$ but not $\GD_1 , A' \Rarr B'$ or the other way around; when $\GD$ contains $\GD_0 , A \Rarr B , \GL , \GD_1 , A' \Rarr B'$. In all these cases the interpolant triples are equivelent since the interpolant formulae are equal, and $g \circeq g'$ and $h \circeq h'$. 
+Other cases are treated similarly: when $\GD$ is contained in $\GG$, in $\Lambda$, in $\GD_1$ or in $\GO$; when $\GD$ contains $\GD_0 , A\Rarr B$ but not $\GD_1 , A' \Rarr B'$ or the other way around; when $\GD$ contains $\GD_0 , A \Rarr B , \GL , \GD_1 , A' \Rarr B'$.
+In all these cases the interpolant triples are computed using the recursive call on \emph{one} derivation among $f,f'$ and $f''$.
+The triples are equivelent since the interpolant formulae are equal, and $g \circeq g'$ and $h \circeq h'$. 
 
 
-Case $(ii)$: $\GD$ splits between $\GG$ and $\GD_1$. This implies that $\GL$ has the form $\GL_0 , \GL_1$ and $\GD_1$ has the form $\GD'_{1} , \GD''_{1}$ so that $\GD = \GL_1 , \GD'_1$. Computing $\mf{mip}$ gives two interpolant triples
+Situation $(ii)$: $\GD$ splits between $\GG$ and $\GD_1$. This implies that $\GL$ has the form $\GL_0 , \GL_1$ and $\GD_1$ has the form $\GD'_{1} , \GD''_{1}$ so that $\GD = \GL_1 , \GD'_1$. Computing $\mf{mip}$ gives two interpolant triples
 \[
 \begin{array}{l}
   (F \ot E ,\ \ \tl \ (\Rl \ (g' , g'')) , \ \ \Rl \ (f , \tr\ (h' 
@@ -1249,9 +1251,11 @@ Case $(ii)$: $\GD$ splits between $\GG$ and $\GD_1$. This implies that $\GL$ has
 where $\mf{mip} \ (\GL_1 , f') = (E , g' , h')$ and $\mf{mip} \ (\GD''_{1} , f'') = (F , g'' , h'')$.
 The triples are equivalent since $\Rl$ commutes with $\tr$.
 Other cases are treated similarly: $\GD$ splits between $\GG$ and $\GD_0$, or between $\GG$ and $\GD_1$ (fully containing $\GD_0,A \Rarr B,\GL$), or between $\GD_0$ and $\GL$ (fully containing $A \Rarr B$), or between $\GD_0$ and $\GO$ (fully containing $A \Rarr B,\GL,\GD',A' \Rarr B'$), or between $\GD_1$ and $\GO$ (fully containing $A' \Rarr B'$).
+In all these cases the interpolant triples are computed using the recursive call on \emph{two} derivation among $f,f'$ and $f''$.
+The triples are equivelent since the interpolant formulae are equal, and $g \circeq g'$ and $h \circeq h'$. 
 
 
-Case $(iii)$: $\GD$ splits between $\GD_0$ and $\GD_1$. Then $\GD_0$ is of the form $\GD'_0 , \GD''_0$ and $\GD_1$ is of the form $\GD'_1 , \GD''_1$ so that $\GD = \GD''_0 , A \Rarr B , \GL , \GD'_1$.
+Situation $(iii)$: $\GD$ splits between $\GD_0$ and $\GD_1$. Then $\GD_0$ is of the form $\GD'_0 , \GD''_0$ and $\GD_1$ is of the form $\GD'_1 , \GD''_1$ so that $\GD = \GD''_0 , A \Rarr B , \GL , \GD'_1$.
 Computing $\mf{mip}$ returns two interpolant triples
     \[
       \begin{array}{l}
@@ -1437,7 +1441,11 @@ Computing $\mf{mip}$ returns two interpolant triples
 \end{proof}
 
 
-As the readers might have noticed, the proof of Theorem \ref{thm:welldef:L} requires a great amount of case distinction. It makes the proof error-prone and demanding. To alleviate this,  we have formalized the ($\Rarr,\ot$) fragment of \L\ in the proof assistant Agda.
+As the readers might have noticed, the proof of Theorem \ref{thm:welldef:L} requires a great amount of case distinction.
+The relation $\circeq$ contains ?? generating equations and each of them requires further case analyses on the location of the interpolation context $\Delta$.
+Equation (\ref{eq:rl:comm}) alone has 15 possible subcases.
+It is clear that keeping track of all these cases is proof error-prone and demanding.
+To alleviate the situation and convince ourselves of the validity of the theorem, we have formalized the result for the ($\Rarr,\ot$) fragment of \L\ in the proof assistant Agda.
 A description of the formalization can be found in Appendix \ref{appendix}.
 
 %\section{Proof-relevant Maehara Multi-Interpolation of Product-free Lambek Calculus}
