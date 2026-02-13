@@ -921,7 +921,7 @@ We also prove that the function $\mf{mip}$ is well-defined wrt.\ the equivalence
   Given $f : \GG , \GD , \GL \vd C$, if $\mf{mip}\ (\GD,f) = (D,g,h)$, then $\cut \ (h , g) \circeq f$.
 \end{theorem}
 \begin{proof}
-  The proof proceeds by structural induction on the derivation $f$.
+  The proof proceeds by induction on the derivation $f$.
   We only discuss the case $f = \Rl \ (f' , f'')$ and its subcases $(v)$ and $(iv)$ in the proof of Theorem \ref{thm:MIP}. %in the the proofs of the interesting subcases of $f = \Rl \ (f' , f''): \GG' , \GD' , A \Rarr B , \GL' \vd C$ mentioned
 
     % The first case is when $\GD$ splits both $\GG'$ and $\GD'$ where the interpolant formula is $E \ot D$. Recall the derivations $g = \tl \ (\Rl \ (g' , g''))$ and $h = \tr \ (h'' , h')$, therefore the goal is to show $\cut \ (\tr \ (h'' , h') , \tl \ (\Rl \ (g' , g''))) \circeq \Rl \ (f' , f'')$, which is witnessed by the following:
@@ -1601,7 +1601,7 @@ Next, given a list of derivations, $f_i : \GD_i \vd A_i$ for $i \in \{1,\dots, n
   Given a derivation $f : \GG , \GD , \GL \vd C$, there exist a partition $\Delta = \GD_1, \dots, \GD_n$, formulae $D_1,\dots,D_n$, a derivation $g : \GG, D_1,\dots,D_n, \GL \vdash C$ and derivations $h_i : \GD_i \vdash D_i$ for $i \in \{1,\dots,n\}$ such that $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD} \cap \vars{\GG, \GL, C}$.
 \end{theorem}
 \begin{proof}
-  We build a function $\mf{mmip}$ producing a tuple $(n,\vec{\GD_i},\vec{D_i},g,\vec{h_i})$ for each derivation $f : \Gamma,\Delta,\Lambda \vdash C$ and write $\mf{mmip}\ (\GD,f) = (n,\vec{\GD_i},\vec{D_i},g,\vec{h_i})$.
+  We build a function $\mf{mmip}$ producing a tuple $(n,\vec{\GD},\vec{D},g,\vec{h})$ for each derivation $f : \Gamma,\Delta,\Lambda \vdash C$ and write $\mf{mmip}\ (\GD,f) = (n,\vec{\GD},\vec{D},g,\vec{h})$. Here the list $\vec{\GD}$ has length $n$ and its $i$th element is denoted $\GD_1$, and similarly for lists $\vec{D}$ and $\vec{h}$.
   The construction proceeds similarly to the one $\mf{mip}$ in Theorem \ref{thm:MIP}.
   We only discuss the case when $f = \Rl \ (f' , f'') : \GG' , \GD' , A \Rarr B , \GL' \vd C$ and only show subcases $(v)$ and $(vi)$. We use the same variable names for contexts and derivations as in Theorem \ref{thm:MIP}.
   %Here we briefly discuss the new proofs of the two interesting cases of $f = \Rl \ (f' , f'') : \GG' , \GD' , A \Rarr B , \GL' \vd C$.
@@ -1634,7 +1634,7 @@ Next, given a list of derivations, $f_i : \GD_i \vd A_i$ for $i \in \{1,\dots, n
   \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG'_0 , B , \GL' , C}$
   \end{itemize}
   % The desired partition of $\GG'_1, \GD'_0$ is $\langle \GG'_{1_1}, \dots , \GG'_{1_m}, \GD'_{0_1}, \dots , \GD'_{0_n}\rangle$ and the list of interpolant formulae is $[E_1 , \dots, E_m, D_1,\dots, D_n]$. The desired derivations are \linebreak $\Rl \ (g' , g'')$ and $[h''_1, \dots, h''_m, h'_1, \dots, h'_n]$.
-  We return $\mf{mmip}\ (\GD,f) = (l,\vec{\GD_k},\vec{F_k},g,\vec{h_k})$, where $l = n+m$,  the partition $\vec{\GD_k}$ of $\GD$ is $\GG'_{1_1}, \dots , \GG'_{1_m}, \GD'_{0_1}, \dots , \GD'_{0_n}$, the list of interpolant formulae $\vec{F_k}$ is $E_1 , \dots, E_m, D_1,\dots, D_n$, the derivation $g = \Rl \ (g' , g'')$ and the list of derivations $\vec{h_k}$ is $h''_1, \dots, h''_m, h'_1, \dots, h'_n$.
+  We return $\mf{mmip}\ (\GD,f) = (l,\vec{\GD},\vec{F},g,\vec{h})$, where $l = n+m$,  the partition $\vec{\GD}$ of $\GD$ is $\GG'_{1_1}, \dots , \GG'_{1_m}, \GD'_{0_1}, \dots , \GD'_{0_n}$, the list of interpolant formulae $\vec{F}$ is $E_1 , \dots, E_m, D_1,\dots, D_n$, the derivation $g = \Rl \ (g' , g'')$ and the list of derivations $\vec{h}$ is $h''_1, \dots, h''_m, h'_1, \dots, h'_n$.
 %  The variable condition is easy to check.
 
   Case $(vi)$: % The second case is when the interpolant context splits both $\GD'$ and $\GL'$ and contains $A \Rarr B$. By inductive hypothesis, we obtain:
@@ -1665,59 +1665,72 @@ Next, given a list of derivations, $f_i : \GD_i \vd A_i$ for $i \in \{1,\dots, n
   \end{itemize}
   % The desired partition of $\GD'_1 , A \Rarr B , \GL'_1$ is $\langle (\GD'_1, A \Rarr B , \GL''_{0_1}), \GL'_{0_2}, \dots \GL'_{0_m}\rangle$ and the list of interpolant formulae is $[[D_i] \Rs E_1 , E_2 , \dots , E_j]$. The desired derivations are $\Rsl \ ([h'_i] , g'')$ and $[\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m]$.
   % The variable condition is easy to check.
-  We return $\mf{mmip}\ (\GD,f) = (m,\vec{\GD_j},\vec{F_j},g,\vec{h_j})$, where the partition $\vec{\GD_j}$ of $\GD$ is $(\GD'_1, A \Rarr B , \GL''_{0_1}), \GL'_{0_2}, \dots \GL'_{0_m}$, the interpolant formulae  $\vec{F_j}$ are $(D_1,\dots,D_n) \Rs E_1 , E_2 , \dots , E_j$, the derivation $g = \Rsl \ (\vec{h'_i} , g'')$ and the list of derivations $\vec{h_j}$ is $\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m$.
+  We return $\mf{mmip}\ (\GD,f) = (m,\vec{\GD},\vec{F},g,\vec{h})$, where the partition $\vec{\GD}$ of $\GD$ is $(\GD'_1, A \Rarr B , \GL''_{0_1}), \GL'_{0_2}, \dots \GL'_{0_m}$, the interpolant formulae  $\vec{F}$ are $(D_1,\dots,D_n) \Rs E_1 , E_2 , \dots , E_j$, the derivation $g = \Rsl \ (\vec{h'} , g'')$ and the list of derivations $\vec{h}$ is $\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m$.
 
   In all cases the variable condition is easy to verify.
 \end{proof}
 %The proof of Theorem \ref{thm:MIP:LPfree} describes the construction of a function $\mf{mmip}$ producing a multi-interpolant tuple $(n,[\GD_i],[D_i],g,[h_i])$, where the lists have index $i \in \{1,\dots,n\}$, for each derivation $f : \Gamma,\Delta,\Lambda \vdash C$, in which case we write $\mf{mmip}\ (\GD,f) = (n,[\GD_i],[D_i],g,[h_i])$.
 
 \begin{theorem}[Proof-relevant multi-interpolation for \LPfree]\label{thm:cut:intrp:LPfree}
-  Given $f : \GG , \GD , \GL \vd C$, if $\mf{mmip}\ (\GD,f) = (n,[\GD_i],[D_i],g,[h_i])$, then $\cuts \ ([h_i] , g) \circeq f$.
+  Given $f : \GG , \GD , \GL \vd C$, if $\mf{mmip}\ (\GD,f) = (n,\vec{\GD},\vec{D},g,\vec{h})$, then $\cuts \ (\vec{h} , g) \circeq f$.
 \end{theorem}
 \begin{proof}
-  Proof proceeds by induction on $f$.
-  We show one interesting subcase of $f = \Rl \ (f' , f'') : \GG' , \GD' , A \Rarr B , \GL' \vd C$ that the interpolation context splits both $\GD'$ and $\GL'$ and contains $A \Rarr B$.
-  Recall the derivations are $\Rsl \ ([h'_i] , g'')$ and $\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m$.
+  The proof proceeds by induction on the derivation $f$.
+  We only discuss the case $f = \Rl \ (f' , f'')$ and its subcase $(iv)$ in the proof of Theorem \ref{thm:MIP:LPfree}. 
+%%  Proof proceeds by induction on $f$.
+%%  We show one interesting subcase of $f = \Rl \ (f' , f'') : \GG' , \GD' , A \Rarr B , \GL' \vd C$ that the interpolation context splits both $\GD'$ and $\GL'$ and contains $A \Rarr B$.
+%  Recall the derivations are $\Rsl \ ([h'_i] , g'')$ and $\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m$.
   % We show one interesting subcase of $f = \Rl \ (f' , f'')$ where $\mf{mmip}\ ((\GD'_1,A\Rarr B,\GL'_0) , \Rl \ (f',f'')) = $
   % Recall the derivations are $\Rsl \ ([h'_i] , g'')$ and $[\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m]$.
-  The desired equation is obtained by the following:
+  We calculate:
   \[
     \begin{array}{lr}
-      \cuts \ ([\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m], \Rsl \ ([h'_i] , g''))
+      \cuts \ (\vec{h},g)
       &
       \\
-      =\cuts \ ([h''_2,\dots,h''_m] , \cut \ (\Rsr \ (\Rl \ (g',h''_1), \Rsl \ ([h'_i],g'')))) 
+      = \cuts \ ([\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m], \Rsl \ ([h'_1,\dots,h'_n] , g''))
       &
+      \hspace*{-2cm}\text{(unfold defns)}
       \\
-      &\hspace*{-1cm}\text{(by (\ref{eq:cut:comm}))}
+      =\cuts \ ([h''_2,\dots,h''_m] , \cut \ (\Rsr \ (\Rl \ (g',h''_1), \Rsl \ ([h'_1 \dots h'_n],g'')))) 
+      &
+      \hspace*{-2cm}\text{(by (\ref{eq:cut:comm}))}
       \\
-      =\cuts \ ([h''_2,\dots,h''_m] , \cuts \ ([h'_i], \cut \ (\Rl \ (g' , h''_1), g''))) & \hspace*{-1cm}\text{(defn of $\cut$)}
+      =\cuts \ ([h''_2,\dots,h''_m] , \cuts \ ([h'_1,\dots,h'_n], \cut \ (\Rl \ (g' , h''_1), g''))) & \hspace*{-2cm}\text{(defn of $\cut$)}
       \\
-      \circeq \cuts \ ([h''_2,\dots,h''_m] , \cuts \ ([h'_i],\Rl \ (g' , \cut \ (h''_1,g''))))& \hspace*{-1cm}\text{($\cut$ and $\Rl$ commute)}
+      \circeq \cuts \ ([h''_2,\dots,h''_m] , \cuts \ ([h'_1,\dots,h'_n],\Rl \ (g' , \cut \ (h''_1,g''))))&
       \\
-      = \cuts \ ([h''_2,\dots,h''_m] ,\Rl \ (\cuts \ ([h'_i],g'), \cut \ (h''_1,g'')))& \hspace*{-1cm}\text{(defn of $\cut$)}
+      &\hspace*{-2cm}\text{($\cut$ and $\Rl$ commute)}
       \\
-      \circeq \cuts \ ([h''_2,\dots,h''_m] ,\Rl \ (f', \cut \ (h''_1,g'')))& \hspace*{-1cm}\text{(by ind. hyp. on $f'$)}
+      = \cuts \ ([h''_2,\dots,h''_m] ,\Rl \ (\cuts \ ([h'_1,\dots,h'_n],g'), \cut \ (h''_1,g'')))& \hspace*{-2cm}\text{(defn of $\cut$)}
       \\
-      = \Rl \ (f' , \cuts ([h''_j], g'')) &\hspace*{-1cm}\text{(defn of $\cut$}
+      \circeq \cuts \ ([h''_2,\dots,h''_m] ,\Rl \ (f', \cut \ (h''_1,g'')))& \hspace*{-2cm}\text{(ind hyp on $f'$)}
       \\
-      &\hspace*{-1cm}\text{and (\ref{eq:cut:comm}))}
+      = \Rl \ (f' , \cuts \ ([h''_2,\dots,h''_m] , \cut \ (h''_1,g'')))
+      &\hspace*{-2cm}\text{(defn of $\cut$)}
       \\
-      \circeq \Rl \ (f' , f'')&\hspace*{-1cm}\text{(by ind. hyp. on $f''$)}
+      = \Rl \ (f' , \cuts ([h''_1,\dots,h''_m], g'')) 
+      &\hspace*{-2cm}\text{(by (\ref{eq:cut:comm}))}
+      \\
+      \circeq \Rl \ (f' , f'')&\hspace*{-2cm}\text{(ind hyp on $f''$)}
     \end{array}
   \]
-  Other cases are similar.
   % \[
   % \cuts ([\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m], \Rsl \ ([h'_i] , g'')) \circeq \Rl \ (f' , f'').
   % \]
 \end{proof}
 The appropriate notion of equivalence of multi-interpolant tuples in \LPfree\ is obtained as a modification of the equivalence of interpolant tuples in \L\ by additionally considering the relationship between partitions of $\GD$.
 \begin{definition}[Equivalence of multi-interpolant tuples]\label{def:equiv:intrp:triples:LPfree}
-  Two multi-interpolant tuples are equivalent, written $(n,[\GD_i], [D_i] , g , [h_i]) \sim (m,[\GD'_j] , [D'_j] , g' , [h'_j])$, if they satisfy the symmetric-transitive closure of the following relation:
+  Two multi-interpolant tuples are equivalent, written $(n,\vec{\GD}, \vec{D} , g , \vec{h}) \sim (m,\vec{\GD'} , \vec{D'} , g' , \vec{h'})$, if they satisfy the symmetric-transitive closure of the following relation:
   % there exists a partition $[\GD_i] = [\GD_{(1-i_1)_1}], \dots, [\GD_{(i_{j-1}-n)_m}]$ such that $[\GD_{i_j}] = \GD'_j$ for $j \in \{1,\dots,m\}$
-  $\GD$ can be partitioned in $m$ groups, %there exists a partition
-  i.e. $\GD = (\GD_1,\dots,\GD_{n_1}), \dots,(\GD_{n_{m-1}+1},\dots,\GD_{n_m})$ with $n_m = n$, such that $\GD'_j = \GD_{n_{j-1}+1},\dots,\GD_{n_{j}}$ for $j \in \{1,\dots,m\}$ (where $n_0$ is assumed to be 0), and there exist derivations $t_j : D_{n_{j-1}+1},\dots,D_{n_{j}} \vd D'_j$ such that  $g \circeq \cuts \ ([t_j] , g')$ and 
-$\cuts \ ([h_k] , t_j) \circeq h'_j$ where index $k \in \{n_{j-1}+1,\dots,n_j \}$.
+  \begin{enumerate}
+  \item $\GD$ can be partitioned in $m$ groups, %there exists a partition
+    i.e. $n = n_1 + \dots + n_m$ and there is an equality $\GD = (\GD_1,\dots,\GD_{n_1}), \dots,(\GD_{n_{m-1}+1},\dots,\GD_{n_m})$ with $n_m = n$,
+  \item $\GD'_j = \GD_{n_{j-1}+1},\dots,\GD_{n_{j}}$ for $j \in \{1,\dots,m\}$ (where $n_0$ is assumed to be 0),
+  \item there exist derivations $t_j : D_{n_{j-1}+1},\dots,D_{n_{j}} \vd D'_j$ for each $j \in \{ 1,\dots,m \}$, such that
+  \item $g \circeq \cuts \ (\vec{t} , g')$ and
+  \item $\cuts \ (\vec{h} , t_j) \circeq h'_j$ for each $j \in \{ 1,\dots,m \}$, where index $k$ ranges over  $\{n_{j-1}+1,\dots,n_j \}$.
+  \end{enumerate}
   % there exists a partition $n = n_1+n_2+\dots+n_m$ such that $\GD'_j = \GD_{n_{j-1}+1},\dots,\GD_{n_{j}}$ for $j \in \{1,\dots,m\}$ (where $n_0$ is assumed to be 0), 
 %   and there exist derivations $t_j : D_{n_{j-1}+1},\dots,D_{n_{j}} \vd D'_j$ such that  $g \circeq \cuts \ ([t_j] , g')$ and 
 % $\cuts \ ([h_k] , t_j) \circeq h'_j$ where index $k \in \{n_{j-1}+1,\dots,n_j \}$.
@@ -1734,13 +1747,29 @@ $\cuts \ ([h_k] , t_j) \circeq h'_j$ where index $k \in \{n_{j-1}+1,\dots,n_j \}
 %%       \item or the other way around.
 %%     \end{itemize}
 %%   \end{definition}
+
+ Let us write $\vec{t} : \vec{D} \vdash \vec{D'}$ to denote the list of derivations in condition 3 of Definition \ref{def:equiv:intrp:triples:LPfree}.
+ Intuitively, two multi-interpolant tuples are equivalent if there exists a ``generalized zig-zag'' of proofs of the form
+ $$
+ \vec{t^1}: \vec{D} \vdash \vec{D^1} \qquad
+ \vec{t^2}: \vec{D^2} \vdash \vec{D^1} \qquad
+ \vec{t^3} : \vec{D^2} \vdash \vec{D^3}
+ \quad
+ \dots
+ \quad
+ \vec{t^n} : \vec{D^n} \vdash \vec{D'}
+ $$
+
+
 \begin{theorem}[Well-definedness of $\mf{mmip}$]\label{thm:welldef:LPfree}
-  Given $f,f' : \GG , \GD , \GL \vd C$ with $\mf{mmip} \ (\Delta,f) = (n,[\GD_i] , [D_i] , g , [h_i])$ and $\mf{mmip} \ (\Delta,f') = (m,[\GD'_j] , [D'_j] , g' , [h'_j])$, if $f \circeq f'$ then $(n,[\GD_i] , [D_i] , g , [h_i]) \sim (m,[\GD'_j] , [D'_j] , g' , [h'_j])$.
+  Given $f,f' : \GG , \GD , \GL \vd C$ with $\mf{mmip} \ (\Delta,f) = (n,\vec{\GD} , \vec{D} , g , \vec{h})$ and $\mf{mmip} \ (\Delta,f') = (m,\vec{\GD'} , \vec{D'} , g' , \vec{h'})$, if $f \circeq f'$ then $(n,\vec{\GD} , \vec{D} , g , \vec{h})
+  \sim
+  (m,\vec{\GD'} , \vec{D'} , g' , \vec{h'})$.
 \end{theorem}
 \begin{proof}
-  Proof proceeds by examining all equations in the equivalence relation $\circeq$.
-  The case distinction for the equations in \LPfree\ is exactly the same as the proof of Theorem \ref{thm:welldef:L}.
-  We show the most complicated case of the equation (\ref{eq:rl:ll:assoc}) where the interpolant context splits $\GG'$ and $\GD$, i.e.\ $\GG' = \GG'_0,\GG'_1$, $\GD = \GD_0, \GD_1$ and the interpolant context is $\GG'_1 , B' \Larr A', \GG , \GD_0$. Assume given multi-interpolant tuples for the derivations $f$, $f'$ and $f''$:
+  The proof proceeds by induction on the proof of $f \circeq f'$ (remember that $\circeq$ is an inductively defined congruence).
+  We only show the case of the equation (\ref{eq:rl:ll:assoc}) and its most complicated subcase, where $\GD$ split between $\GG'$ and $\GD$, i.e.\ $\GG' = \GG'_0,\GG'_1$ and $\GD = \GD_0, \GD_1$ so that $\GD = \GG'_1 , B' \Larr A', \GG , \GD_0$.
+ Assume given multi-interpolant tuples for the derivations $f$, $f'$ and $f''$:
     % \[
     %   \scalebox{1}{$\begin{array}{c}
     %   \begin{array}{l}
@@ -1755,11 +1784,11 @@ $\cuts \ ([h_k] , t_j) \circeq h'_j$ where index $k \in \{n_{j-1}+1,\dots,n_j \}
     \[
       \scalebox{1}{$\begin{array}{c}
       \begin{array}{l}
-        \mf{mmip} \ (\GD_0 , f) = (n, [\GD_{0_i}], [D_i] , g : [D_i] , \GD_1 \vd A , [h_i : \GD_{0i} \vd D_i])
+        \mf{mmip} \ (\GD_0 , f) = (n,\  \vec{\GD_0},\ \vec{D} , \ g : D_1,\dots,D_n , \GD_1 \vd A , \ [h_i : \GD_{0_i} \vd D_i]_{1 \le i \le n})
       \\[3pt]
-      \mf{mmip} \ ((B,\GL),f') = (m, [\GL_j], [E_j], g' : \GG, [E_j] \vd A' , [h'_j : \GL_j \vd E_j])
+      \mf{mmip} \ ((B,\GL),f') = (m, \ \vec{\GL}, \ \vec{E}, \ g' : \GG, E_1,\dots,E_m \vd A' , \ [h'_j : \GL_j \vd E_j]_{1 \le j \le m})
       \\[3pt]
-      \mf{mmip} \ ((\GG'_1 , B'), f'') = (l,[\GG'_{1_k}] ,[F_k] , g'' : \GG'_0 , [F_k] , \GL' \vd C , [h''_l : \GG'_{1_k} \vd F_k])
+      \mf{mmip} \ ((\GG'_1 , B'), f'') = (l, \ \vec{\GG'_1} , \ \vec{F} , \ g'' : \GG'_0 , F_1,\dots,F_l , \GL' \vd C , \  [h''_k : \GG'_{1_k} \vd F_k]_{1 \le k \le l})
       \end{array}
       \end{array}$}
     \]
@@ -1784,7 +1813,48 @@ $\cuts \ ([h_k] , t_j) \circeq h'_j$ where index $k \in \{n_{j-1}+1,\dots,n_j \}
     %   \end{array}$}
     % \]
 where $\GL_1 = B , \GL'_1$ for some $\GL'_1$ and $\GG'_{1_l} = \GG''_{1_l} , B'$ for some $\GG''_{1_l}$.
-By executing $\mf{mmip}$ to both derivations in (\ref{eq:rl:ll:assoc}), we obtain:
+Computing $\mf{mmip}$ on the two side of equation (\ref{eq:rl:ll:assoc}) returns
+\[
+\begin{array}{c}
+     \begin{array}{c}
+       \text{(for the left-hand-side)} \\
+ %      \mf{mmip} \ ((\GG'_1 , B' \Larr A', \GG , \GD_0) , \Rl \ (f , \Ll \ (f',f''))) 
+ %      \\[5pt]
+ %      \hspace*{3.3cm}=
+       l
+       \\ %\hspace*{3.8cm}
+         {[\GG'_{1_1}, \dots, \GG'_{1_{l-1}}, (\GG''_{1_l} , B'\Larr A',\GG,\GD_{0_1},\dots,\GD_{0_n})]}
+           \\
+           %\hspace*{3.8cm}
+             {[F_1,\dots,F_{l-1}, F_l \Ls [[D_1,\dots,D_n] \Rs E_1,E_2,\dots,E_m]]}
+           \\
+           %\hspace*{3.8cm}
+           g_0 = \Lsl \ ([\Rsr \ (\Rl \ (g, h'_1)), h'_2,\dots,h'_m], g'')
+           \\
+           %\hspace*{3.8cm}
+             {[h''_1, \dots, h''_{l-1}, \Lsr \ (\Ll \ (\Rsl\ ([h_1,\dots,h_n],g') , h''_l))]}
+     \end{array}
+     \\ \\
+     \begin{array}{c}
+       \text{(for the right-hand-side)} \\
+ %        \mf{mmip} \ ((\GG'_1 , B' \Larr A', \GG , \GD_0) , \Ll \ (\Rl \ (f , f'), f'')) 
+ %      \\[5pt]
+ %      \hspace*{3.3cm}=
+       l+n
+       \\
+           {[\GG'_{1_1}, \dots, \GG'_{1_{l-1}}, (\GG''_{1_l} , B'\Larr A',\GG),\GD_{0_1},\dots,\GD_{0_n}]}
+           \\
+           %\hspace*{3.8cm}
+             {[F_1, \dots, F_{l-1}, F_l \Ls [E_1,\dots,E_m] , D_1, \dots, D_n]}
+           \\
+           %\hspace*{3.8cm}
+           g_1 = \Rl \ (g, \Rsl \ ([h'_1,\dots,h'_m] , g'')),
+           \\
+           %\hspace*{3.8cm}
+             {[h''_1, \dots, h''_{l-1}, \Rsr \ (\Ll (g' , h''_l)) , h_1, \dots, h_n]}
+     \end{array}
+\end{array}
+\]
   % \[
   %     \begin{array}{c}
   %     % \arraycolsep=20pt
@@ -1813,86 +1883,69 @@ By executing $\mf{mmip}$ to both derivations in (\ref{eq:rl:ll:assoc}), we obtai
   %       \end{array}
   %     \end{array}
   %   \]
-    \[
-      \begin{array}{l}
-      \mf{mmip} \ ((\GG'_1 , B' \Larr A', \GG , \GD_0) , \Rl \ (f , \Ll \ (f',f''))) 
-      \\[5pt]
-      \hspace*{3.3cm}=
-          (l, 
-          [\GG'_{1_1}, \dots, \GG'_{1_{l-1}}, (\GG''_{1_l} , B'\Larr A',\GG,\GD_{0_1},\dots,\GD_{0_n})],
-          \\
-          \hspace*{3.8cm}[F_1,\dots,F_{l-1}, F_l \Ls [[D_i] \Rs E_1,E_2,\dots,E_m]],
-          \\
-          \hspace*{3.8cm}\Lsl \ ([\Rsr \ (\Rl \ (g, h'_1)), h'_2,\dots,h'_m], g'')
-          \\
-          \hspace*{3.8cm}[h''_1, \dots, h''_{l-1}, \Lsr \ (\Ll \ (\Rsl\ ([h_i],g') , h''_l))])
-        \\[10pt]
-        \mf{mmip} \ ((\GG'_1 , B' \Larr A', \GG , \GD_0) , \Ll \ (\Rl \ (f , f'), f'')) 
-      \\[5pt]
-      \hspace*{3.3cm}=
-          (l+n,
-          [\GG'_{1_1}, \dots, \GG'_{1_{l-1}}, (\GG''_{1_l} , B'\Larr A',\GG),\GD_{0_1},\dots,\GD_{0_n}],
-          \\
-          \hspace*{3.8cm}[F_1, \dots, F_{l-1}, F_l \Ls [E_j] , D_1, \dots, D_n],
-          \\
-          \hspace*{3.8cm}\Rl \ (g, \Rsl \ ([h'_j] , g'')),
-          \\
-          \hspace*{3.8cm}[h''_1, \dots, h''_{l-1}, \Rsr \ (\Ll (g' , h''_l)) , h_1, \dots, h_n])
-      \end{array}
-    \]
-Notice that $(\GG''_{1_l} , B'\Larr A',\GG),\GD_{0_1},\dots,\GD_{0_n}$ is a partition of\newline $(\GG''_{1_l} , B'\Larr A',\GG,\GD_{0_1},\dots,\GD_{0_n})$ and there exists a derivation:
+Conditions 1 and 2 of Definition \ref{def:equiv:intrp:triples:LPfree} is satisfied by noticing that the list of contexts $(\GG''_{1_l} , B'\Larr A',\GG),\GD_{0_1},\dots,\GD_{0_n}$ is a partition of the context $(\GG''_{1_l} , B'\Larr A',\GG,\GD_{0_1},\dots,\GD_{0_n})$.
+Condition 3 amounts to constructing the following derivation, which we call $t$:
 \[
-  \infer[\Lsr]{F_l \Ls [E_j], D_1, \dots, D_n \vd F_l \Ls [[D_i] \Rs E_1, E_2,\dots,E_m]}{
-    \infer[\Rsl]{F_l \Ls [E_j], D_1, \dots, D_n, [D_i]\Rs E_1, E_2,\dots, E_m \vd F_l}{
-      \infer{[D_i \vd D_i]_{i \in \{1,\dots,n\}}}{[\ax]}
+  \infer[\Lsr]{F_l \Ls [E_1,\dots,E_m], D_1, \dots, D_n \vd F_l \Ls [[D_1,\dots,D_n] \Rs E_1, E_2,\dots,E_m]}{
+    \infer[\Rsl]{F_l \Ls [E_1,\dots,E_m], D_1, \dots, D_n, [D_1,\dots,D_n]\Rs E_1, E_2,\dots, E_m \vd F_l}{
+      \infer[\vec{\ax}]{[D_i \vd D_i]_{i \in \{1,\dots,n\}}}{}
       &
-      \infer[\Lsl]{F_l \Ls [E_j], E_1,\dots, E_m \vd F_l}{
-        \infer{[E_j \vd E_j]_{j \in \{1,\dots,m\}}}{[\ax]}
+      \infer[\Lsl]{F_l \Ls [E_1,\dots,E_m], E_1,\dots, E_m \vd F_l}{
+        \infer[\vec{\ax}]{[E_j \vd E_j]_{j \in \{1,\dots,m\}}}{}
         &
         \infer[\ax]{F_l \vd F_l}{}
       }
     }
   }
 \]
-The other parts of the two partitions can be ignored since they are exactly the same.
-
-We then check the equivalence of derivations. The first cases is:
+%The other parts of the two partitions can be ignored since they are exactly the same.
+Condition 4 is true since we calculate
+%We then check the equivalence of derivations. The first cases is:
 \[
-  \begin{array}{lr}
-    \cut\ (\Lsr \ (\Rsl \ ([\ax], \Lsl \ ([\ax], \ax))), \Rsl \ ([\Rsr \ (\Rl \ (g, h'_1)), h'_2,\dots,h'_m], g''))
+\begin{array}{lr}
+  \cut\ (t,g_1) & \\
+  =\cut\ (\Lsr \ (\Rsl \ (\vec{\ax}, \Lsl \ (\vec{\ax}, \ax))), \Lsl \ ([\Rsr \ (\Rl \ (g, h'_1)), h'_2,\dots,h'_m], g''))
     &
     \\
-    = \cuts \ ([\Rsr (\Rl \ (g, h'_1)), \dots, h'_m], \cut\ (\Rsl\ ([\ax], \Lsl \ ([\ax],\ax)),g''))&
+    &\hspace*{-5cm}\text{(unfold defns)}
     \\
-    &\hspace*{-3.5cm}\text{(defn of $\cut$)}
+    = \cuts \ ([\Rsr (\Rl \ (g, h'_1)), \dots, h'_m], \cut\ (\Rsl\ (\vec{\ax}, \Lsl \ (\vec{\ax},\ax)),g''))&
     \\
-    \circeq \cuts \ ([\Rsr (\Rl \ (g, h'_1)), \dots, h'_m], \Rsl \ ([\ax], \cut\ (\Lsl \ ([\ax], \ax),g'')))
+    &\hspace*{-5cm}\text{(defn of $\cut$)}
+    \\
+    \circeq \cuts \ ([\Rsr (\Rl \ (g, h'_1)), \dots, h'_m], \Rsl \ (\vec{\ax}, \cut\ (\Lsl \ (\vec{\ax}, \ax),g'')))
     &
     \\
-    &\hspace*{-3.5cm}\text{($\cut$ and $\Rl$ commute)}
+    &\hspace*{-5cm}\text{($\cut$ and $\Rl$ commute)}
+    \\
+    \circeq \cuts \ ([\Rsr (\Rl \ (g, h'_1)), \dots, h'_m],\Rsl\ (\vec{\ax}, \Lsl \ (\vec{\ax}, \cut\ (\ax,g''))))
+    \\
+    &\hspace*{-5cm}\text{($\cut$ and $\Ll$ commute)}
   \end{array}
   \]
   \[
   \begin{array}{lr}
-    \circeq \cuts \ ([\Rsr (\Rl \ (g, h'_1)), \dots, h'_m],\Rsl\ ([\ax], \Lsl \ ([\ax], g'')))
+    \circeq \cuts \ ([\Rsr (\Rl \ (g, h'_1)), \dots, h'_m],\Rsl\ (\vec{\ax}, \Lsl \ (\vec{\ax}, g'')))
     \\
-    &\hspace*{-3.5cm}\text{($\cut$ and $\Ll$ commute}
+    &\hspace*{-3.5cm} \text{($\cut$ left unital)}
     \\
-    &\hspace*{-3.5cm} \text{and $\cut$ left unital)}
-    \\
-    = \cuts\ ([h'_2,\dots,h'_m], (\cut \ (\Rsr \ (\Rl \ (g,h'_1)), \Rsl \ ([\ax], \Lsl \ ([\ax], g'')))))
+    = \cuts\ ([h'_2,\dots,h'_m], \cut \ (\Rsr \ (\Rl \ (g,h'_1)), \Rsl \ (\vec{\ax}, \Lsl \ (\vec{\ax}, g''))))
     &
     \\
     &\hspace*{-3.5cm}\text{(by (\ref{eq:cut:comm}))}
     \\
-    \circeq \cuts\ ([h'_2,\dots,h'_m],\cut\ (\Rl \ (g, h'_1), \Lsl \ ([\ax], g'')))
-    \\
-    &\hspace*{-3.5cm}\text{(defn of $\cut$ and $\cut$ left)}
-    \\
-    = \cuts\ ([h'_2,\dots,h'_m],\Lsl \ ([\Rl \ (g, h'_1), \ax,\dots,\ax], g''))
+    \circeq \cuts\ ([h'_2,\dots,h'_m],\cuts\ (\vec{\ax},\cut\ (\Rl \ (g, h'_1), \Lsl \ (\vec{\ax}, g''))))
     \\
     &\hspace*{-3.5cm}\text{(defn of $\cut$)}
     \\
+    \circeq \cuts\ ([h'_2,\dots,h'_m],\cut\ (\Rl \ (g, h'_1), \Lsl \ (\vec{\ax}, g'')))
+    \\
+    &\hspace*{-3.5cm}\text{($\cut$ left unital)}
+    \\
+%    = \cuts\ ([h'_2,\dots,h'_m],\Lsl \ ([\Rl \ (g, h'_1), \ax,\dots,\ax], g''))
+%    \\
+%    &\hspace*{-3.5cm}\text{(defn of $\cut$)}
+%    \\
     = \Lsl \ ([\Rl \ (g, h'_1), h'_2,\dots,h'_m], g'') 
     &\hspace*{-3.5cm}\text{(defn of $\cut$)}
     \\
@@ -1904,11 +1957,14 @@ We then check the equivalence of derivations. The first cases is:
     \\
     = \Rl \ (g, \Lsl \ ([h'_j], g''))
     &\hspace*{-3.5cm}\text{(defn of $\Lsl$)}
+    \\
+    = g_0
+    &\hspace*{-3.5cm}\text{(unfold defn)}
         \end{array}
 \]
 % \[    
 %     \begin{array}{lr}
-%     \circeq \cuts\ ([h'_2,\dots,h'_m],\cut\ (\Rl \ (g, h'_1), \Lsl \ ([\ax], g'')))
+%     \circeq \cuts\ ([h'_2,\dots,h'_m],\cut\ (\Rl \ (g, h'_1), \Lsl \ (\vec{\ax}, g'')))
 %     \\
 %     &\hspace*{-7cm}\text{(defn of $\cut$ and $\cut$ left)}
 %     \\
@@ -1930,33 +1986,38 @@ We then check the equivalence of derivations. The first cases is:
 %     % &\hspace*{-10cm}
 %   \end{array}
 % \]
-The second case is:
+Condition 5 is true since we calculate
 \[
-  \begin{array}{lr}
-    \cuts \ ([\Lsr \ (\Rl \ (g', h''_l)), h_1,\dots,h_n],\Lsr \ (\Rsl \ ([\ax], \Lsl \ ([\ax], \ax))))
-    &
+\begin{array}{lr}
+  \cuts \ ([\Lsr \ (\Rl \ (g', h''_l)), h_1,\dots,h_n],t)
+  &
+  \\
+  = \cuts \ ([\Lsr \ (\Rl \ (g', h''_l)), h_1,\dots,h_n],\Lsr \ (\Rsl \ (\vec{\ax}, \Lsl \ (\vec{\ax}, \ax))))
+  &
     \\
-    = \Lsr \ (\cuts \ ([\Lsr \ (\Rl \ (g', h''_l)), h_1,\dots,h_n], \Rsl \ ([\ax], \Lsl\ ([\ax], \ax))))
-    &
+    &\hspace*{-7cm}\text{(unfold defn)}  
     \\
-    &\hspace*{-7cm}\text{(defn of $\cut$)}
-    \\
-    = \Lsr \ (\Rsl \ ([h_i], \cut \ (\Lsr\ (\Ll \ (g', h''_l)), \Lsl \ ([\ax], \ax)))) 
-    &
-    \\
-    &\hspace*{-7cm}\text{(defn of $\cut$)}
-    \\
-    = \Lsr \ (\Rsl \ ([h_i], \cuts \ ([\ax], \Ll \ (g',h''_l))))
+%    = \Lsr \ (\cuts \ ([\Lsr \ (\Rl \ (g', h''_l)), h_1,\dots,h_n], \Rsl \ (\vec{\ax}, \Lsl\ (\vec{\ax}, \ax))))
+%    &
+%    \\
+%    &\hspace*{-7cm}\text{(defn of $\cut$)}
+%    \\
+%    = \Lsr \ (\Rsl \ ([h_i], \cut \ (\Lsr\ (\Ll \ (g', h''_l)), \Lsl \ (\vec{\ax}, \ax)))) 
+%    &
+%    \\
+%    &\hspace*{-7cm}\text{(defn of $\cut$)}
+%    \\
+    = \Lsr \ (\Rsl \ ([h_1,\dots,h_n], \cuts \ (\vec{\ax}, \Ll \ (g',h''_l))))
     & \hspace*{-7cm}\text{(defn of $\cut$)}
     \\
-    \circeq \Lsr \ (\Rsl \ ([h_i], \Ll \ (g', h''_l)))
+    \circeq \Lsr \ (\Rsl \ ([h_1,\dots,h_n], \Ll \ (g', h''_l)))
     &\hspace*{-7cm}\text{($\cut$ left unital)}
     \\
-    \circeq \Lsr \ (\Ll \ (\Rsl \ ([h_i], g'),h''_l))
-    &\hspace*{-7cm}\text{(applying (\ref{eq:rl:ll:assoc}) $n$ times)}
+    \circeq \Lsr \ (\Ll \ (\Rsl \ ([h_1,\dots,h_n], g'),h''_l))
+    &\hspace*{-7cm}\text{(by (\ref{eq:rl:ll:assoc}) $n$ times)}
   \end{array}
 \]
-Therefore the two multi-interpolant tuples are equivalent. Other cases are similar.
+%Therefore the two multi-interpolant tuples are equivalent. Other cases are similar.
 %% ax annotated
 % \[
 %   \infer[\Lsr]{F_l \Ls [E_j], D_1, \dots, D_n \vd F_l \Ls [[D_i] \Rs E_1, E_2,\dots,E_m]}{
@@ -2111,7 +2172,7 @@ with multiplicative unit and additive multiplication, additive disjunction and a
 An interesting finding is the discrepancy between non-associative and associative Lambek calculi wrt. equivalence of interpolation triples.
 In \NL, the equivalence of interpolant triples is strict, i.e.\ the interpolant formulae are exactly the same and the derivations are pairwise equivalent.
 In \L, we have to introduce a more relaxed zig-zag equivalence relation, and an even more complex relation in \LPfree. 
-The zig-zag relation might look like an unusual notion, but it is actually very natural from a category-theoretic perspective, since it characterizes the collection of interpolant triples as some kind of colimit/coend \niccolo{Citation}. We plan to expand on this categorical characterization in future work.
+The zig-zag relation might look like an unusual notion, but it is actually very natural from a category-theoretic perspective, since it characterizes the collection of interpolant triples as some kind of colimit/coend \cite{Loregian_2021}. We plan to expand on this categorical characterization in future work.
 
 %The definitions and results we had in this work, including \MIP\ (\MmIP) being a right inverse of the admissible cut, definition of equivalence of interpolant triples (quadruples), and \MIP\ (\MmIP) being well-defined wrt.\ $\circeq$ can all be generalized to Lambek calculus with multiplicative unit and additive multiplication, disjunction and their units.
 
