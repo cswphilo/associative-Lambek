@@ -18,10 +18,12 @@ open import IntrpTriples
 Maehara interpolation procedure is well-defined wrt. ≗
 -}
 
-
--- module _ (Γ Δ Λ : Cxt) (C : Fma) (n n' : MIP Γ Δ Λ C) where
---   open MIP n 
---   open MIP n'
+{-
+We have dealt with the most complicated cases,
+⇒L⇒L-assoc and ⇒L⇒L-comm.
+Other cases are similar.
+Most of the proofs are commented out due to type-checking efficiency.
+-}
           
 record MIP≗ (Γ Δ Λ : Cxt) (C : Fma) (n n' : MIP Γ Δ Λ C) : Set where
   constructor intrp≗
@@ -34,22 +36,17 @@ mip≗ : ∀ Γ Δ Λ {Ω} {C}
   → (p : f ≗ f')
   → MIP≗ Γ Δ Λ C (mip Γ Δ Λ f eq) (mip Γ Δ Λ f' eq)
 
--- ===================================
 mip≗ Γ Δ Λ eq ⇒L⇒R = {!   !} 
--- ===================================
-
 mip≗ Γ Δ Λ eq ⇒L⊗R₁ = {!   !}
 mip≗ Γ Δ Λ eq ⇒L⊗R₂ = {!   !}
-
 mip≗ Γ Δ Λ eq ⊗L⊗R₁ = {!   !}
 mip≗ Γ Δ Λ eq ⊗L⊗R₂ = {!   !}
 mip≗ Γ Δ Λ eq ⊗L⊗L = {!   !}
-
 mip≗ Γ Δ Λ eq ⊗L⇒L-assoc = {!   !}
 mip≗ Γ Δ Λ eq ⊗L⇒L-comm₁ = {!   !}
 mip≗ Γ Δ Λ eq ⊗L⇒L-comm₂ = {!      !}
 
--- 15 + 4 cases, 4 from an addtional pattern-matching to use ++?-injᵢ
+-- In princiapl 15 cases. The additionbal cases come from addtional pattern-matching to use the helper function ++?-injᵢ correctly.
 mip≗ Γ Δ Λ eq (⇒L⇒L-assoc {Γ₀} {Γ₁} {Δ₁} {Λ₀} {Λ₁} {A} {B} {A'} {B'}) with ++? (Γ ++ Δ) (Γ₁ ++ Γ₀) Λ (Δ₁ ++ A' ⇒ B' ∷ Λ₀ ++ A ⇒ B ∷ Λ₁) eq
 ... | inj₁ (Ω , eq₁ , eq₂) with cases++ Δ₁ Ω (Λ₀ ++ A ⇒ B ∷ Λ₁) Λ (sym eq₁)
 ... | inj₁ (Ω₀ , refl , eq₄) with cases++ Λ₀ Ω₀ Λ₁ Λ (sym eq₄)
@@ -63,7 +60,6 @@ mip≗ ._ Δ Λ refl (⇒L⇒L-assoc {Γ₀} {Γ₁} {Δ₁} {Λ₀} {Λ₁} {A}
   --         cases++-inj₁ (Γ₀ ++ B' ∷ Λ₀) (Ω₃ ++ Δ) Λ (A ⇒ B) |
   --         cases++-inj₁ (Γ₁ ++ Γ₀ ++ B' ∷ Λ₀) Ω₃ Δ (A ⇒ B)
   --           = intrp≗ (↝∷ (ax , (⇒L⇒L-assoc ∘ (~ cutaxA-left (Γ₁ ++ Γ₀ ++ Δ₁ ++ A' ⇒ B' ∷ Λ₀ ++ A ⇒ B ∷ Ω₃) _ refl)) , refl) refl)
-
 
 mip≗ ._ Δ Λ refl (⇒L⇒L-assoc {[]} {Γ₁} {Δ₁} {Λ₀} {Λ₁} {A} {B} {A'} {B'} {f = f} {g} {h}) | inj₁ (._ , refl , refl) | inj₁ (._ , refl , refl) | inj₁ (Ω₁ , refl , refl) | inj₁ (Ω₂ , refl , refl) | inj₂ (Ω₃ , refl , refl) = {!   !}
   -- rewrite ++?-inj₁ (Δ₁ ++ A' ⇒ B' ∷ Ω₂ ++ Ω₃ ++ A ⇒ B ∷ Ω₁) Γ₁ Λ |
