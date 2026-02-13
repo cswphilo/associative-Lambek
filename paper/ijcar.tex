@@ -16,6 +16,7 @@
 % \usepackage{quiver}
 \usepackage{proof}
 \usepackage{amsmath,amssymb,amsfonts}
+\usepackage[amsmath]{ntheorem}
 % \usepackage{amsmath,amsfonts,MnSymbol}
 % \usepackage{MnSymbol}
 
@@ -968,7 +969,9 @@ We also prove that the function $\mf{mip}$ is well-defined wrt.\ the equivalence
 % In particular, consider two interpolant triples $(D , g , h)$ and $(D' , g' , h')$ which are obtained by Maehara interpolation on two derivations $f$ and $f'$, respectively. If $f \circeq f'$, then $D = D'$, $g \circeq g'$ and $h \circeq h'$.
 In nonassociative Lambek calculus (\NL), two interpolant triples $(D , g , h)$ and $(D' , g' , h')$ can be considered equivalent if $D = D'$, $g \circeq g'$ and $h \circeq h'$\footnote{Here the relation $\circeq$ is the equivalence of derivations in \NL\ described in \cite{VW2025Tableaux}}. Then the Maehara interpolation procedure in \NL\ is well-defined, in the sense that if it receives in input two $\circeq$-related derivations $f$ and $f'$, it returns equivalent interpolant triples \cite{VW2025Tableaux}.
 
-However, this is not an appropriate definition for interpolant triples in \L. Consider the permutative conversion between $\tr$ and $\Rl$ in (\ref{eq:tr:rl:comm}), and the situation where 
+However, this is not an appropriate definition for interpolant triples in \L.
+\begin{example}
+  Consider the permutative conversion between $\tr$ and $\Rl$ in (\ref{eq:tr:rl:comm}), and the situation where 
 the interpolant context splits $\GD$ and $\GO$, i.e. $\GD = \GD_0 , \GD_1$, $\GO = \GO_0 , \GO_1$ and the interpolant context of the endsequent is $\GD_1 , A \Rarr B , \GL , \GO_0$:
 % (the red text traces the flow of the interpolant context in the derivations):
 % \begin{equation}\label{eq:ct:example}
@@ -1110,6 +1113,8 @@ The left one entails the right one, but not the other way round.
 %   }
 %   }
 % \end{equation}
+\end{example}
+
 The example leads to a relaxed notion of equivalence on interpolant triples for \L.
 \begin{definition}[Equivalence of interpolant triples]\label{def:equiv:intrp:triples}
   Two interpolant triples qre equivalent, written $(D , g , h) \sim (D' , g' , h')$, if they satisfy the symmetric-transitive closure of the following relation: 
@@ -1131,6 +1136,8 @@ t_n : D_n \vdash D'
 $$
 and the derivations $g$ and $g'$, as well as $h$ and $h'$, are $\circeq$-related modulo composition with the $t_i$s.
 
+\addtocounter{example}{-1}
+\begin{example}[continued]\label{example}
 We can check that derivations in (\ref{eq:ct:example}) have equivalent interpolant triples.
 Take $t = \Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax))$ proving the sequent $(D \Rarr E) \ot F \vd D \Rarr (E \ot F)$.
 We can prove that $\cut \ (t , g_1) \circeq g_0$ and $\cut \ (h_0 , t) \circeq h_1$:
@@ -1213,148 +1220,225 @@ We can prove that $\cut \ (t , g_1) \circeq g_0$ and $\cut \ (h_0 , t) \circeq h
     \hspace*{-2cm}\text{(unfold defn)}
   \end{array}
 \]
+\end{example}
 \begin{theorem}[Well-definedness of $\mf{mip}$]\label{thm:welldef:L}
   Given derivations $f , f' : \GG , \GD , \GL \vd C$ with $\mf{mip}(\GD,f) = (D , g , h)$ and $\mf{mip}(\GD,f') = (D' , g' , h')$, if $f \circeq f'$ then $(D , g , h) \sim (D' , g' , h')$.
 \end{theorem}
 \begin{proof}
-  Proof proceeds by examining all equations in the equivalence relation $\circeq$.
-  We show the case of the equation that two instances of $\Rl$ are commutative (\ref{eq:rl:comm}) while other cases are similar.
-  The cases are divided into three groups:
-  \begin{enumerate}
-    \item The interpolant context is ($i$) contained in $\GG$, $\GD_0$, $\GL$, $\GD_1$, or $\GO$, ($ii$) it contains $\GD_0 , A\Rarr B$ but not $\GD_1 , A' \Rarr B'$ and the other way around or ($iii$) it contains $\GD_0 , A \Rarr B , \GL , \GD_1 , A' \Rarr B'$. 
-    % \begin{itemize}
-    %   \item contained in $\GG$, $\GD_0$, $\GL$, $\GD_1$, or $\GO$ or
-    %   \item it contains $\GD_0 , A\Rarr B$ but not $\GD_1 , A' \Rarr B'$ and the other way around or
-    %   \item it contains $\GD_0 , A \Rarr B , \GL , \GD_1 , A' \Rarr B'$. 
-    % \end{itemize}
-    The interpolant triples of the two derivations in the equation are dictated by one of the derivations in $f$, $f'$ and $f''$. The triples will have the same interpolant formulae and the equivalence of derivations are witnessed by the equations in $\circeq$.
-    % For example, if the interpolant context is contained in $\GD_0$, then the interpolant triples are $(D , \Rl \ (g,\Rl\ (f' , f'')) , h)$ and $(D , \Rl \ (f' , \Rl \ (g , f'')) , h)$ where $(D , g ,h)$ is the interpolant triple of $f$. The interpolant formulae and derivation $h$ are the same and $\Rl \ (g,\Rl\ (f' , f'')) \circeq \Rl \ (f' , \Rl \ (g , f''))$ is an instance of the commutativity of $\Rl$. Therefore, the two interpolant triples are equivalent. 
-    For example, if the interpolant context $\GD'_0$ is contained in $\GD_0$, then $\mf{mip} \ (\GD'_0 , \Rl \ (f, \Rl\ (f',f''))) = (D , \Rl \ (g,\Rl\ (f' , f'')) , h)$ and $\mf{mip} \ (\GD'_0 , \Rl \ (f', \Rl\ (f,f''))) = \linebreak (D , \Rl \ (f' , \Rl \ (g , f'')) , h)$ where $\mf{mip} \ (\GD'_0 , f) = (D , g , h)$. The interpolant formula $D$ and derivation $h$ are the same where $\Rl \ (g,\Rl\ (f' , f'')) \circeq \linebreak \Rl \ (f' , \Rl \ (g , f''))$ is an instance (\ref{eq:rl:comm}). Therefore, the two interpolant triples are equivalent. 
-    \item The interpolant context splits ($i$) $\GG$ and $\GD_0$, ($ii$) $\GG$ and $\GD_1$, ($iii$) $\GD_0$ and $\GL$, ($iv$) $\GD_0$ and $\GO$, ($v$) $\GL$ and $\GD_1$, or ($vi$) $\GD_1$ and $\GO$.
-    % \begin{itemize}
-    %   \item $\GG$ and $\GD_0$, %(tensor of $f$ and $f''$), 
-    %   \item $\GG$ and $\GD_1$, %($\Rarr$ of $f'$ and $f''$),
-    %   \item $\GD_0$ and $\GO$, %($\Rarr$ of $f$ and $f''$),
-    %   \item $\GL$ and $\GD_1$, or %(tensor of $f'$ and $f''$) or
-    %   \item $\GD_1$ and $\GO$. %($\Rarr$ of $f'$ and $f''$)
-    % \end{itemize}
-    In these cases, the interpolant triples of the two derivations in the equation is dictated by two of the derivations in $f$, $f'$ and $f''$.
-    Again, the triples will have the same interpolant formulae and the equivalence of derivations are witnessed by the equations in $\circeq$.
-    % For example, if the interpolant context is $\GG_1,\GD_{1_0}$, that splits $\GG$ and $\GD_1$, then the interpolant triples of the derivations in the equation are dictated only by $f'$ and $f''$. Assume $\mf{mip} \ $f'$ and $f''$ are $(E , g' , h')$ and $(F , g'' , h'')$, respectively.
-    For example, if the interpolant context is $\GG_1, \GD_0 , A \Rarr B, \GL, \GD_{1_0}$ ($\GG$ and $\GD_1$ are split), then the interpolant triples of the derivations in the equation are dictated only by $f'$ and $f''$. Assume $\mf{mip} \ (\GG_1 , f') = (E , g' , h')$ and $\mf{mip} \ (\GD_{1_0} , f'') = (F , g'' , h'')$, respectively.
-    The interpolant triples of derivations in the equation are:
-    \[
-    \begin{array}{l}
-      \mf{mip} \ ((\GG_1, \GD_0 , A \Rarr B, \GL, \GD_{1_0}) , \Rl \ (f , \Rl \ (f', f''))) 
-      \\
-      \hspace*{3cm}= (F \ot E , \tl \ (\Rl \ (g' , g'')) , \Rl \ (f , \tr\ (h' , h''))) 
-      \\[5pt]
-      \mf{mip} \ ((\GG_1, \GD_0 , A \Rarr B, \GL, \GD_{1_0}) , \Rl \ (f' , \Rl \ (f, f''))) 
-      \\
-      \hspace*{3cm}=
-      (F \ot E , \tl \ (\Rl \ (g' , g'')) , \tr \ (h' , \Rl \ (f , h'')))
-    \end{array}
-    \] 
-    % The interpolant formulae and the derivation $\tl \ (\Rl \ (g' , g''))$ are the same and 
-    The equation $\Rl \ (f , \tr\ (h' , h'')) \circeq \tr \ (h' , \Rl \ (f , h''))$ is an instance of permutation between $\Rl$ and the second premise of $\tr$. Therefore, the two interpolant triples are equivalent.
-    % splits $\GG$ and $\GD_0$ (tensor of $f$ and $f''$), splits $\GD_0$ and $\GL$ ($\Rarr$ of $f$ and $f''$), splits $\GD_0$ and $\GO$, ($\Rarr$ of $f$ and $f''$), splits $\GL$ and $\GD_1$ (tensor of $f'$ and $f''$), splits $\GD_1$ and $\GO$ ($\Rarr$ of $f'$ and $f''$)
-    \item The last one is the interpolant context splits $\GD_0$ and $\GD_1$, i.e. the interpolant context is $\GD''_0 , A \Rarr B , \GL , \GD'_1$ where $\GD_0 = \GD'_0 , \GD''_0$, $\GD_1 = \GD'_1 , \GD''_1$. Similar to the case for (\ref{eq:ct:example}), assume given interpolant triples for the derivations $f$, $f'$ and $f''$:
-    % \[
-    %   \begin{array}{rl}
-    %   \begin{array}{r}
-    %     \text{(interpolant triples}
-    %     \\
-    %     \text{of $f$, $f'$, and $f''$)}
-    %   \end{array}
-    %   &
-    %   \begin{array}{l}
-    %     (D , g : D , \GD''_0 \vd A , h : \GD'_0 \vd D)
-    %   \\[3pt]
-    %   (E , g' : E , \GD''_1 \vd A' , h' : \GD'_1 \vd E)
-    %   \\[3pt]
-    %   (F , g'' : \GG , F , B' , \GO \vd C , h'' : B , \GL \vd F)
-    %   \end{array}
-    %   \end{array}
-    % \]
+  The proof proceeds by induction on the proof of $f \circeq f'$ (remember that $\circeq$ is an inductively defined congruence).
+  We only show the case of the generating equation in (\ref{eq:rl:comm}), other cases are similar.
+  We do proceed in different ways, depending on the location of $\GD$ inside the context $\GG , \GD_0 , A \Rarr B , \GL , \GD_1 , A' \Rarr B', \GO$, which is the antecedent in the conclusion of both derivations.
+  We can identify three main situations.
+
+Case $(i)$: $\GD$ is contained in $\GD_0$. Computing $\mf{mip}$ by looking at the proof of Theorem \ref{thm:MIP} gives two interpolant triples
+$$(D , \ \ \Rl \ (g',\Rl\ (f' , f'')) , \ \ h') \qquad (D , \ \ \Rl \ (f' , \Rl \ (g' , f'')) , \ \ h')$$
+where $\mf{mip} \ (\GD,f) = (D,g',h')$.
+The triple are equivalent by (\ref{eq:rl:comm}).
+Other cases are treated similarly: when $\GD$ is contained in $\GG$, in $\Lambda$, in $\GD_1$ or in $\GO$; when $\GD$ contains $\GD_0 , A\Rarr B$ but not $\GD_1 , A' \Rarr B'$ or the other way around; when $\GD$ contains $\GD_0 , A \Rarr B , \GL , \GD_1 , A' \Rarr B'$. In all these cases the interpolant triples are equivelent since the interpolant formulae are equal, and $g \circeq g'$ and $h \circeq h'$. 
+
+
+Case $(ii)$: $\GD$ splits between $\GG$ and $\GD_1$. This implies that $\GL$ has the form $\GL_0 , \GL_1$ and $\GD_1$ has the form $\GD'_{1} , \GD''_{1}$ so that $\GD = \GL_1 , \GD'_1$. Computing $\mf{mip}$ gives two interpolant triples
+\[
+\begin{array}{l}
+  (F \ot E ,\ \ \tl \ (\Rl \ (g' , g'')) , \ \ \Rl \ (f , \tr\ (h' 
+  , h'')))
+  \\[3pt]
+  (F \ot E , \ \ \tl \ (\Rl \ (g' , g'')) , \ \ \tr \ (h' , \Rl \ (f , h'')))
+\end{array}
+\]
+where $\mf{mip} \ (\GL_1 , f') = (E , g' , h')$ and $\mf{mip} \ (\GD''_{1} , f'') = (F , g'' , h'')$.
+The triples are equivalent since $\Rl$ commutes with $\tr$.
+Other cases are treated similarly: $\GD$ splits between $\GG$ and $\GD_0$, or between $\GG$ and $\GD_1$ (fully containing $\GD_0,A \Rarr B,\GL$), or between $\GD_0$ and $\GL$ (fully containing $A \Rarr B$), or between $\GD_0$ and $\GO$ (fully containing $A \Rarr B,\GL,\GD',A' \Rarr B'$), or between $\GD_1$ and $\GO$ (fully containing $A' \Rarr B'$).
+
+
+Case $(iii)$: $\GD$ splits between $\GD_0$ and $\GD_1$. Then $\GD_0$ is of the form $\GD'_0 , \GD''_0$ and $\GD_1$ is of the form $\GD'_1 , \GD''_1$ so that $\GD = \GD''_0 , A \Rarr B , \GL , \GD'_1$.
+Computing $\mf{mip}$ returns two interpolant triples
     \[
       \begin{array}{l}
-        \mf{mip} \ (\GD'_0,f) = (D , g : D , \GD''_0 \vd A , h : \GD'_0 \vd D)
-      \\[3pt]
-      \mf{mip} \ (\GD'_1, f') = (E , g' : E , \GD''_1 \vd A' , h' : \GD'_1 \vd E)
-      \\[3pt]
-      \mf{mip} \ ((B, \GL),f'') = (F , g'' : \GG , F , B' , \GO \vd C , h'' : B , \GL \vd F)
-      \end{array}
-    \]
-    % and
-    % \[
-    %   \begin{array}{lr}
-    %   \arraycolsep=20pt
-    %     \begin{array}{c}
-    %       \text{(for the top derivation)}
-    %       \\
-    %       D \Rarr (F \ot E)
-    %       \\
-    %       \Rl (h , \tl \ (\Rl \ (g' , g'')))
-    %       \\
-    %       \Rr \ (\Rl \ (g , (\tr \ (h'' , h'))))
-    %     \end{array}
-    %     &
-    %     \begin{array}{c}
-    %       \text{(for the bottom derivation)}
-    %       \\
-    %       (D \Rarr F) \ot E
-    %       \\
-    %       \tl \ (\Rl \ (g' , \Rl (h , g'')))
-    %       \\
-    %       \tr \ (\Rr \ (\Rl \ (g , h'')), h')
-    %     \end{array}
-    %   \end{array}
-    % \]
-    When executing $\mf{mip}$ the derivations in (\ref{eq:rl:comm}), we obtain the following triples:
-    \[
-      \begin{array}{l}
-      \mf{mip} \ ((\GD''_0 , A \Rarr B , \GL , \GD'_1), \Rl \ (f, \Rl \ (f', f''))) 
-      \\
-      \hspace*{5cm} = 
           (D \Rarr (F \ot E),
-          \\
-          \hspace*{5.5cm}\Rl (h , \tl \ (\Rl \ (g' , g''))),
-          \\
-          \hspace*{5.5cm}\Rr \ (\Rl \ (g , (\tr \ (h'' , h'))))
-        \\[5pt]
-        \mf{mip} \ ((\GD''_0 , A \Rarr B , \GL , \GD'_1), \Rl \ (f', \Rl \ (f, f''))))
-      \\
-      \hspace*{5cm} =
+          \ \
+          \Rl (h_0 , \tl \ (\Rl \ (g_1 , g_2))),
+          \ \
+          \Rr \ (\Rl \ (g_0 , (\tr \ (h_2 , h_1)))))
+        \\[3pt]
           ((D \Rarr F) \ot E,
-          \\
-          \hspace*{5.5cm}\tl \ (\Rl \ (g' , \Rl (h , g''))),
-          \\
-          \hspace*{5.5cm}\tr \ (\Rr \ (\Rl \ (g , h'')), h'))
+          \ \
+          \tl \ (\Rl \ (g_1 , \Rl (h_0 , g_2))),
+          \ \
+          \tr \ (\Rr \ (\Rl \ (g_0 , h_2)), h_1))
       \end{array}
     \]
-    The two interpolant formulae are not logically equivalent but there exists a derivation $\Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax))) : (D \Rarr F) \ot E \vd D \Rarr (F \ot E)$ such that the following two equations hold:
-    % We then check the equivalence of derivations. The first case is:
-    % \[
-    %   \begin{array}{lr}
-    %     \cut \ (\Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax))) , \Rl (h , \tl \ (\Rl \ (g' , g'')))) &
-    %     \\
-    %     hi
-    %   \end{array}
-    % \]
+    where
     \[
-    \begin{array}{l}
-      \tl \ (\Rl \ (g' , \Rl (h , g''))) 
-      \\
-      \hspace*{1.4cm} \circeq \cut \ (\Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax))) , \Rl (h , \tl \ (\Rl \ (g' , g''))))
-      \\[5pt]
-      \cut\ (\tr \ (\Rr \ (\Rl \ (g , h'')), h') , \Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax)))) 
-      \\
-      \hspace*{1.4cm} \circeq  \Rr \ (\Rl \ (g , (\tr \ (h'' , h'))))
-    \end{array}
+      \begin{array}{l}
+      \mf{mip} \ (\GD'_0,f) = (D , \ \ g_0 : D , \GD''_0 \vd A , \ \ h_0 : \GD'_0 \vd D)
+      \\[3pt]
+      \mf{mip} \ (\GD'_1, f') = (E , \ \ g_1 : E , \GD''_1 \vd A' , \ \ h_1 : \GD'_1 \vd E)
+      \\[3pt]
+      \mf{mip} \ ((B, \GL),f'') = (F , \ \ g_2 : \GG , F , B' , \GO \vd C ,\ \  h_2 : B , \GL \vd F)
+      \end{array}
     \]
-    The chains of reasoning are similar to the ones in the proof of equivalence of interpolant triples of (\ref{eq:ct:example}).
-  \end{enumerate} 
+    The two interpolant formulae are not logically equivalent but there exists a derivation $t = \Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax))) : (D \Rarr F) \ot E \vd D \Rarr (F \ot E)$.
+    Using $t$, the triples can be proved equivalent by producing equational proofs similar to the ones in Example \ref{example}.
+%%%      % We then check the equivalence of derivations. The first case is:
+%%%      % \[
+%%%      %   \begin{array}{lr}
+%%%      %     \cut \ (\Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax))) , \Rl (h , \tl \ (\Rl \ (g' , g'')))) &
+%%%      %     \\
+%%%      %     hi
+%%%      %   \end{array}
+%%%      % \]
+%%%      \[
+%%%      \begin{array}{l}
+%%%        \tl \ (\Rl \ (g' , \Rl (h , g''))) 
+%%%        \\
+%%%        \hspace*{1.4cm} \circeq \cut \ (\Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax))) , \Rl (h , \tl \ (\Rl \ (g' , g''))))
+%%%        \\[5pt]
+%%%        \cut\ (\tr \ (\Rr \ (\Rl \ (g , h'')), h') , \Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax)))) 
+%%%        \\
+%%%        \hspace*{1.4cm} \circeq  \Rr \ (\Rl \ (g , (\tr \ (h'' , h'))))
+%%%      \end{array}
+%%%      \]    
+%%%    The cases are divided into three groups:
+%%%    \begin{enumerate}
+%%%      \item The interpolant context is ($i$) contained in $\GG$, $\GD_0$, $\GL$, $\GD_1$, or $\GO$, ($ii$) it contains $\GD_0 , A\Rarr B$ but not $\GD_1 , A' \Rarr B'$ and the other way around or ($iii$) it contains $\GD_0 , A \Rarr B , \GL , \GD_1 , A' \Rarr B'$. 
+%%%      % \begin{itemize}
+%%%      %   \item contained in $\GG$, $\GD_0$, $\GL$, $\GD_1$, or $\GO$ or
+%%%      %   \item it contains $\GD_0 , A\Rarr B$ but not $\GD_1 , A' \Rarr B'$ and the other way around or
+%%%      %   \item it contains $\GD_0 , A \Rarr B , \GL , \GD_1 , A' \Rarr B'$. 
+%%%      % \end{itemize}
+%%%      The interpolant triples of the two derivations in the equation are dictated by one of the derivations in $f$, $f'$ and $f''$. The triples will have the same interpolant formulae and the equivalence of derivations are witnessed by the equations in $\circeq$.
+%%%      % For example, if the interpolant context is contained in $\GD_0$, then the interpolant triples are $(D , \Rl \ (g,\Rl\ (f' , f'')) , h)$ and $(D , \Rl \ (f' , \Rl \ (g , f'')) , h)$ where $(D , g ,h)$ is the interpolant triple of $f$. The interpolant formulae and derivation $h$ are the same and $\Rl \ (g,\Rl\ (f' , f'')) \circeq \Rl \ (f' , \Rl \ (g , f''))$ is an instance of the commutativity of $\Rl$. Therefore, the two interpolant triples are equivalent. 
+%%%      For example, if the interpolant context $\GD'_0$ is contained in $\GD_0$, then $\mf{mip} \ (\GD'_0 , \Rl \ (f, \Rl\ (f',f''))) = (D , \Rl \ (g,\Rl\ (f' , f'')) , h)$ and $\mf{mip} \ (\GD'_0 , \Rl \ (f', \Rl\ (f,f''))) = \linebreak (D , \Rl \ (f' , \Rl \ (g , f'')) , h)$ where $\mf{mip} \ (\GD'_0 , f) = (D , g , h)$. The interpolant formula $D$ and derivation $h$ are the same where $\Rl \ (g,\Rl\ (f' , f'')) \circeq \linebreak \Rl \ (f' , \Rl \ (g , f''))$ is an instance (\ref{eq:rl:comm}). Therefore, the two interpolant triples are equivalent. 
+%%%      \item The interpolant context splits ($i$) $\GG$ and $\GD_0$, ($ii$) $\GG$ and $\GD_1$, ($iii$) $\GD_0$ and $\GL$, ($iv$) $\GD_0$ and $\GO$, ($v$) $\GL$ and $\GD_1$, or ($vi$) $\GD_1$ and $\GO$.
+%%%      % \begin{itemize}
+%%%      %   \item $\GG$ and $\GD_0$, %(tensor of $f$ and $f''$), 
+%%%      %   \item $\GG$ and $\GD_1$, %($\Rarr$ of $f'$ and $f''$),
+%%%      %   \item $\GD_0$ and $\GO$, %($\Rarr$ of $f$ and $f''$),
+%%%      %   \item $\GL$ and $\GD_1$, or %(tensor of $f'$ and $f''$) or
+%%%      %   \item $\GD_1$ and $\GO$. %($\Rarr$ of $f'$ and $f''$)
+%%%      % \end{itemize}
+%%%      In these cases, the interpolant triples of the two derivations in the equation is dictated by two of the derivations in $f$, $f'$ and $f''$.
+%%%      Again, the triples will have the same interpolant formulae and the equivalence of derivations are witnessed by the equations in $\circeq$.
+%%%      % For example, if the interpolant context is $\GG_1,\GD_{1_0}$, that splits $\GG$ and $\GD_1$, then the interpolant triples of the derivations in the equation are dictated only by $f'$ and $f''$. Assume $\mf{mip} \ $f'$ and $f''$ are $(E , g' , h')$ and $(F , g'' , h'')$, respectively.
+%%%      For example, if the interpolant context is $\GG_1, \GD_0 , A \Rarr B, \GL, \GD_{1_0}$ ($\GG$ and $\GD_1$ are split), then the interpolant triples of the derivations in the equation are dictated only by $f'$ and $f''$. Assume $\mf{mip} \ (\GG_1 , f') = (E , g' , h')$ and $\mf{mip} \ (\GD_{1_0} , f'') = (F , g'' , h'')$, respectively.
+%%%      The interpolant triples of derivations in the equation are:
+%%%      \[
+%%%      \begin{array}{l}
+%%%        \mf{mip} \ ((\GG_1, \GD_0 , A \Rarr B, \GL, \GD_{1_0}) , \Rl \ (f , \Rl \ (f', f''))) 
+%%%        \\
+%%%        \hspace*{3cm}= (F \ot E , \tl \ (\Rl \ (g' , g'')) , \Rl \ (f , \tr\ (h' , h''))) 
+%%%        \\[5pt]
+%%%        \mf{mip} \ ((\GG_1, \GD_0 , A \Rarr B, \GL, \GD_{1_0}) , \Rl \ (f' , \Rl \ (f, f''))) 
+%%%        \\
+%%%        \hspace*{3cm}=
+%%%        (F \ot E , \tl \ (\Rl \ (g' , g'')) , \tr \ (h' , \Rl \ (f , h'')))
+%%%      \end{array}
+%%%      \] 
+%%%      % The interpolant formulae and the derivation $\tl \ (\Rl \ (g' , g''))$ are the same and 
+%%%      The equation $\Rl \ (f , \tr\ (h' , h'')) \circeq \tr \ (h' , \Rl \ (f , h''))$ is an instance of permutation between $\Rl$ and the second premise of $\tr$. Therefore, the two interpolant triples are equivalent.
+%%%      % splits $\GG$ and $\GD_0$ (tensor of $f$ and $f''$), splits $\GD_0$ and $\GL$ ($\Rarr$ of $f$ and $f''$), splits $\GD_0$ and $\GO$, ($\Rarr$ of $f$ and $f''$), splits $\GL$ and $\GD_1$ (tensor of $f'$ and $f''$), splits $\GD_1$ and $\GO$ ($\Rarr$ of $f'$ and $f''$)
+%%%      \item The last one is the interpolant context splits $\GD_0$ and $\GD_1$, i.e. the interpolant context is $\GD''_0 , A \Rarr B , \GL , \GD'_1$ where $\GD_0 = \GD'_0 , \GD''_0$, $\GD_1 = \GD'_1 , \GD''_1$. Similar to the case for (\ref{eq:ct:example}), assume given interpolant triples for the derivations $f$, $f'$ and $f''$:
+%%%      % \[
+%%%      %   \begin{array}{rl}
+%%%      %   \begin{array}{r}
+%%%      %     \text{(interpolant triples}
+%%%      %     \\
+%%%      %     \text{of $f$, $f'$, and $f''$)}
+%%%      %   \end{array}
+%%%      %   &
+%%%      %   \begin{array}{l}
+%%%      %     (D , g : D , \GD''_0 \vd A , h : \GD'_0 \vd D)
+%%%      %   \\[3pt]
+%%%      %   (E , g' : E , \GD''_1 \vd A' , h' : \GD'_1 \vd E)
+%%%      %   \\[3pt]
+%%%      %   (F , g'' : \GG , F , B' , \GO \vd C , h'' : B , \GL \vd F)
+%%%      %   \end{array}
+%%%      %   \end{array}
+%%%      % \]
+%%%      \[
+%%%        \begin{array}{l}
+%%%          \mf{mip} \ (\GD'_0,f) = (D , g : D , \GD''_0 \vd A , h : \GD'_0 \vd D)
+%%%        \\[3pt]
+%%%        \mf{mip} \ (\GD'_1, f') = (E , g' : E , \GD''_1 \vd A' , h' : \GD'_1 \vd E)
+%%%        \\[3pt]
+%%%        \mf{mip} \ ((B, \GL),f'') = (F , g'' : \GG , F , B' , \GO \vd C , h'' : B , \GL \vd F)
+%%%        \end{array}
+%%%      \]
+%%%      % and
+%%%      % \[
+%%%      %   \begin{array}{lr}
+%%%      %   \arraycolsep=20pt
+%%%      %     \begin{array}{c}
+%%%      %       \text{(for the top derivation)}
+%%%      %       \\
+%%%      %       D \Rarr (F \ot E)
+%%%      %       \\
+%%%      %       \Rl (h , \tl \ (\Rl \ (g' , g'')))
+%%%      %       \\
+%%%      %       \Rr \ (\Rl \ (g , (\tr \ (h'' , h'))))
+%%%      %     \end{array}
+%%%      %     &
+%%%      %     \begin{array}{c}
+%%%      %       \text{(for the bottom derivation)}
+%%%      %       \\
+%%%      %       (D \Rarr F) \ot E
+%%%      %       \\
+%%%      %       \tl \ (\Rl \ (g' , \Rl (h , g'')))
+%%%      %       \\
+%%%      %       \tr \ (\Rr \ (\Rl \ (g , h'')), h')
+%%%      %     \end{array}
+%%%      %   \end{array}
+%%%      % \]
+%%%      When executing $\mf{mip}$ the derivations in (\ref{eq:rl:comm}), we obtain the following triples:
+%%%      \[
+%%%        \begin{array}{l}
+%%%        \mf{mip} \ ((\GD''_0 , A \Rarr B , \GL , \GD'_1), \Rl \ (f, \Rl \ (f', f''))) 
+%%%        \\
+%%%        \hspace*{5cm} = 
+%%%            (D \Rarr (F \ot E),
+%%%            \\
+%%%            \hspace*{5.5cm}\Rl (h , \tl \ (\Rl \ (g' , g''))),
+%%%            \\
+%%%            \hspace*{5.5cm}\Rr \ (\Rl \ (g , (\tr \ (h'' , h'))))
+%%%          \\[5pt]
+%%%          \mf{mip} \ ((\GD''_0 , A \Rarr B , \GL , \GD'_1), \Rl \ (f', \Rl \ (f, f''))))
+%%%        \\
+%%%        \hspace*{5cm} =
+%%%            ((D \Rarr F) \ot E,
+%%%            \\
+%%%            \hspace*{5.5cm}\tl \ (\Rl \ (g' , \Rl (h , g''))),
+%%%            \\
+%%%            \hspace*{5.5cm}\tr \ (\Rr \ (\Rl \ (g , h'')), h'))
+%%%        \end{array}
+%%%      \]
+%%%      The two interpolant formulae are not logically equivalent but there exists a derivation $\Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax))) : (D \Rarr F) \ot E \vd D \Rarr (F \ot E)$ such that the following two equations hold:
+%%%      % We then check the equivalence of derivations. The first case is:
+%%%      % \[
+%%%      %   \begin{array}{lr}
+%%%      %     \cut \ (\Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax))) , \Rl (h , \tl \ (\Rl \ (g' , g'')))) &
+%%%      %     \\
+%%%      %     hi
+%%%      %   \end{array}
+%%%      % \]
+%%%      \[
+%%%      \begin{array}{l}
+%%%        \tl \ (\Rl \ (g' , \Rl (h , g''))) 
+%%%        \\
+%%%        \hspace*{1.4cm} \circeq \cut \ (\Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax))) , \Rl (h , \tl \ (\Rl \ (g' , g''))))
+%%%        \\[5pt]
+%%%        \cut\ (\tr \ (\Rr \ (\Rl \ (g , h'')), h') , \Rr \ (\tl \ (\tr \ (\Rl \ (\ax , \ax),\ax)))) 
+%%%        \\
+%%%        \hspace*{1.4cm} \circeq  \Rr \ (\Rl \ (g , (\tr \ (h'' , h'))))
+%%%      \end{array}
+%%%      \]
+%%%      The chains of reasoning are similar to the ones in the proof of equivalence of interpolant triples of (\ref{eq:ct:example}).
+%%%    \end{enumerate} 
 \end{proof}
+
+
+As the readers might have noticed, the proof of Theorem \ref{thm:welldef:L} requires a great amount of case distinction. It makes the proof error-prone and demanding. To alleviate this,  we have formalized the ($\Rarr,\ot$) fragment of \L\ in the proof assistant Agda.
+A description of the formalization can be found in Appendix \ref{appendix}.
 
 %\section{Proof-relevant Maehara Multi-Interpolation of Product-free Lambek Calculus}
 \section{The Story for the Product-free Lambek Calculus}
@@ -2044,10 +2128,8 @@ It will also be interesting to have a general theory on well-definedness of fami
 \newpage
 \appendix
 \phantomsection
-\section*{A. Formalization in Agda}
+\section{Formalization in Agda}\label{appendix}
 \addcontentsline{toc}{section}{A. Formalization in Agda}
-As the readers might have noticed, the proof of Theorem \ref{thm:welldef:L} requires a great amount of case distinction. It makes the proof error-prone and demanding. Therefore we formalize the $\Rarr,\ot$ fragment of \L\ in the Agda proof assistant as an experiment to test our calculation on pen and paper.
-
 The formalization of the syntax of the $\Rarr,\ot$ fragment of \L\ is standard. We define the formulae, sequents as inductive types with the appropriate constructors for each connective and its corresponding left and right rules.
 The equivalence relation of derivations $\circeq$ is defined as an inductive datatype including the constructors that makes $\circeq$ as an equivalence and congruence relation and all permutative conversions.
 % The functions of cut admissibility and Maehara interpolation are constructed similarly as Veltri and Wan did for the nonassociative Lambek calculus \cite{VW2025Tableaux}. 
