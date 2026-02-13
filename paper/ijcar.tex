@@ -16,7 +16,9 @@
 % \usepackage{quiver}
 \usepackage{proof}
 \usepackage{amsmath,amssymb,amsfonts}
-\usepackage[amsmath]{ntheorem}
+
+
+
 % \usepackage{amsmath,amsfonts,MnSymbol}
 % \usepackage{MnSymbol}
 
@@ -45,6 +47,8 @@
 \renewcommand\UrlFont{\color{blue}\rmfamily}
 \urlstyle{rm}
 
+
+\renewcommand{\vec}[1]{\overrightarrow{#1}}
 
 % \usepackage{amsmath,amssymb,amsfonts}%
 
@@ -511,8 +515,9 @@ The sequent calculus has an underlying \emph{multicategory} \cite{Lambek1969} wi
   Case $(i)$: $\GD$ is contained in $\GD'$.
   %, $\GD'$ or $\GL'$ or $\GD$ contains $\GD' , A \Rarr B$ We apply the inductive hypothesis appropriately to obtain desired interpolant formula and derivations.
 %  For example, if $\GD$ is contained in $\GD'$, i.e.\
-  Then $\GD'$ is of the form  $\GD'_0 , \GD , \GD'_1$ and by recursive hypothesis on $f'$ we have
-  $$\mf{mip}\ (\GD,f') = (D,\ \ g' : \GD'_0 , D , \GD'_1 \vd A,\ \ h' : \GD \vd D)$$ Then $\mf{mip}\ (\GD,f) = (D,g,h')$ where
+  Then $\GD'$ is of the form  $\GD'_0 , \GD , \GD'_1$ and the recursive call on $f'$ gives
+  $$\mf{mip}\ (\GD,f') = (D,\ \ g' : \GD'_0 , D , \GD'_1 \vd A,\ \ h' : \GD \vd D)$$
+  Then $\mf{mip}\ (\GD,f) = (D,g,h')$ where
   \[
     \begin{array}{c}
     g = \proofbox{
@@ -531,7 +536,7 @@ The sequent calculus has an underlying \emph{multicategory} \cite{Lambek1969} wi
 %  The variable condition holds automatically.
 Cases $(ii)$ $\GD$ is contained in $\GD'$, $(iii)$ $\GD$ is contained in $\GL'$ and $(iv)$ $\GD$ contains $\GD' , A \Rarr B$, are treated similarly.
   
-Case $(v)$: $\GD$ splits between $\GG'$ and $\GD'$. This implies that $\GG'$ has the form $\GG'_0 , \GG'_1$ and $\GD'$ has the form $\GD'_0 , \GD'_1$ so that $\GD = \GG'_1 , \GD'_0$. By recursive hypothesis on $f'$ and $f''$ we have
+Case $(v)$: $\GD$ splits between $\GG'$ and $\GD'$. This implies that $\GG'$ has the form $\GG'_0 , \GG'_1$ and $\GD'$ has the form $\GD'_0 , \GD'_1$ so that $\GD = \GG'_1 , \GD'_0$. The recursive calls on $f'$ and $f''$ give
 \[
 \begin{array}{l}
 \mf{mip}\ (\GD'_0,f')=(D, \ \ g' : D , \GD'_1 \vd A,\ \ h' : \GD'_0 \vd D)
@@ -575,7 +580,7 @@ Case $(v)$: $\GD$ splits between $\GG'$ and $\GD'$. This implies that $\GG'$ has
  % The variable condition is easy to check.
 
   Case $(iv)$: $\GD$ splits between $\GD'$ and $\GL'$ and contains $A \Rarr B$. Then $\GD'$ has the form $\GD'_0 , \GD'_1$ and $\GL'$ has the form $\GL'_0 , \GD'_1$ so that $\GD = \GD'_1 , A \Rarr B , \GL'_0$.
-  By recursive hypothesis on $f'$ and $f''$ we have
+  The recursive calls on $f'$ and $f''$ give
   \[
   \begin{array}{l}
   \mf{mip}\ (\GD'_0,f') = (D, \ \ g' : D , \GD'_1 \vd A, \ \ h' : \GD'_0 \vd D)
@@ -1596,18 +1601,24 @@ Next, given a list of derivations, $f_i : \GD_i \vd A_i$ for $i \in \{1,\dots, n
   Given a derivation $f : \GG , \GD , \GL \vd C$, there exist a partition $\Delta = \GD_1, \dots, \GD_n$, formulae $D_1,\dots,D_n$, a derivation $g : \GG, D_1,\dots,D_n, \GL \vdash C$ and derivations $h_i : \GD_i \vdash D_i$ for $i \in \{1,\dots,n\}$ such that $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD} \cap \vars{\GG, \GL, C}$.
 \end{theorem}
 \begin{proof}
-  Proof proceeds similarly as the proof of Theorem \ref{thm:MIP}.
-  Here we briefly discuss the new proofs of the two interesting cases of $f = \Rl \ (f' , f'') : \GG' , \GD' , A \Rarr B , \GL' \vd C$.
-  The first case is when the interpolant context splits $\GG'$ and $\GD'$ where the interpolant formula was a tensor formula. 
-  In this case, we apply inductive hypothesis on $f'$ and $f''$ respectively to obtain:
+  We build a function $\mf{mmip}$ producing a tuple $(n,\vec{\GD_i},\vec{D_i},g,\vec{h_i})$ for each derivation $f : \Gamma,\Delta,\Lambda \vdash C$ and write $\mf{mmip}\ (\GD,f) = (n,\vec{\GD_i},\vec{D_i},g,\vec{h_i})$.
+  The construction proceeds similarly to the one $\mf{mip}$ in Theorem \ref{thm:MIP}.
+  We only discuss the case when $f = \Rl \ (f' , f'') : \GG' , \GD' , A \Rarr B , \GL' \vd C$ and only show subcases $(v)$ and $(vi)$. We use the same variable names for contexts and derivations as in Theorem \ref{thm:MIP}.
+  %Here we briefly discuss the new proofs of the two interesting cases of $f = \Rl \ (f' , f'') : \GG' , \GD' , A \Rarr B , \GL' \vd C$.
+
+  Case $(v)$: %The first case is when the interpolant context splits $\GG'$ and $\GD'$ where the interpolant formula was a tensor formula.
+%  $\GD$ splits between $\GG'$ and $\GD'$, then $\GG'$ has the form $\GG'_0 , \GG'_1$ and $\GD'$ has the form $\GD'_0 , \GD'_1$ so that $\GD = \GG'_1 , \GD'_0$.
+  the recursive calls of $\mf{mmip}$ on $f'$ and $f''$ give
   % \begin{itemize}
   %   \item a partition $\langle \GD'_{0_1}, \dots , \GD'_{0_n}\rangle$ of $\GD'_0$ and a list of formulae $[D_i]$ for $i\in\{1,\dots,n\}$,
   %   \item a derivation $g' : [D_i] , \GD'_1 \vd A$, a list of derivations $[h'_i : \GD'_{0_i} \vdash D_i]$ such that
   %   \item $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD'_0} \cap \vars{\GD'_1, A}$
   % \end{itemize}
   \begin{itemize}
-    \item a partition $\GD'_{0_1}, \dots , \GD'_{0_n}$ of $\GD'_0$ and a list of formulae $D_1,\dots,D_n$,
-    \item a derivation $g' : D_1,\dots,D_n , \GD'_1 \vd A$, a list of derivations $h'_i : \GD'_{0_i} \vdash D_i$ for $i \in \{1,\dots,n\}$ such that
+  \item a partition $\GD'_0 = \GD'_{0_1}, \dots , \GD'_{0_n}$,
+  \item a list of formulae $D_1,\dots,D_n$,
+  \item a derivation $g' : D_1,\dots,D_n , \GD'_1 \vd A$,
+  \item a list of derivations $h'_i : \GD'_{0_i} \vdash D_i$ for $i \in \{1,\dots,n\}$ such that
     \item $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD'_0} \cap \vars{\GD'_1, A}$
   \end{itemize}
   % \begin{itemize}
@@ -1616,15 +1627,18 @@ Next, given a list of derivations, $f_i : \GD_i \vd A_i$ for $i \in \{1,\dots, n
   %   \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG'_0 , B , \GL' , C}$
   % \end{itemize}
   \begin{itemize}
-    \item a partition $\GG'_{1_1}, \dots , \GG'_{1_m}$ of $\GG'_1$ and a list of formulae $E_1, \dots,E_m$,
-    \item a derivation $g'' : \GG'_0 , E_1, \dots,E_m, B , \GL' \vd A$, a list of derivations $h''_j : \GG'_{1j} \vdash E_j$ for $j\in\{1,\dots,m\}$ such that
-    \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG'_0 , B , \GL' , C}$
+  \item a partition $\GG'_1 = \GG'_{1_1}, \dots , \GG'_{1_m}$,
+  \item a list of formulae $E_1, \dots,E_m$,
+  \item a derivation $g'' : \GG'_0 , E_1, \dots,E_m, B , \GL' \vd A$,
+  \item a list of derivations $h''_j : \GG'_{1j} \vdash E_j$ for $j\in\{1,\dots,m\}$ such that
+  \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG'_0 , B , \GL' , C}$
   \end{itemize}
   % The desired partition of $\GG'_1, \GD'_0$ is $\langle \GG'_{1_1}, \dots , \GG'_{1_m}, \GD'_{0_1}, \dots , \GD'_{0_n}\rangle$ and the list of interpolant formulae is $[E_1 , \dots, E_m, D_1,\dots, D_n]$. The desired derivations are \linebreak $\Rl \ (g' , g'')$ and $[h''_1, \dots, h''_m, h'_1, \dots, h'_n]$.
-  The desired partition of $\GG'_1, \GD'_0$ is $\GG'_{1_1}, \dots , \GG'_{1_m}, \GD'_{0_1}, \dots , \GD'_{0_n}$ and the list of interpolant formulae is $E_1 , \dots, E_m, D_1,\dots, D_n$. The desired derivations are $\Rl \ (g' , g'')$ and $h''_1, \dots, h''_m, h'_1, \dots, h'_n$.
-  The variable condition is easy to check.
+  We return $\mf{mmip}\ (\GD,f) = (l,\vec{\GD_k},\vec{F_k},g,\vec{h_k})$, where $l = n+m$,  the partition $\vec{\GD_k}$ of $\GD$ is $\GG'_{1_1}, \dots , \GG'_{1_m}, \GD'_{0_1}, \dots , \GD'_{0_n}$, the list of interpolant formulae $\vec{F_k}$ is $E_1 , \dots, E_m, D_1,\dots, D_n$, the derivation $g = \Rl \ (g' , g'')$ and the list of derivations $\vec{h_k}$ is $h''_1, \dots, h''_m, h'_1, \dots, h'_n$.
+%  The variable condition is easy to check.
 
-  The second case is when the interpolant context splits both $\GD'$ and $\GL'$ and contains $A \Rarr B$. By inductive hypothesis, we obtain:
+  Case $(vi)$: % The second case is when the interpolant context splits both $\GD'$ and $\GL'$ and contains $A \Rarr B$. By inductive hypothesis, we obtain:
+  the recursive calls of $\mf{mmip}$ on $f'$ and $f''$ give
   % \begin{itemize}
   %   \item a partition $\langle \GD'_{0_1}, \dots , \GD'_{0_n}\rangle$ of $\GD'_0$ and a list of formulae $[D_i]$ for $i\in\{1,\dots,n\}$,
   %   \item a derivation $g' : [D_i] , \GD'_1 \vd A$, a list of derivations $[h'_i : \GD'_{0_i} \vdash D_i]$ such that
@@ -1636,21 +1650,26 @@ Next, given a list of derivations, $f_i : \GD_i \vd A_i$ for $i \in \{1,\dots, n
   %   \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG,  \GL'_1 , C}$
   % \end{itemize}
   \begin{itemize}
-    \item a partition $\GD'_{0_1}, \dots , \GD'_{0_n}$ of $\GD'_0$ and a list of formulae $D_1,\dots,D_n$,
-    \item a derivation $g' : D_1,\dots,D_n , \GD'_1 \vd A$, a list of derivations $h'_i : \GD'_{0_i} \vdash D_i$ for $\in \{1,\dots,n\}$ such that
-    \item $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD'_0} \cap \vars{\GD'_1, A}$
+  \item a partition $\GD'_0 = \GD'_{0_1}, \dots , \GD'_{0_n}$,
+  \item a list of formulae $D_1,\dots,D_n$,
+  \item a derivation $g' : D_1,\dots,D_n , \GD'_1 \vd A$,
+  \item a list of derivations $h'_i : \GD'_{0_i} \vdash D_i$ for $\in \{1,\dots,n\}$ such that
+  \item $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD'_0} \cap \vars{\GD'_1, A}$
   \end{itemize}
   \begin{itemize}
-    \item a partition $\GL'_{0_1}, \dots , \GL'_{0_m}$ of $\GL'_0$, where $\GL'_{0_1} = B , \GL''_{0_1}$ for some $\GL''_{0_1}$ and a list of formulae $E_1,\dots,E_m$ for $j\in\{1,\dots,m\}$,
-    \item a derivation $g'' : \GG' , E_1,\dots,E_m, \GL'_1 \vd A$, a list of derivations $h''_j : \GL'_{0_j} \vdash E_j$ for $j \in \{1,\dots,m\}$ such that
-    \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG,  \GL'_1 , C}$
+  \item a partition $\GL'_0 = \GL'_{0_1}, \dots , \GL'_{0_m}$, where $\GL'_{0_j}$ has the form $B , \GL''_{0_1}$,
+  \item a list of formulae $E_1,\dots,E_m$ for $j\in\{1,\dots,m\}$,
+  \item a derivation $g'' : \GG' , E_1,\dots,E_m, \GL'_1 \vd A$,
+  \item a list of derivations $h''_j : \GL'_{0_j} \vdash E_j$ for $j \in \{1,\dots,m\}$ such that
+  \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG,  \GL'_1 , C}$
   \end{itemize}
   % The desired partition of $\GD'_1 , A \Rarr B , \GL'_1$ is $\langle (\GD'_1, A \Rarr B , \GL''_{0_1}), \GL'_{0_2}, \dots \GL'_{0_m}\rangle$ and the list of interpolant formulae is $[[D_i] \Rs E_1 , E_2 , \dots , E_j]$. The desired derivations are $\Rsl \ ([h'_i] , g'')$ and $[\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m]$.
   % The variable condition is easy to check.
-  The desired partition of $\GD'_1 , A \Rarr B , \GL'_1$ is $ (\GD'_1, A \Rarr B , \GL''_{0_1}), \GL'_{0_2}, \dots \GL'_{0_m}$ and the list of interpolant formulae is $(D_1,\dots,D_n) \Rs E_1 , E_2 , \dots , E_j$. The desired derivations are $\Rsl \ ([h'_i] , g'')$ and $\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m$.
-  The variable condition is easy to check.
+  We return $\mf{mmip}\ (\GD,f) = (m,\vec{\GD_j},\vec{F_j},g,\vec{h_j})$, where the partition $\vec{\GD_j}$ of $\GD$ is $(\GD'_1, A \Rarr B , \GL''_{0_1}), \GL'_{0_2}, \dots \GL'_{0_m}$, the interpolant formulae  $\vec{F_j}$ are $(D_1,\dots,D_n) \Rs E_1 , E_2 , \dots , E_j$, the derivation $g = \Rsl \ (\vec{h'_i} , g'')$ and the list of derivations $\vec{h_j}$ is $\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m$.
+
+  In all cases the variable condition is easy to verify.
 \end{proof}
-The proof of Theorem \ref{thm:MIP:LPfree} describes the construction of a function $\mf{mmip}$ producing a multi-interpolant tuple $(n,[\GD_i],[D_i],g,[h_i])$, where the lists have index $i \in \{1,\dots,n\}$, for each derivation $f : \Gamma,\Delta,\Lambda \vdash C$, in which case we write $\mf{mmip}\ (\GD,f) = (n,[\GD_i],[D_i],g,[h_i])$.
+%The proof of Theorem \ref{thm:MIP:LPfree} describes the construction of a function $\mf{mmip}$ producing a multi-interpolant tuple $(n,[\GD_i],[D_i],g,[h_i])$, where the lists have index $i \in \{1,\dots,n\}$, for each derivation $f : \Gamma,\Delta,\Lambda \vdash C$, in which case we write $\mf{mmip}\ (\GD,f) = (n,[\GD_i],[D_i],g,[h_i])$.
 
 \begin{theorem}[Proof-relevant multi-interpolation for \LPfree]\label{thm:cut:intrp:LPfree}
   Given $f : \GG , \GD , \GL \vd C$, if $\mf{mmip}\ (\GD,f) = (n,[\GD_i],[D_i],g,[h_i])$, then $\cuts \ ([h_i] , g) \circeq f$.
