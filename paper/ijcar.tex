@@ -2267,7 +2267,7 @@ Maehara interpolation is then witnessed by the construction of the following fun
 \]
 The function is constructed by pattern-matching on the derivation $f$.
 
-The equivalence of interpolation triples (cf. Definition \ref{def:equiv:intrp:triples}) is implemented in two steps.
+The equivalence of interpolation triples (cf.\ Definition \ref{def:equiv:intrp:triples}) is implemented in two steps.
 The first step is to define the relation that witnesses the equivalence between two interpolation triples as a dependent product type:
 \[
   \begin{array}{l}
@@ -2294,7 +2294,7 @@ The other two mean that for any three interpolation triples $n$, $n'$, and $p$, 
 
 Notice that symmetry and transitivity of the relation $\_{\sim}\_$ are derivable so they are not included in the datatype.
 
-The well-definedness of \MIP\ wrt.\ $\circeq$ (cf. Theorem \ref{thm:welldef:L}) is implemented as a record type:
+The well-definedness of \MIP\ wrt.\ $\circeq$ (cf.\ Theorem \ref{thm:welldef:L}) is implemented as a record type:
 \[
 \begin{array}{rl}
   \multicolumn{2}{l}{\record \:\:  \MIP{\circeq} ~ (\GG ~ \GD ~ \GL : \mf{Cxt}) ~ (C : \Fma) ~ (n ~ n' : \MIP \GG ~ \GD ~ \GL ~ C) : \Set \:\: \where} \\
@@ -2320,8 +2320,8 @@ The function is constructed by pattern-matching on $p$, the proof of equivalence
 \underline{N. B.} 
 We have proved the most complicated cases: ($i$) permutation of consecutive applications of two instances of $\Rl$ and ($ii$) permutation of disjoint applications of two instances of $\Rl$ although the current formalization is not exhaustive.
 There are more cases to consider in the construction of the function $\mathsf{mip}{\circeq}$ than the corresponding pen-and-paper proof.
-This is due to the definition of the helper functions that distinguish all possible cases on an equation of two lists.
-It will be beneficial to improve the helper functions for completing the formalization and making it efficient and reusable.
+This is due to the definition of the helper functions that distinguish all possible cases on equations of lists.
+It will be beneficial to improve the helper functions to complete the formalization and make it efficient and reusable.
 
 The formalization postulates the admissible equations that $\cut$ commutes with left introduction rules in the first premise and congruence of $\cut$ wrt. $\circeq$. These equations are provable in Agda but we chose to postulate them and leave the proofs for the future.
 
