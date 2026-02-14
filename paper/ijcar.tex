@@ -200,19 +200,19 @@ Cheng-Syuan Wan \orcidID{0000-0003-2053-1688}}
 
 In most of the systems investigated by proof theorists, such as the sequent calculus and natural deduction, proofs are represented as finite trees, which are built inductively from a set of deductive rules.
 But proof theorists are not only interested in in the way in which proofs can be constructed, they also care about \emph{equality of proofs}: deductive systems are specified by a set of deductive rules \emph{together} with a set of equality rules. The latter typically consist of $\beta$- and $\eta$-equivalences plus a large number of permutative conversions.
-Proof theorists can produce these set of equations, which generate a congruence relation $\circeq$ on derivations, in various ways. Possibly as an axiomatization of equality in categorical models, e.g. two derivations (or terms) $f,f'$ in intuitionistic logic should be considered equal, i.e. $f \circeq f'$, iff the interpretations of $f$ and $f'$ are equal in every Cartesian closed category \niccolo{Cite Lambek Scott book}. Alternatively, the equality rules can be obtained by studying geometric representations of proofs, e.g. in linear logic $f \circeq f'$ iff $f$ and $f'$ have the same proof net \cite{girard:linear:87}.
+Proof theorists can produce these set of equations, which generate a congruence relation $\circeq$ on derivations, in various ways. Possibly as an axiomatization of equality in categorical models, e.g. two derivations (or terms) $f,f'$ in intuitionistic logic should be considered equal, i.e. $f \circeq f'$, iff the interpretations of $f$ and $f'$ are equal in every Cartesian closed category \cite{lambekscott1988}. Alternatively, the equality rules can be obtained by studying geometric representations of proofs, e.g. in linear logic $f \circeq f'$ iff $f$ and $f'$ have the same proof net \cite{girard:linear:87}.
 
 In this paper, we are interested in the relationship between equivalence of derivations and interpolation properties, such as Craig interpolation and its generalizations, in substructural logics. These are logical systems allowing a fine control on the use and production of formulae/resources. Concretely, we study this relationship in the sequent calculus formulation of \emph{Lambek's syntactic calculus} (\L) \cite{lambek:mathematics:58}, which forbids the structural rules of weakening, contraction and exchange,
 %The sequent calculus formulation of Lambek calculus (\L) has the sequents of the form $\GG \vd C$ where the $\GG$ is an oredered list of formulae.
-and has been extensively studied for its linguistic applications \cite{Pentus1997,moot:categorial:2012}.
+and has been extensively studied for its linguistic applications \cite{moot:categorial:2012}.
 
 \emph{Craig interpolation} is a fundamental property of logical systems \cite{craig:interpolation:1957}.
 It has been studied for various logics including, e.g.\ classical logic \cite{craig:interpolation:1957}, intermediate logics \cite{Maksimova1977}, and substructural logics \cite{Galatos2007}.
 A logic $\mc{L}$ enjoys Craig interpolation if for any theorem $A \to C$ (where $\to$ is the implication connective in $\mc{L}$), there exists an intermediate formula $B$ such that both $A \to B$ and $B \to C$ are theorems in $\mc{L}$ and $\vars{B}\subseteq \vars{A} \cap \vars{C}$, where $\vars{A}$ denotes the set of atomic formulae appearing in $A$.
 %Deductive interpolation is a generalized property, where the role of implication $\to$ is replaced by the consequence relation $\vd$.
 %For any formula $A$ and $C$, if $A \vd C$, then there exists a formula $B$ such that $A \vd B$, $B \vd C$ and $\vars{B}\subseteq \vars{A} \cap \vars{C}$.
-A generalization of Craig interpolation is \emph{Maehara interpolation} (\MIP), also known as strong deductive interpolation. In \L, this property states that for a derivation $f : \GG , \GD , \GL \vd C$ with a specified sublist $\GD$ of the antecedent, there exist a formula $D$ and two derivations $g : \GG, D, \GL \vdash C$ and $h : \GD \vdash D$ such that $\vars{D} \subseteq \vars{\GD} \cap \vars{\GG, \GL, C}$.
-The property \MIP\ is usually proved by Maehara's method \cite{maehara1961}, i.e.\ by induction on the derivation $f$. We call this method \emph{Maehara interpolation procedure}.
+A generalization of Craig interpolation is \emph{Maehara interpolation}, also known as strong deductive interpolation. In \L, this property states that for a derivation $f : \GG , \GD , \GL \vd C$ with a specified sublist $\GD$ of the antecedent, there exist a formula $D$ and two derivations $g : \GG, D, \GL \vdash C$ and $h : \GD \vdash D$ such that $\vars{D} \subseteq \vars{\GD} \cap \vars{\GG, \GL, C}$.
+The Maehara interpolation property is usually proved by Maehara's method \cite{maehara1961}, i.e.\ by induction on the derivation $f$. We call this method \emph{Maehara interpolation procedure}.
 The applicability of the method relies on the existence of a cut-free  sequent calculus for the logic under investigation.
 The triple $(D,g,h)$ consisting of a formula $D$ and derivations $g$ and $h$ outputted by the interpolation procedure is called an \emph{interpolation triple}.
 
@@ -221,10 +221,10 @@ The triple $(D,g,h)$ consisting of a formula $D$ and derivations $g$ and $h$ out
 %For example, Theorem \ref{thm:MIP} is \MIP\ for \L.
 %We call $(D , g : \GG , D , \GL \vd C , h : \GD \vd D)$ the interpolation triple of $f : \GG , \GD , \GL \vd C$ if it is obtained by applying \MIP\ on $f$.
  
-Traditionally, \MIP\ only states the \emph{mere existence} of an interpolation triple $(D,g,h)$, but it does not say how the input derivation relates to this triple.
+Traditionally, the Maehara interpolation property only states the \emph{mere existence} of an interpolation triple $(D,g,h)$, but it does not say how the input derivation relates to this triple.
 In this work, we are interested in a \emph{proof-relevant} version of  Maehara interpolation, also known as \emph{Maehara-\cub\ interpolation}, that exhibits such relationship.
 In \L, proof-relevant interpolation states that, if the interpolation procedure on $f$ produces an interpolation triple $(D,g,h)$, then $\cut \ (h , g) \circeq f$, where $\cut$ is the admissible cut rule.
-In other words, \MIP\ is a right inverse of the admissible cut rule, up to $\circeq$.
+In other words, the interpolation procedure is a right inverse of the admissible cut rule, up to $\circeq$.
 This line of work has been initiated in the 90s by \cub~\cite{vcubric1993results,Cubric1994}, who proved proof-relevant interpolation for the simply typed $\lambda$-calculus with sum types,
 %and its relation to categorical models.
 and has been recently revived by Saurin, who proved proof-relevant interpolation for (extensions) of classical linear logic \cite{Saurin2024} and considered generalizations to sequent calculi with primitive cut rule and to proof nets \cite{Saurin2025}.
@@ -243,7 +243,7 @@ However, this notion of equivalence of interpolation triples is not appropriate 
 We therefore propose a different \emph{zig-zag} equivalence of interpolation triples which implies the well-definedness of the interpolation procedure in \L. The equivalence of triples $(D , g, h) \sim (D' , g', h')$ is the symmetric transitive closure of the relation stating that there exists a derivation $t : D \vd D'$ such that $g \circeq \cut \ (t , g')$ and $\cut \ (h , t) \circeq h'$.
 
 Finally, we look at the \emph{product-free} Lambek calculus (\LPfree), i.e. the fragment of \L\ without multiplicative conjunction.
-Pentus showed that \LPfree\ does not enjoy Maehara interpolation, but Craig interpolation can still be proved using a more complex \emph{Maehara multi-interpolation} property. We conclude our paper by establishing a proof-relevant version of Pentus' multi-interpolation and studying an appropriate equivalence of multi-interpolation tuples that implies well-definedness of the multi-interpolation procedure. 
+Pentus showed that \LPfree\ does not enjoy Maehara interpolation, but Craig interpolation can still be proved using a more complex \emph{Maehara multi-interpolation} property \cite{Pentus1997}. We conclude our paper by establishing a proof-relevant version of Pentus' multi-interpolation and studying an appropriate equivalence of multi-interpolation tuples that implies well-definedness of the multi-interpolation procedure. 
 
 %\paragraph{Contributions} In this paper, we establish the following results: 
 %\begin{enumerate}
@@ -934,7 +934,7 @@ We also prove that the function $\mf{mip}$ is well-defined wrt.\ the equivalence
   Given $f : \GG , \GD , \GL \vd C$, if $\mf{mip}\ (\GD,f) = (D,g,h)$, then $\cut \ (h , g) \circeq f$.
 \end{theorem}
 \begin{proof}
-  The proof proceeds by induction on the derivation $f$.
+  By induction on the derivation $f$.
   We only discuss the case $f = \Rl \ (f' , f'')$ and its subcases $(v)$ and $(iv)$ in the proof of Theorem \ref{thm:MIP}. %in the the proofs of the interesting subcases of $f = \Rl \ (f' , f''): \GG' , \GD' , A \Rarr B , \GL' \vd C$ mentioned
 
     % The first case is when $\GD$ splits both $\GG'$ and $\GD'$ where the interpolant formula is $E \ot D$. Recall the derivations $g = \tl \ (\Rl \ (g' , g''))$ and $h = \tr \ (h'' , h')$, therefore the goal is to show $\cut \ (\tr \ (h'' , h') , \tl \ (\Rl \ (g' , g''))) \circeq \Rl \ (f' , f'')$, which is witnessed by the following:
@@ -1243,7 +1243,7 @@ We show that $\cut \ (t , g_1) \circeq g_0$ and $\cut \ (h_0 , t) \circeq h_1$:
   Given derivations $f , f' : \GG , \GD , \GL \vd C$ with $\mf{mip}(\GD,f) = (D , g , h)$ and $\mf{mip}(\GD,f') = (D' , g' , h')$, if $f \circeq f'$ then $(D , g , h) \sim (D' , g' , h')$.
 \end{theorem}
 \begin{proof}
-  The proof proceeds by induction on the proof of $f \circeq f'$ (remember that $\circeq$ is an inductively defined congruence).
+  By induction on the proof of $f \circeq f'$ (remember that $\circeq$ is an inductively defined congruence).
   We only show the case of the generating equation in (\ref{eq:rl:comm}), other cases are similar.
   We proceed in different ways depending on the location of $\GD$ inside the context $\GG , \GD_0 , A \Rarr B , \GL , \GD_1 , A' \Rarr B', \GO$, which is the antecedent in the conclusion of both derivations.
   There are 15 possible cases, but we can identify three main situations.
@@ -1612,8 +1612,9 @@ Next, given a list of derivations $f_i : \GD_i \vd A_i$ for $i \in \{1,\dots, n\
   \end{array}
 \end{equation*}
 %The first equation is the associativity of $\cut$ and the second one is the commutativity of $\cut$.
+Given a list of contexts $[\GD_1,\dots,\GD_n]$, we say that it \emph{partitions} a context $\GD$ if $\Delta = \GD_1, \dots, \GD_n$.
 \begin{theorem}[Maehara multi-interpolation for \LPfree]\label{thm:MIP:LPfree}
-  Given a derivation $f : \GG , \GD , \GL \vd C$, there exist a partition $\Delta = \GD_1, \dots, \GD_n$, formulae $D_1,\dots,D_n$, a derivation $g : \GG, D_1,\dots,D_n, \GL \vdash C$ and derivations $h_i : \GD_i \vdash D_i$ for $i \in \{1,\dots,n\}$ such that $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD} \cap \vars{\GG, \GL, C}$.
+  Given a derivation $f : \GG , \GD , \GL \vd C$, there exist a list of contexts $[\GD_1, \dots, \GD_n]$ partitioning $\GD$, formulae $D_1,\dots,D_n$, a derivation $g : \GG, D_1,\dots,D_n, \GL \vdash C$ and derivations $h_i : \GD_i \vdash D_i$ for $i \in \{1,\dots,n\}$ such that $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD} \cap \vars{\GG, \GL, C}$.
 \end{theorem}
 \begin{proof}
   We build a function $\mf{mmip}$ producing a tuple $(n,\vec{\GD},\vec{D},g,\vec{h})$ for each derivation $f : \Gamma,\Delta,\Lambda \vdash C$ and write $\mf{mmip}\ (\GD,f) = (n,\vec{\GD},\vec{D},g,\vec{h})$. Here the list $\vec{\GD}$ has length $n$ and its $i$th element is denoted $\GD_i$, and similarly for lists $\vec{D}$ and $\vec{h}$.
@@ -1630,10 +1631,10 @@ Next, given a list of derivations $f_i : \GD_i \vd A_i$ for $i \in \{1,\dots, n\
   %   \item $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD'_0} \cap \vars{\GD'_1, A}$
   % \end{itemize}
   \begin{itemize}
-  \item a partition $\GD'_0 = \GD'_{0_1}, \dots , \GD'_{0_n}$,
-  \item a list of formulae $D_1,\dots,D_n$,
+  \item a list of contexts $[\GD'_{0_1}, \dots , \GD'_{0_n}]$ partitioning $\GD'_0$ ,
+  \item formulae $D_1,\dots,D_n$,
   \item a derivation $g' : D_1,\dots,D_n , \GD'_1 \vd A$,
-  \item a list of derivations $h'_i : \GD'_{0_i} \vdash D_i$ for $i \in \{1,\dots,n\}$ such that
+  \item derivations $h'_i : \GD'_{0_i} \vdash D_i$ for $i \in \{1,\dots,n\}$ such that
     \item $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD'_0} \cap \vars{\GD'_1, A}$
   \end{itemize}
   % \begin{itemize}
@@ -1642,14 +1643,14 @@ Next, given a list of derivations $f_i : \GD_i \vd A_i$ for $i \in \{1,\dots, n\
   %   \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG'_0 , B , \GL' , C}$
   % \end{itemize}
   \begin{itemize}
-  \item a partition $\GG'_1 = \GG'_{1_1}, \dots , \GG'_{1_m}$,
-  \item a list of formulae $E_1, \dots,E_m$,
+  \item a list of contexts $[\GG'_{1_1}, \dots , \GG'_{1_m}]$ partitioning $\GG'_1$,
+  \item formulae $E_1, \dots,E_m$,
   \item a derivation $g'' : \GG'_0 , E_1, \dots,E_m, B , \GL' \vd A$,
-  \item a list of derivations $h''_j : \GG'_{1j} \vdash E_j$ for $j\in\{1,\dots,m\}$ such that
+  \item derivations $h''_j : \GG'_{1j} \vdash E_j$ for $j\in\{1,\dots,m\}$ such that
   \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG'_0 , B , \GL' , C}$
   \end{itemize}
   % The desired partition of $\GG'_1, \GD'_0$ is $\langle \GG'_{1_1}, \dots , \GG'_{1_m}, \GD'_{0_1}, \dots , \GD'_{0_n}\rangle$ and the list of interpolant formulae is $[E_1 , \dots, E_m, D_1,\dots, D_n]$. The desired derivations are \linebreak $\Rl \ (g' , g'')$ and $[h''_1, \dots, h''_m, h'_1, \dots, h'_n]$.
-  We return $\mf{mmip}\ (\GD,f) = (l,\vec{\GD},\vec{F},g,\vec{h})$, where $l = n+m$,  the partition $\vec{\GD}$ of $\GD$ is $\GG'_{1_1}, \dots , \GG'_{1_m}, \GD'_{0_1}, \dots , \GD'_{0_n}$, the list of interpolant formulae $\vec{F}$ is $E_1 , \dots, E_m, D_1,\dots, D_n$, the derivation $g = \Rl \ (g' , g'')$ and the list of derivations $\vec{h}$ is $h''_1, \dots, h''_m, h'_1, \dots, h'_n$.
+  We return $\mf{mmip}\ (\GD,f) = (l,\vec{\GD},\vec{F},g,\vec{h})$, where $l = n+m$,  the list of contexts $\vec{\GD}$ is $\GG'_{1_1}, \dots , \GG'_{1_m}, \GD'_{0_1}, \dots , \GD'_{0_n}$ (which partitions $\GD$), the interpolant formulae $\vec{F}$ are $E_1 , \dots, E_m, D_1,\dots, D_n$, the derivation $g = \Rl \ (g' , g'')$ and derivations $\vec{h}$ are $h''_1, \dots, h''_m, h'_1, \dots, h'_n$.
 %  The variable condition is easy to check.
 
   Case $(vi)$: % The second case is when the interpolant context splits both $\GD'$ and $\GL'$ and contains $A \Rarr B$. By inductive hypothesis, we obtain:
@@ -1665,22 +1666,22 @@ Next, given a list of derivations $f_i : \GD_i \vd A_i$ for $i \in \{1,\dots, n\
   %   \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG,  \GL'_1 , C}$
   % \end{itemize}
   \begin{itemize}
-  \item a partition $\GD'_0 = \GD'_{0_1}, \dots , \GD'_{0_n}$,
-  \item a list of formulae $D_1,\dots,D_n$,
+  \item a list of contexts $\GD'_{0_1}, \dots , \GD'_{0_n}$ partitioning $\GD'_0$,
+  \item formulae $D_1,\dots,D_n$,
   \item a derivation $g' : D_1,\dots,D_n , \GD'_1 \vd A$,
-  \item a list of derivations $h'_i : \GD'_{0_i} \vdash D_i$ for $\in \{1,\dots,n\}$ such that
+  \item derivations $h'_i : \GD'_{0_i} \vdash D_i$ for $\in \{1,\dots,n\}$ such that
   \item $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD'_0} \cap \vars{\GD'_1, A}$
   \end{itemize}
   \begin{itemize}
-  \item a partition $\GL'_0 = \GL'_{0_1}, \dots , \GL'_{0_m}$, where $\GL'_{0_j}$ has the form $B , \GL''_{0_1}$,
-  \item a list of formulae $E_1,\dots,E_m$ for $j\in\{1,\dots,m\}$,
+  \item a list of contexts $\GL'_{0_1}, \dots , \GL'_{0_m}$ partitioning $\GL'_0$, where $\GL'_{0_j}$ has the form $B , \GL''_{0_1}$,
+  \item formulae $E_1,\dots,E_m$ for $j\in\{1,\dots,m\}$,
   \item a derivation $g'' : \GG' , E_1,\dots,E_m, \GL'_1 \vd A$,
-  \item a list of derivations $h''_j : \GL'_{0_j} \vdash E_j$ for $j \in \{1,\dots,m\}$ such that
+  \item derivations $h''_j : \GL'_{0_j} \vdash E_j$ for $j \in \{1,\dots,m\}$ such that
   \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG,  \GL'_1 , C}$
   \end{itemize}
   % The desired partition of $\GD'_1 , A \Rarr B , \GL'_1$ is $\langle (\GD'_1, A \Rarr B , \GL''_{0_1}), \GL'_{0_2}, \dots \GL'_{0_m}\rangle$ and the list of interpolant formulae is $[[D_i] \Rs E_1 , E_2 , \dots , E_j]$. The desired derivations are $\Rsl \ ([h'_i] , g'')$ and $[\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m]$.
   % The variable condition is easy to check.
-  We return $\mf{mmip}\ (\GD,f) = (m,\vec{\GD},\vec{F},g,\vec{h})$, where the partition $\vec{\GD}$ of $\GD$ is $(\GD'_1, A \Rarr B , \GL''_{0_1}), \GL'_{0_2}, \dots \GL'_{0_m}$, the interpolant formulae  $\vec{F}$ are $(D_1,\dots,D_n) \Rs E_1 , E_2 , \dots , E_j$, the derivation $g = \Rsl \ (\vec{h'} , g'')$ and the list of derivations $\vec{h}$ is $\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m$.
+  We return $\mf{mmip}\ (\GD,f) = (m,\vec{\GD},\vec{F},g,\vec{h})$, where the list of contexts $\vec{\GD}$ is $(\GD'_1, A \Rarr B , \GL''_{0_1}), \GL'_{0_2}, \dots \GL'_{0_m}$ (which partitions $\GD$), the interpolant formulae  $\vec{F}$ are $(D_1,\dots,D_n) \Rs E_1 , E_2 , \dots , E_j$, the derivation $g = \Rsl \ (\vec{h'} , g'')$ and derivations $\vec{h}$ are $\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m$.
 
   In all cases the variable condition is easy to verify.
 \end{proof}
@@ -1690,7 +1691,7 @@ Next, given a list of derivations $f_i : \GD_i \vd A_i$ for $i \in \{1,\dots, n\
   Given $f : \GG , \GD , \GL \vd C$, if $\mf{mmip}\ (\GD,f) = (n,\vec{\GD},\vec{D},g,\vec{h})$, then $\cuts \ (\vec{h} , g) \circeq f$.
 \end{theorem}
 \begin{proof}
-  The proof proceeds by induction on the derivation $f$.
+  By induction on the derivation $f$.
   We only discuss the case $f = \Rl \ (f' , f'')$ and its subcase $(iv)$ in the proof of Theorem \ref{thm:MIP:LPfree}. 
 %%  Proof proceeds by induction on $f$.
 %%  We show one interesting subcase of $f = \Rl \ (f' , f'') : \GG' , \GD' , A \Rarr B , \GL' \vd C$ that the interpolation context splits both $\GD'$ and $\GL'$ and contains $A \Rarr B$.
@@ -1736,6 +1737,7 @@ Next, given a list of derivations $f_i : \GD_i \vd A_i$ for $i \in \{1,\dots, n\
   % \]
 \end{proof}
 The appropriate notion of equivalence of multi-interpolation tuples in \LPfree\ is obtained as a modification of the equivalence of interpolant tuples in \L\ by additionally considering the relationship between partitions of $\GD$.
+Given a list $\vec{\GD}$, we write $\vec{\GD}[i..j]$ for the sublist of elements between positions $i$ and $j$.
 \begin{definition}[Equivalence of multi-interpolation tuples]\label{def:equiv:intrp:triples:LPfree}
 %~
 %\\
@@ -1744,12 +1746,13 @@ The appropriate notion of equivalence of multi-interpolation tuples in \LPfree\ 
   \begin{enumerate}
   % \item $\GD$ can be partitioned in $m$ groups, %there exists a partition
   % i.e. $n = n_1 + \dots + n_m$ and there is an equality $\GD = (\GD_1,\dots,\GD_{n_1}), \dots,(\GD_{n_{m-1}+1},\dots,\GD_{n_m})$ with $n_m = n$,
-  \item $\vec{\GD}$ can be partitioned in $m$ groups, %there exists a partition
-    i.e. there is an equality $\vec{\GD} = \linebreak(\GD_1,\dots,\GD_{n_1}), \dots,(\GD_{n_{m-1}+1},\dots,\GD_{n_m})$ with $n_m = n$,
-  \item $\GD'_j = \GD_{n_{j-1}+1},\dots,\GD_{n_{j}}$ for $j \in \{1,\dots,m\}$ (where $n_0$ is assumed to be 0),
-  \item there exist derivations $t_j : D_{n_{j-1}+1},\dots,D_{n_{j}} \vd D'_j$ for each $j \in \{ 1,\dots,m \}$, such that
+%   \item $\vec{\GD}$ can be partitioned in $m$ groups, %there exists a partition
+%     i.e. there is an equality $\vec{\GD} = \linebreak(\GD_1,\dots,\GD_{n_1}), \dots,(\GD_{n_{m-1}+1},\dots,\GD_{n_m})$,
+%   \item $\GD'_j = \GD_{n_{j-1}+1},\dots,\GD_{n_{j}}$ for $j \in \{1,\dots,m\}$ (where $n_0$ is assumed to be 0),
+  \item there exist $n_1,\dots,n_m \in \mathbb{N}$ such that $n = n_1+\dots +n_m$ and $\GD[n_{j-1}+1..n_{j}]$ partitions $\GD'_j$ for all $j \in \{ 1,\dots,m \}$, where $n_0$ is assumed to be 0,
+  \item there exist derivations $t_j : D_{n_{j-1}+1},\dots,D_{n_{j}} \vd D'_j$ for each $j \in \{ 1,\dots,m \}$, 
   \item $g \circeq \cuts \ (\vec{t} , g')$ and
-  \item $\cuts \ (\vec{h} , t_j) \circeq h'_j$ for each $j \in \{ 1,\dots,m \}$, where index $k$ ranges over  $\{n_{j-1}+1,\dots,n_j \}$.
+  \item $\cuts \ (\vec{h}[n_{j-1}+1..n_j] , t_j) \circeq h'_j$ for each $j \in \{ 1,\dots,m \}$.
   \end{enumerate}
   % there exists a partition $n = n_1+n_2+\dots+n_m$ such that $\GD'_j = \GD_{n_{j-1}+1},\dots,\GD_{n_{j}}$ for $j \in \{1,\dots,m\}$ (where $n_0$ is assumed to be 0), 
 %   and there exist derivations $t_j : D_{n_{j-1}+1},\dots,D_{n_{j}} \vd D'_j$ such that  $g \circeq \cuts \ ([t_j] , g')$ and 
@@ -1768,7 +1771,7 @@ The appropriate notion of equivalence of multi-interpolation tuples in \LPfree\ 
 %%     \end{itemize}
 %%   \end{definition}
 
- Let us write $\vec{t} : \vec{D} \vdash \vec{D'}$ to denote the list of derivations in condition 3 of Definition \ref{def:equiv:intrp:triples:LPfree}.
+ Let us write $\vec{t} : \vec{D} \vdash \vec{D'}$ to denote the list of derivations in condition 2 of Definition \ref{def:equiv:intrp:triples:LPfree}.
  Intuitively, two multi-interpolation tuples are equivalent if there exists a ``generalized zig-zag'' of proofs of the form
  $$
  \vec{t^1}: \vec{D} \vdash \vec{D^1} \qquad
@@ -1787,7 +1790,7 @@ The appropriate notion of equivalence of multi-interpolation tuples in \LPfree\ 
   (m,\vec{\GD'} , \vec{D'} , g' , \vec{h'})$.
 \end{theorem}
 \begin{proof}
-  The proof proceeds by induction on the proof of $f \circeq f'$ (remember that $\circeq$ is an inductively defined congruence).
+  By induction on the proof of $f \circeq f'$ (remember that $\circeq$ is an inductively defined congruence).
   We only show the case of the equation (\ref{eq:rl:ll:assoc}) and its most complicated subcase, where $\GD$ split between $\GG'$ and $\GD$, i.e.\ $\GG' = \GG'_0,\GG'_1$ and $\GD = \GD_0, \GD_1$ so that $\GD = \GG'_1 , B' \Larr A', \GG , \GD_0$.
  Assume given multi-interpolation tuples for the derivations $f$, $f'$ and $f''$:
     % \[
@@ -1833,7 +1836,7 @@ The appropriate notion of equivalence of multi-interpolation tuples in \LPfree\ 
     %   \end{array}$}
     % \]
 where $\GL_1 = B , \GL'_1$ for some $\GL'_1$ and $\GG'_{1_l} = \GG''_{1_l} , B'$ for some $\GG''_{1_l}$.
-Computing $\mf{mmip}$ on the two side of equation (\ref{eq:rl:ll:assoc}) returns
+Computing $\mf{mmip}$ on the two sides of equation (\ref{eq:rl:ll:assoc}) returns
 \[
 \begin{array}{c}
      \begin{array}{c}
@@ -1903,7 +1906,7 @@ Computing $\mf{mmip}$ on the two side of equation (\ref{eq:rl:ll:assoc}) returns
   %       \end{array}
   %     \end{array}
   %   \]
-Conditions 1 and 2 of Definition \ref{def:equiv:intrp:triples:LPfree} is satisfied by noticing that the list of contexts $(\GG''_{1_l} , B'\Larr A',\GG),\GD_{0_1},\dots,\GD_{0_n}$ is a partition of the context $(\GG''_{1_l} , B'\Larr A',\GG,\GD_{0_1},\dots,\GD_{0_n})$.
+Condition 1 of Definition \ref{def:equiv:intrp:triples:LPfree} is satisfied by decomposing $l + n$ as the sum $1 + \dots + 1 + (1 + n)$, read as $1 * (l-1) + (1+n)$, so that $[\GG'_k]$ partitions $\GG'_k$ for $k \in \{1,\dots,l-1\}$ and $[(\GG''_{1_l} , B'\Larr A',\GG),\GD_{0_1},\dots,\GD_{0_n}]$ partitions  $\GG''_{1_l} , B'\Larr A',\GG,\GD_{0_1},\dots,\GD_{0_n}$.
 % Condition 3 amounts to constructing the following derivation, which we call $t$:
 % \[
 %   \infer[\Lsr]{F_l \Ls [E_1,\dots,E_m], D_1, \dots, D_n \vd F_l \Ls [[D_1,\dots,D_n] \Rs E_1, E_2,\dots,E_m]}{
@@ -1918,9 +1921,9 @@ Conditions 1 and 2 of Definition \ref{def:equiv:intrp:triples:LPfree} is satisfi
 %     }
 %   }
 % \]
-Condition 3 is satisfied by constructing the derivation $t = \Lsr \ (\Rsl \ (\vec{\ax}, \Lsl \ (\vec{\ax}, \ax)))$.
+Condition 2 holds by constructing the derivation $t = \Lsr \ (\Rsl \ (\vec{\ax}, \Lsl \ (\vec{\ax}, \ax)))$.
 %The other parts of the two partitions can be ignored since they are exactly the same.
-Condition 4 is true since we calculate
+Condition 3 is true since we calculate
 %We then check the equivalence of derivations. The first cases is:
 \[
 \begin{array}{lr}
@@ -2016,7 +2019,7 @@ Condition 4 is true since we calculate
 %     % &\hspace*{-10cm}
 %   \end{array}
 % \]
-Condition 5 is true since we calculate
+Condition 4 is true since we calculate
 \[
 \begin{array}{lr}
   \cuts \ ([\Lsr \ (\Rl \ (g', h''_l)), h_1,\dots,h_n],t)
@@ -2197,13 +2200,13 @@ Condition 5 is true since we calculate
 \section{Conclusion}
 In this work, we have provided a detailed analysis of proof-relevant Maehara interpolation for the Lambek calculus and its product-free variant.
 We established that the Maehara interpolation procedure $\mf{mip}$ and the multi-interpolation procedure $\mf{mmip}$ are right inverses to the admissible cut rules in their respective calculus.
-Moreover, we demonstrated that both $\mf{mip}$ and $\mf{mmip}$ are well-defined wrt.\ $\circeq$, the equivalence of derivations axiomatizing equality in categorical models.
-The proof is done by providing an appropriate equivalence relation quotienting the interpolation triples (resp. multi-interpolation tuples). It is possible to show that all the constructions and theorems in this paper generalize to extensions of the Lambek calculus with multiplicative unit and additive multiplication, additive disjunction and additive units.
+Moreover, we demonstrated that both $\mf{mip}$ and $\mf{mmip}$ are well-defined wrt.\ $\circeq$, the equivalence of derivations axiomatizing equality in categorical models/proof nets.
+This is achieved by providing an appropriate equivalence relation quotienting the interpolation triples (resp. multi-interpolation tuples). It is possible to show that all the constructions and theorems in this paper generalize to extensions of the Lambek calculus with multiplicative unit and additive multiplication, additive disjunction and additive units.
 
 An interesting finding is the discrepancy between non-associative and associative Lambek calculi wrt. equivalence of interpolation triples.
 In \NL, the equivalence of interpolation triples is strict, i.e.\ the interpolant formulae are exactly the same and the derivations are pairwise equivalent.
 In \L, we have to introduce a more relaxed zig-zag equivalence relation, and an even more complex relation in \LPfree. 
-The zig-zag relation might look like an unusual notion, but it is actually very natural from a category-theoretic perspective, since it characterizes the collection of interpolation triples as some kind of colimit/coend \cite{Loregian_2021}. We plan to expand on this categorical characterization in future work.
+At first glance the zig-zag relation might look quite unusual, but it is actually very natural from a category-theoretic perspective, since it characterizes the collection of interpolation triples as some kind of colimit/coend \cite{Loregian_2021}. We plan to expand on this categorical characterization in future work.
 
 %The definitions and results we had in this work, including \MIP\ (\MmIP) being a right inverse of the admissible cut, definition of equivalence of interpolation triples (quadruples), and \MIP\ (\MmIP) being well-defined wrt.\ $\circeq$ can all be generalized to Lambek calculus with multiplicative unit and additive multiplication, disjunction and their units.
 
