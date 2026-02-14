@@ -1749,7 +1749,7 @@ Given a list $\vec{\GD}$, we write $\vec{\GD}[i..j]$ for the sublist of elements
 %   \item $\vec{\GD}$ can be partitioned in $m$ groups, %there exists a partition
 %     i.e. there is an equality $\vec{\GD} = \linebreak(\GD_1,\dots,\GD_{n_1}), \dots,(\GD_{n_{m-1}+1},\dots,\GD_{n_m})$,
 %   \item $\GD'_j = \GD_{n_{j-1}+1},\dots,\GD_{n_{j}}$ for $j \in \{1,\dots,m\}$ (where $n_0$ is assumed to be 0),
-  \item there exist $n_1,\dots,n_m \in \mathbb{N}$ such that $n = n_1+\dots +n_m$ and $\vec{\GD}[n_{j-1}+1..n_{j}]$ partitions $\GD'_j$ for all $j \in \{ 1,\dots,m \}$, where $n_0$ is assumed to be 0,
+  \item there exist $n_0,n_1,\dots,n_m \in \mathbb{N}$ such that $0 = n_0 < n_1< \dots <n_m = n$ and $\vec{\GD}[n_{j-1}+1..n_{j}]$ partitions $\GD'_j$ for all $j \in \{ 1,\dots,m \}$,
   \item there exist derivations $t_j : D_{n_{j-1}+1},\dots,D_{n_{j}} \vd D'_j$ for each $j \in \{ 1,\dots,m \}$, 
   \item $g \circeq \cuts \ (\vec{t} , g')$ and
   \item $\cuts \ (\vec{h}[n_{j-1}+1..n_j] , t_j) \circeq h'_j$ for each $j \in \{ 1,\dots,m \}$.
@@ -1906,7 +1906,7 @@ Computing $\mf{mmip}$ on the two sides of equation (\ref{eq:rl:ll:assoc}) return
   %       \end{array}
   %     \end{array}
   %   \]
-Condition 1 of Definition \ref{def:equiv:intrp:triples:LPfree} is satisfied by decomposing $l + n$ as the sum $1 + \dots + 1 + (1 + n)$, read as $1 * (l-1) + (1+n)$, so that $[\GG'_k]$ partitions $\GG'_k$ for $k \in \{1,\dots,l-1\}$ and $[(\GG''_{1_l} , B'\Larr A',\GG),\GD_{0_1},\dots,\GD_{0_n}]$ partitions  $\GG''_{1_l} , B'\Larr A',\GG,\GD_{0_1},\dots,\GD_{0_n}$.
+Condition 1 of Definition \ref{def:equiv:intrp:triples:LPfree} is satisfied by taking $0 < 1 < 2 < \dots < l-1 < l + n$, so that $[\GG'_k]$ partitions $\GG'_k$ for $k \in \{1,\dots,l-1\}$ and $[(\GG''_{1_l} , B'\Larr A',\GG),\GD_{0_1},\dots,\GD_{0_n}]$ partitions  $\GG''_{1_l} , B'\Larr A',\GG,\GD_{0_1},\dots,\GD_{0_n}$.
 % Condition 3 amounts to constructing the following derivation, which we call $t$:
 % \[
 %   \infer[\Lsr]{F_l \Ls [E_1,\dots,E_m], D_1, \dots, D_n \vd F_l \Ls [[D_1,\dots,D_n] \Rs E_1, E_2,\dots,E_m]}{
