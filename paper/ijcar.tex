@@ -1457,8 +1457,10 @@ As the readers might have noticed, the proof of Theorem \ref{thm:welldef:L} requ
 The relation $\circeq$ contains 30 generating equations and each of them requires further case analyses on the location of the interpolation context $\Delta$.
 Equation (\ref{eq:rl:comm}) alone has 15 possible subcases.
 It is clear that keeping track of all these cases is proof error-prone and demanding.
-To alleviate the situation and convince ourselves of the validity of the theorem, we have formalized the result for the ($\Rarr,\ot$) fragment of \L\ in the proof assistant Agda.
-A description of the formalization can be found in Appendix \ref{appendix}.
+To increase our (and mostly the reader's) confidence in the correctness of the theorem, we started formalizing the result for the ($\Rarr,\ot$)-fragment of \L\ in the proof assistant Agda.
+The ongoing formalization, which we plan to finish for an extended version of this paper, can be found at \url{https://github.com/cswphilo/associative-Lambek/tree/main/code}.
+%%% To alleviate the situation and convince ourselves of the validity of the theorem, we have formalized the result for the ($\Rarr,\ot$) fragment of \L\ in the proof assistant Agda.
+%%% A description of the formalization can be found in Appendix \ref{appendix}.
 
 %\section{Proof-relevant Maehara Multi-Interpolation of Product-free Lambek Calculus}
 \section{The Story for the Product-free Lambek Calculus}
@@ -2235,97 +2237,99 @@ It will also be interesting to have a general theory on well-definedness of fami
 \bibliographystyle{splncs04}
 \bibliography{ijcar}
 %
-\clearpage
-\newpage
-\appendix
-% \phantomsection
-\section{Formalization in Agda}\label{appendix}
-% \addcontentsline{toc}{section}{A. Formalization in Agda}
-The formalization of the syntax of the $\Rarr,\ot$ fragment of \L\ is standard. We define the formulae, sequents as inductive types with the appropriate constructors for each connective and its corresponding left and right rules.
-The equivalence relation of derivations $\circeq$ is defined as an inductive datatype including the constructors that makes $\circeq$ as an equivalence and congruence relation and all permutative conversions.
-% The functions of cut admissibility and Maehara interpolation are constructed similarly as Veltri and Wan did for the nonassociative Lambek calculus \cite{VW2025Tableaux}. 
 
-For Maehara interpolation, we first declare a record type \MIP:
-% Therefore we formalize the $\Rarr,\ot$ fragment of \L\ and verify its cut admissibility, Maehara interpolation, proof-relevant interpolation and well-definedness of interpolation.
-\[
-\begin{array}{rl}
-  \multicolumn{2}{l}{\record \:\:  \MIP ~ (\GG ~ \GD ~ \GL : \mf{Cxt}) ~ (C : \Fma) : \Set \:\: \where} \\
-  \multicolumn{2}{l}{\quad \mf{constructor} ~ \mf{intrp}} \\
-  \multicolumn{2}{l}{\quad \field} \\
-  \;\; \quad D &: \Fma \\[2pt]
-  \;\; \quad g &: \GG , D , \GL \vd C \\[2pt]
-  \;\; \quad h &: \GD \vd D 
-\end{array}
-\]
-Elements of the type $\MIP ~ \GG ~ \GD ~ \GL ~ C$ are triples consisting of a formula $D$ and two derivations $g$ and $h$, i.e.\ the interpolation triples.
 
-Maehara interpolation is then witnessed by the construction of the following function $\mf{mip}$:
-\[
-\begin{array}{l}
-\mathsf{mip} : (f : \GO \vd C) ~ (eq : \GO \equiv \GG \append \GD \append \GL) \to \MIP ~\GG ~ \GD ~ \GL ~C
-\end{array}
-\]
-The function is constructed by pattern-matching on the derivation $f$.
-
-The equivalence of interpolation triples (cf.\ Definition \ref{def:equiv:intrp:triples}) is implemented in two steps.
-The first step is to define the relation that witnesses the equivalence between two interpolation triples as a dependent product type:
-\[
-  \begin{array}{l}
-  \mathsf\_{\Vdash}\_ : \forall \{\GG ~ \GD ~ \GD ~ C\} \to (n ~ n' : \MIP \GG ~ \GD ~ \GL ~C) \to \Set
-  \\
-  \mathsf\_{\Vdash}\_ ~ \{ \GG \} ~ (\mf{intrp} ~ D ~ g ~ h) ~ (\mf{intrp} ~ D' ~ g' ~ h')
-  \\
-  \hspace*{2cm}= \Sigma ~ (D \vd D') ~ \Gl ~ t ~ \to (g \circeq \cut ~ t ~ g') \times (\cut ~ h ~ t \circeq h') 
-  \end{array}
-\]
-The elements of this dependent product are a derivation $t : D \vd D'$ and the pairwise equivalence of derivations modulo composition with $t$.
-
-Second, the symmetric-transitive closed of the equivalence relation of interpolation triples is implemented as an inductive type:
-\[
-\begin{array}{rl}
-  \multicolumn{2}{l}{\data \:\:  \_{\sim}\_ ~ \{\GG ~ \GD ~ \GL~ C\} : \MIP~ \GG ~ \GD ~ \GL~ C\to \MIP~ \GG ~ \GD ~ \GL~ C \to \Set \:\: \where} \\
-  \;\;\; \mf{refl} &: \{n : \MIP \GG ~ \GD ~ \GL ~C\} \to n \sim n \\
-  \;\;\; \rcons &: \{n~n'~p : \MIP \GG ~ \GD ~ \GL ~C\} \to n \Vd n' \to n' \sim p \to n \sim p \\
-  \;\;\; \lcons &: \{n~n'~p : \MIP \GG ~ \GD ~ \GL ~C\} \to n' \Vd n \to n' \sim p \to n \sim p
-\end{array}
-\]
-The constructor $\mf{refl}$ means that any interpolation triple is equivalent to itself. 
-The other two mean that for any three interpolation triples $n$, $n'$, and $p$, if $n' \sim p$, then we can update the equivalence to $n \sim p$ whenever we have a proof of $n \Vd n'$ or $n' \Vd n$.
-
-Notice that symmetry and transitivity of the relation $\_{\sim}\_$ are derivable so they are not included in the datatype.
-
-The well-definedness of \MIP\ wrt.\ $\circeq$ (cf.\ Theorem \ref{thm:welldef:L}) is implemented as a record type:
-\[
-\begin{array}{rl}
-  \multicolumn{2}{l}{\record \:\:  \MIP{\circeq} ~ (\GG ~ \GD ~ \GL : \mf{Cxt}) ~ (C : \Fma) ~ (n ~ n' : \MIP \GG ~ \GD ~ \GL ~ C) : \Set \:\: \where} \\
-  \multicolumn{2}{l}{\quad \mf{constructor} ~ \mf{intrp{\circeq}}} \\
-  \multicolumn{2}{l}{\quad \field} \\
-  \;\; \quad eq &: n \sim n'
-\end{array}
-\]
-The record type has one element, representing the equivalence of two interpolation triples.
-Well-definedness of \MIP\ wrt.\ $\circeq$ is then witnessed by the construction of the following function $\mf{mip}{\circeq}$:
-\[
-\begin{array}{l}
-\mathsf{mip}{\circeq} : \forall \GG ~ \GD ~ \GL ~\{\GO ~ C\} \to \{f ~ f' : \GO \vd C\} 
-\\
-\hspace*{0.4cm}\to (eq : \GO \equiv \GG \append \GD \append \GL) 
-\to (p : f \circeq f') 
-\\
-\hspace*{0.4cm}\to \MIP{\circeq} ~\GG ~ \GD ~ \GL ~C ~(\mf{mip} ~ \GG ~ \GD ~ \GL ~f~ eq) ~ (\mf{mip} ~ \GG ~ \GD ~ \GL ~f'~ eq)
-\end{array}
-\]
-The function is constructed by pattern-matching on $p$, the proof of equivalence of the derivations $f$ and $f'$. 
-
-\underline{N. B.} 
-We have proved the most complicated cases: ($i$) permutation of consecutive applications of two instances of $\Rl$ and ($ii$) permutation of disjoint applications of two instances of $\Rl$ although the current formalization is not exhaustive.
-There are more cases to consider in the construction of the function $\mathsf{mip}{\circeq}$ than the corresponding pen-and-paper proof.
-This is due to the definition of the helper functions that distinguish all possible cases on equations of lists.
-It will be beneficial to improve the helper functions to complete the formalization and make it efficient and reusable.
-
-The formalization postulates the admissible equations that $\cut$ commutes with left introduction rules in the first premise and congruence of $\cut$ wrt. $\circeq$. These equations are provable in Agda but we chose to postulate them and leave the proofs for the future.
-
-We also include the multiplicative unit $\I$ and its left and right introduction rules to work with the sequents with lists of formulae as their antecedents. In this setting, we can smoothly prove \MIP\ following exactly the same strategy in the proof of Theorem \ref{thm:MIP} without dealing with non-empty list in Agda. The equations of $\eta$-expansion, permutative conversions related to $\I$ and the variable condition are not yet considered in the formalization.
-
-The code is available at \url{https://github.com/cswphilo/associative-Lambek/tree/main/code}.
+%%% \clearpage
+%%% \newpage
+%%% \appendix
+%%% % \phantomsection
+%%% \section{Formalization in Agda}\label{appendix}
+%%% % \addcontentsline{toc}{section}{A. Formalization in Agda}
+%%% The formalization of the syntax of the $\Rarr,\ot$ fragment of \L\ is standard. We define the formulae, sequents as inductive types with the appropriate constructors for each connective and its corresponding left and right rules.
+%%% The equivalence relation of derivations $\circeq$ is defined as an inductive datatype including the constructors that makes $\circeq$ as an equivalence and congruence relation and all permutative conversions.
+%%% % The functions of cut admissibility and Maehara interpolation are constructed similarly as Veltri and Wan did for the nonassociative Lambek calculus \cite{VW2025Tableaux}. 
+%%% 
+%%% For Maehara interpolation, we first declare a record type \MIP:
+%%% % Therefore we formalize the $\Rarr,\ot$ fragment of \L\ and verify its cut admissibility, Maehara interpolation, proof-relevant interpolation and well-definedness of interpolation.
+%%% \[
+%%% \begin{array}{rl}
+%%%   \multicolumn{2}{l}{\record \:\:  \MIP ~ (\GG ~ \GD ~ \GL : \mf{Cxt}) ~ (C : \Fma) : \Set \:\: \where} \\
+%%%   \multicolumn{2}{l}{\quad \mf{constructor} ~ \mf{intrp}} \\
+%%%   \multicolumn{2}{l}{\quad \field} \\
+%%%   \;\; \quad D &: \Fma \\[2pt]
+%%%   \;\; \quad g &: \GG , D , \GL \vd C \\[2pt]
+%%%   \;\; \quad h &: \GD \vd D 
+%%% \end{array}
+%%% \]
+%%% Elements of the type $\MIP ~ \GG ~ \GD ~ \GL ~ C$ are triples consisting of a formula $D$ and two derivations $g$ and $h$, i.e.\ the interpolation triples.
+%%% 
+%%% Maehara interpolation is then witnessed by the construction of the following function $\mf{mip}$:
+%%% \[
+%%% \begin{array}{l}
+%%% \mathsf{mip} : (f : \GO \vd C) ~ (eq : \GO \equiv \GG \append \GD \append \GL) \to \MIP ~\GG ~ \GD ~ \GL ~C
+%%% \end{array}
+%%% \]
+%%% The function is constructed by pattern-matching on the derivation $f$.
+%%% 
+%%% The equivalence of interpolation triples (cf.\ Definition \ref{def:equiv:intrp:triples}) is implemented in two steps.
+%%% The first step is to define the relation that witnesses the equivalence between two interpolation triples as a dependent product type:
+%%% \[
+%%%   \begin{array}{l}
+%%%   \mathsf\_{\Vdash}\_ : \forall \{\GG ~ \GD ~ \GD ~ C\} \to (n ~ n' : \MIP \GG ~ \GD ~ \GL ~C) \to \Set
+%%%   \\
+%%%   \mathsf\_{\Vdash}\_ ~ \{ \GG \} ~ (\mf{intrp} ~ D ~ g ~ h) ~ (\mf{intrp} ~ D' ~ g' ~ h')
+%%%   \\
+%%%   \hspace*{2cm}= \Sigma ~ (D \vd D') ~ \Gl ~ t ~ \to (g \circeq \cut ~ t ~ g') \times (\cut ~ h ~ t \circeq h') 
+%%%   \end{array}
+%%% \]
+%%% The elements of this dependent product are a derivation $t : D \vd D'$ and the pairwise equivalence of derivations modulo composition with $t$.
+%%% 
+%%% Second, the symmetric-transitive closed of the equivalence relation of interpolation triples is implemented as an inductive type:
+%%% \[
+%%% \begin{array}{rl}
+%%%   \multicolumn{2}{l}{\data \:\:  \_{\sim}\_ ~ \{\GG ~ \GD ~ \GL~ C\} : \MIP~ \GG ~ \GD ~ \GL~ C\to \MIP~ \GG ~ \GD ~ \GL~ C \to \Set \:\: \where} \\
+%%%   \;\;\; \mf{refl} &: \{n : \MIP \GG ~ \GD ~ \GL ~C\} \to n \sim n \\
+%%%   \;\;\; \rcons &: \{n~n'~p : \MIP \GG ~ \GD ~ \GL ~C\} \to n \Vd n' \to n' \sim p \to n \sim p \\
+%%%   \;\;\; \lcons &: \{n~n'~p : \MIP \GG ~ \GD ~ \GL ~C\} \to n' \Vd n \to n' \sim p \to n \sim p
+%%% \end{array}
+%%% \]
+%%% The constructor $\mf{refl}$ means that any interpolation triple is equivalent to itself. 
+%%% The other two mean that for any three interpolation triples $n$, $n'$, and $p$, if $n' \sim p$, then we can update the equivalence to $n \sim p$ whenever we have a proof of $n \Vd n'$ or $n' \Vd n$.
+%%% 
+%%% Notice that symmetry and transitivity of the relation $\_{\sim}\_$ are derivable so they are not included in the datatype.
+%%% 
+%%% The well-definedness of \MIP\ wrt.\ $\circeq$ (cf.\ Theorem \ref{thm:welldef:L}) is implemented as a record type:
+%%% \[
+%%% \begin{array}{rl}
+%%%   \multicolumn{2}{l}{\record \:\:  \MIP{\circeq} ~ (\GG ~ \GD ~ \GL : \mf{Cxt}) ~ (C : \Fma) ~ (n ~ n' : \MIP \GG ~ \GD ~ \GL ~ C) : \Set \:\: \where} \\
+%%%   \multicolumn{2}{l}{\quad \mf{constructor} ~ \mf{intrp{\circeq}}} \\
+%%%   \multicolumn{2}{l}{\quad \field} \\
+%%%   \;\; \quad eq &: n \sim n'
+%%% \end{array}
+%%% \]
+%%% The record type has one element, representing the equivalence of two interpolation triples.
+%%% Well-definedness of \MIP\ wrt.\ $\circeq$ is then witnessed by the construction of the following function $\mf{mip}{\circeq}$:
+%%% \[
+%%% \begin{array}{l}
+%%% \mathsf{mip}{\circeq} : \forall \GG ~ \GD ~ \GL ~\{\GO ~ C\} \to \{f ~ f' : \GO \vd C\} 
+%%% \\
+%%% \hspace*{0.4cm}\to (eq : \GO \equiv \GG \append \GD \append \GL) 
+%%% \to (p : f \circeq f') 
+%%% \\
+%%% \hspace*{0.4cm}\to \MIP{\circeq} ~\GG ~ \GD ~ \GL ~C ~(\mf{mip} ~ \GG ~ \GD ~ \GL ~f~ eq) ~ (\mf{mip} ~ \GG ~ \GD ~ \GL ~f'~ eq)
+%%% \end{array}
+%%% \]
+%%% The function is constructed by pattern-matching on $p$, the proof of equivalence of the derivations $f$ and $f'$. 
+%%% 
+%%% \underline{N. B.} 
+%%% We have proved the most complicated cases: ($i$) permutation of consecutive applications of two instances of $\Rl$ and ($ii$) permutation of disjoint applications of two instances of $\Rl$ although the current formalization is not exhaustive.
+%%% There are more cases to consider in the construction of the function $\mathsf{mip}{\circeq}$ than the corresponding pen-and-paper proof.
+%%% This is due to the definition of the helper functions that distinguish all possible cases on equations of lists.
+%%% It will be beneficial to improve the helper functions to complete the formalization and make it efficient and reusable.
+%%% 
+%%% The formalization postulates the admissible equations that $\cut$ commutes with left introduction rules in the first premise and congruence of $\cut$ wrt. $\circeq$. These equations are provable in Agda but we chose to postulate them and leave the proofs for the future.
+%%% 
+%%% We also include the multiplicative unit $\I$ and its left and right introduction rules to work with the sequents with lists of formulae as their antecedents. In this setting, we can smoothly prove \MIP\ following exactly the same strategy in the proof of Theorem \ref{thm:MIP} without dealing with non-empty list in Agda. The equations of $\eta$-expansion, permutative conversions related to $\I$ and the variable condition are not yet considered in the formalization.
+%%% 
+%%% The code is available at \url{https://github.com/cswphilo/associative-Lambek/tree/main/code}.
 \end{document}
