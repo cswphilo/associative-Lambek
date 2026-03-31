@@ -1,0 +1,25 @@
+Overall, I find the results mathematically credible and worthwhile. The proof-relevant interpolation result is apparent once one views Maehara's construction as preserving the shape of the original derivation, but it still needs to be formulated and checked, as done here. The well-definedness result is, to me, the less obvious and more conceptually interesting.
+
+What I found somewhat lacking is an extended reflection on these results in terms of why they hold, what aspects are surprising, whether the results can be tightened, and what natural new problems are uncovered by them. Such a discussion might elevate the results from a confirmation of the interaction between Maehara interpolation, Gentzen cut-elimination, and rule-permutation-based proof equivalence to a more refined understanding of (the canonical nature of) Maehara interpolation and its limits, the "right" definition of proof equivalence in this setting, and more. Having said that, such insights can only follow once these interactions are first confirmed, and that already involves substantial careful checking and identifying appropriate definitions. The authors have done well to achieve this task. I did not check all the proofs, and indeed many details are omitted, but I am confident that the claims are correct.
+
+Further comments
+
+- Currently, cut admissibility and proof-relevant Maehara interpolation are proved as separate theorems. Since the intended conclusion is of the form
+
+P \equiv cut(I(P)_1, I(P)_2),
+
+I wonder whether the presentation could be tightened by integrating these two results into a single theorem. This might be technically interesting.
+
+- After Definition 1, a "zig-zag" of proofs is presented of the form
+
+t1 : D |- D1, t2 : D2 |- D1, t3 : D2 |- D3, ..., tn : Dn |- D'
+
+I do not see why a chain of this particular shape is forced by the definition. Could it not also be a simpler chain of the form
+
+D |- D1 |- D2 |- ... |- Dn |- D' ?
+
+Some explanation would be helpful here.
+
+- There are indeed too many cases to be checked carefully by hand, so it is good to hear that the authors plan to formalise the result in Agda. What is not entirely clear is whether the cases have already been checked by hand. I assume that they have been, and then it would have been helpful to state this more explicitly, and to include full details in an appendix for the reviewer.
+
+- The function notation for rule instances (for example, *L(=>L(g1,g2))) is very economical, but it is difficult to visualise and check. It would be helpful to include proof diagrams where possible, for example in Example 1.

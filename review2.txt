@@ -1,0 +1,29 @@
+From a broader perspective, it would be beneficial to include a more explicit, high-level discussion of why the technical developments in the paper are of particular interest to the logic and automated reasoning community. The paper touches on several important themes, namely the notion of equivalence of proofs, the structure of Maehara interpolation, and the behaviour of these constructions in substructural logics such as the Lambek calculus. A more explicit bird-eye view connecting these aspects, and clarifying their relevance for proof theory, proof assistants, or automated reasoning, would further strengthen the contribution and accessibility of the work.
+
+DETAILED COMMENTS
+
+p.2, l.25: "exhibits such relationship" --> "exhibits such a relationship"
+
+p.3, l.2: "it is possible to show that there exist equivalent derivations f = f' that have distinct interpolation formulae D =/= D'. Even more, D and D' may not be logically equivalent." --> It would be helpful to illustrate this phenomenon with a small illustrative example, or refer the reader to the one on page 8. As it stands, the statement is important but somewhat abrupt.
+
+p.3-4, proof of Thm 1: It would be helpful to include a few fully worked inductive cases in detail, rather than only describing them at a high level - perhaps in an appendix.
+
+p.4, l.-7: "(ii) Δ is contained in Δ'" --> "(ii) Δ is contained in Γ'"
+
+p.5, case (vi): "mip ((B,Λ′0), f′′) = (E, g′′ : Γ′,E,Λ′1 ⊢ C, h′′ : B,Λ′0 ⊢ E" --> "mip ((B,Λ′0), f′′) = (E, g′′ : Γ′,E,Λ′1 ⊢ C, h′′ : B,Λ′0 ⊢ E)" (insert the right parethesis at the end)
+
+p.5, end of proof of Thm 2: "In all cases the variable condition is easy to verify." --> This claim is repeated several times; perhaps one representative argument could be included to justify it explicitly.
+
+p.6, l.-12: "The admissible cut rule also satisfies a number of equivalences, stating that cut commutes with left introduction rules in the first premise up to ≐, e.g. cut (⇒L (f′, f′′), g) ≐ ⇒L (f′, cut (f′′, g))." --> Do these equivalences constitute another set, apart from the ones in points (i)-(iv), defining the general relation relation of equivalence of derivations, or do they follow from the above?
+
+p.7, l.7: "and its subcases (v) and (iv)" --> "and its subcases (v) and (vi)"
+
+p.9, proof of Thm 4: "There are 15 possible cases, but we can identify three main situations." --> While the reduction to three main situations is helpful, a short explanation of how why aspects of the original 15 cases other than the ones qualifying them into one of the three situations are irrelevant would improve clarity.
+
+p.9, proof of Thm 4, situation (ii) : "Δ splits between Γ and Δ1" --> "Δ splits between Λ and Δ1"
+
+p.9, l.-4: "recursive call on two derivation among" --> "recursive call on two derivations among"
+
+p.12, l.4: "similarly to the one mip in Theorem 2" --> "similarly to the one of mip in Theorem 2"
+
+p.12, l.4: "We only discuss the case f = ⇒L(f', f'')" --> Given the central role of this case, it might be useful to briefly justify why it is representative of the general situation.

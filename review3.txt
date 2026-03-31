@@ -1,0 +1,69 @@
+The problem of proof‑relevant interpolation in the Lambek calculus and the product‑free Lambek calculus is interesting from a theoretical perspective because it identifies a structural relationship between cut admissibility and (variants of) Maehara's interpolation method. The notion of zig‑zag equivalence and the extension of the analysis to Pentus's multi‑interpolation method for the product‑free case add further substance to the contribution. I expect that the IJCAR community would find the topic of interest.
+
+However, I did identify several weaknesses in the presentation:
+
+(i) As the authors themselves note, many proofs require extensive case analyses (e.g., Theorem 4). This is common in proof‑theoretic work, but such case splits are often relegated to an appendix or supported by a complete formalisation. Although the authors mention that a formalisation in Agda is underway, it is not yet finished. Having this formalisation completed would strengthen confidence in the correctness of the results. That said, the cases I checked appeared correct.
+
+(ii) The paper does not fully motivate the importance of proof‑relevant interpolation or the significance of well‑definedness for interpolation procedures. While the inverse relationship between cut admissibility and Maehara‑style interpolation is intriguing, the broader theoretical or practical implications of these observations remain unclear from the current presentation.
+
+(iii) Although the paper is not poorly written, it occasionally reads as if it was written in a rush. Several pieces of notation appear without explicit definitions, which makes certain parts less clear.
+
+Overall, despite these issues, the paper does contain some interesting ideas, and the technical work has the potential to contribute meaningfully to ongoing discussions about interpolation in nonclassical or substructural logics.
+
+#Comments:
+
+p.2 - "We call this method Maehara interpolation procedure" \to "We call this method Maehara's interpolation procedure"
+
+p.2 - "The applicability of the method relies on the existence of a cut-free sequent calculus for the logic under investigation." This is technically not correct. It is known that Maehara's method can still be applied in the presence of (analytic) cuts. See [1].
+
+p.2 - "Traditionally, the Maehara interpolation property only states the mere existence of an interpolation triple" I believe this is also technically incorrect. Maehara's method is inductive on the structure of a sequent calculus proof and outputs two proofs witnessing the correctness of the interpolant.
+
+p.2 - It would be good to explicitly explain what "cut (h,g)" means. Is this the cut-free proof that results from applying the cut elimination procedure to h and g? Or is this the proof that ends with an application of cut to h and g, which is not cut free?
+
+p.2 - It would be good to state what is meant by "right inverse".
+
+p.2 - In the second to last line it says "D = D" but I think this should be D = D'
+
+p.3 - "studying" \to "study"
+
+p.3 - in the title of the section "calculus" should be capitalised
+
+p.3 - it would be good to add a citation in the title of theorem 1 to where the result is originally proven
+
+p.3 and 4 - the says it is "by induction on the derivation". Do you mean by induction on the height or size of the derivation?
+
+p.4 - the notation R (f, h) is used to indicate rule applications to proofs, but I do not think this was defined or explained anywhere
+
+p.4 - it would be good to add a citation in the title of theorem 2 to where the result is originally proven
+
+p.4 - It seems that the case (ii) assumption in the theorem 2 proof is wrong (it is the same as the case (i) assumption)
+
+p.5 - "In sequent calculus" \to "In the sequent calculus"
+
+p.5 - "to a derivations" is ungrammatical
+
+*p.6 - Perhaps I am missing something, but I found case (iii) to be odd. Not all consecutive applications of left rules seem to be permutable. For example:
+
+Y |- B   Z, C, W |- D
+--------------------- <=L
+ Z, C <= B, Y, W |- D
+
+X |- A    f
+----------- =>L
+Z, X, A => (C <= B), Y, W |- D
+
+with f the top derivation. Since C <= B is active in the =>L application, it cannot be permuted above the <=L application. In fact, example (6), which is supposed to be an example of permutation type (iii), seems to be an example of permutation type (iv), where the left rules are disjoint.
+
+p.11 - "then that =>*R f = f" is ungrammatical
+
+p.11 - it would be good to add a citation in the title of theorem 5 to where the result is originally proven
+
+#Bibliography
+
+[1] Kowalski, Tomasz, and Hiroakira Ono. "Analytic cut and interpolation for bi-intuitionistic logic." The Review of Symbolic Logic 10.2 (2017): 259-283.
+
+#Questions for Authors
+
+1) Could you please comment on the importance of proof‑relevant interpolation and the significance of well‑definedness for interpolation procedures?
+
+2) Could you please comment on the potential issue in case (iii) of your definition of derivation equivalence (page 5-6) that is mentioned in the comment *p.6 above?
