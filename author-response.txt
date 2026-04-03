@@ -12,7 +12,13 @@ We plan to undertake this multicategorical investigation of interpolation in fut
 
 * R2: "why the technical developments in the paper are of particular interest to the logic and automated reasoning community"
 
-As for relevance to logic and automated reasoning, one reason we find well-definedness interesting is that a well-defined interpolation procedure could possibly provide an alternative way to extract interpolants when given a derivation f, its interpolation triple (D , g ,h) and a derivation f' such that f ≗ f'. We can calculate the interpolation triple for f' by inspecting the chain of permutation between f and f' to find a zig-zag  of the interpolation formulae and produce the corresponding interpolation triple for f'.
+The study of well-defined Maehara interpolation, and in particular the structure of interpolant triples and their equivalence, is important for understanding how differences in proofs (differences that preserve proof denotations, i.e. that result in equivalent proofs) translates to differences in the corresponding interpolants computed by Maehara's method.
+
+Being able to quantify this difference can be useful in applications. For example, in program verification. Model checkers based on interpolation produce loop invariants by iteratively finding a proof of a certain (un)reachibility condition and then applying an interpolation algorithm (such as Maehara's method) on this proof. Our work, and its extension to more expressive logical systems and different interpolation algorithms, could potentially be used for the analysis of these model checkers, for understanding how the modification of the proof search procedure translates to the production of different loop invariants.
+
+We also conjecture possible uses of well-defined interpolation for the efficient computation of interpolants. For example, given equivalent proofs f ≗ g and an interpolant D for f produced by Maehara's algorithm, then we should be able to compute an interpolant for g, equivalent to D, directly by inspecting the given equality of proofs, without the need of running Maehara's method also on g. This could be efficient if the differences between f and g are small and located towards the lower parts of the proof trees.
+
+We will add a discussion on these ideas and conjectures to the conclusive section of the paper.
 
 * Omitted/incomplete proofs
 
@@ -20,37 +26,11 @@ In the proofs of Theorem 4 and 7, we only show one of the many possible cases fo
 
 * R1: "I do not see why a chain of this particular shape [zig-zag] is forced by the definition"
 
-The zig-zag is necessary because equivalent derivations need not produce interpolant formulae that are connected by a simple chain of derivations. In particular, there are equivalent derivations whose interpolants do not imply each other, but can imply or be implied by the interpolant extracted from a third equivalent derivation. For example, consider this sequent 
+The zig-zag is necessary because equivalent derivations need not produce interpolant formulae that are connected by a simple, directed chain of derivations. In particular, there are equivalent derivations whose interpolants do not imply each other, but can imply or be implied by the interpolant extracted from a third equivalent derivation.
 
-Γ , Δ₀ , Δ₁ , A ⇒ B , Λ , Ω , Ψ , Θ , N ⇐ M , Ξ₀ , Ξ₁ , Σ  ⊢ (A' ⊗ B') ⊗ (M' ⊗ N') 
+For example, we found two equivalent derivations f and f', to which Maehara's method assign interpolant formulae ((D₀ ⇒ E₀) ⊗ F₀) ⊗ ((D₁ ⊗ F₁) ⇐ E₁) and (D₀ ⇒ (E₀ ⊗ F₀)) ⊗ (D₁ ⊗ (F₁ ⇐ E₁)), respectively. These formulae do not imply each other. However, they are both implied by ((D₀ ⇒ E₀) ⊗ F₀) ⊗ ((D₁ ⊗ F₁) ⇐ E₁), which is the interpolant formula of another derivation f'' equivalent to both f and f'.
 
-and two equivalent derivations of it:
-
-⊗R (⊗R (⇒L (f , f') , f''), ⇐L (k', (⊗R (k , k''))))
-≗
-⊗R (⇒L (f , ⊗R (f' , f'')) , ⊗R (k , ⇐L (k',k'')))
-where
-f : Δ₀ , Δ₁ ⊢ A 
-f' : Γ , B , Λ ⊢ A'
-f'' : Ω ⊢ B'
-k : ψ ⊢ M'
-k' : Ξ₀ , Ξ₁ ⊢ M
-k'' : Θ , N , Σ ⊢ N'.
-
-Consider the interpolation context Δ₁ , A ⇒ B , Λ , Ω , Ψ , Θ , N ⇐ M , Ξ₀.
-
-The two interpolant formulae of the derivations are
-
-((D₀ ⇒ E₀) ⊗ F₀) ⊗ ((D₁ ⊗ F₁) ⇐ E₁)
-and
-(D₀ ⇒ (E₀ ⊗ F₀)) ⊗ (D₁ ⊗ (F₁ ⇐ E₁))
-where D₀ is the interpolant formula of f, E₀ is the one of f', F₀ is the one of f'' and so on.
-
-They do not imply each other. However, they are both implied by ((D₀ ⇒ E₀) ⊗ F₀) ⊗ ((D₁ ⊗ F₁) ⇐ E₁), the interpolant formula of the derivation
-
-⊗R (⇒L (f , ⊗R (f' , f'')) , ⇐L (k' , (⊗R (k , k''))))
-
-which is equivalent to the two derivations above. We will add this explanation after Definition 1. 
+We will add this concrete example motivating the need of zig-zags after Definition 1.
 
 * R3: "Perhaps I am missing something, but I found case (iii) to be odd"
 
