@@ -1,9 +1,42 @@
-We thank the reviewers for their detailed and thoughtful comments. We are encouraged that the reviewers found the results mathematically credible and technically worthwhile. In the revision, we will correct all typos and grammatical issues, improve readability and notation, and add an example derivation in the introduction. We will also publish an extended version with full explanations and proofs on arXiv. 
+We thank the reviewers for their detailed and thoughtful comments. In the revision, we will correct all typos and grammatical issues, improve readability and notation, and add an example derivation in the introduction.
 
-We will also clarify the explanation after Definition 1. The zig-zag is necessary because equivalent derivations need not produce interpolant formulae that are connected by a simple chain of derivations. In particular, there are equivalent derivations whose interpolants do not imply each other, but can imply or be implied by the interpolant extracted from a third equivalent derivation. For example, consider these two equivalent derivations, ⊗R (⊗R (⇒L (f₀ , f'₀) , f''₀), ⇒L (f₁ , (⊗R (f'₁ , f''₁)))) ≗ ⊗R (⇒L (f₀ , ⊗R (f'₀ , f''₀)) , ⊗R (⇒L (f₁ , f'₁) , f''₁)). The two interpolant formulae are ((D₀ ⇒ E₀) ⊗ F₀) ⊗ (D₁ ⇒ (E₁ ⊗ F₁)) and (D₀ ⇒ (E₀ ⊗ F₀)) ⊗ ((D₁ ⇒ E₁) ⊗ F₁), respectively. They do not imply each other, however, they are both implied by ((D₀ ⇒ E₀) ⊗ F₀) ⊗ ((D₁ ⇒ E₁) ⊗ F₁), the interpolant formula of the derivation ⊗R (⇒L (f₀ , ⊗R (f'₀ , f''₀)) , ⇒L (f₁ , (⊗R (f'₁ , f''₁)))), which is equivalent to the two derivations above. 
+* R1: "I found somewhat lacking is an extended reflection on these results"
+  R2: "A more explicit bird-eye view connecting these aspects ... would further strengthen the contribution"
+  R3: "the broader theoretical implications of these observations remain unclear"
 
-We thank the reviewer for pointing out the possible issue with case (iii) on page 6. Our current phrasing is ambiguous. The intention was to say two consecutive applications of left rules on different formulae and in different sequents. The combinator-style representation of the proof equivalence then looks like associativity, e.g. ⇒L (f , ⇐L (f' , f'')) ≗ ⇐L (⇒L (f , f') , f''). We will revise this part to make the intended condition explicit.
+We agree with the reviewers that the paper currently does not include an extended reflection, or bird-eye view, on the connection between the structure of Maehara interpolants, cut admissibility and equality of proofs in substructural logics. But we believe that such a perspective can be given using the language of category theory, in particular employing the multicategories of Lambek. Multicategory have morphisms with a list of objects as domain, not necessarily a single object, and as such have strong connections to sequent calculi for variants of intuitionistic logic.
 
-We study proof-relevant interpolation since we are interested in categorical soundness and completeness, which leads us to consider proof equivalences that are related to morphism equalities in the corresponding categorical models. Maehara's method is usually used to provide an interpolant formula for sequent calculi. However, its construction also records information about derivations, and for many logics, including classical and intuitionistic (linear) logics, it has been shown that the derivations extracted from Maehara's method are equivalent to the original derivation after cut (composition). The interpolation triples can thus be thought of as factorizations of morphisms in the corresponding categorical models. Well-definedness is a step further, where we study the structure of interpolation triples (factorizations). We also realized, after submission, that our notion of equivalence of interpolation triples is close in spirit to Pavlović's paper "Categorical interpolation: Descent and the Beck-Chevalley condition without direct images", but in a multicategorical setting. We had not made this connection explicit in the submitted version and we will add the reference. In a multicategory, a morphism may have a list of objects as domain, so it has a more natural link to sequent calculi. Proof-relevant interpolation and well-definedness for the product-free Lambek calculus, on the other hand, would correspond to the study of the interpolation condition on non-representable closed multicategories. Given the strong connection between sequent calculi and multicategories, we believe that our work can serve as a first step toward studying interpolation for multicategories.
+In multicategorical models of sequent calculus, the cut rule is intepreted as morphism composition and interpolant triples would be interpreted as certain factorizations of morphisms. In this setting, studying well-definedness and equivalence of interpolation triples translates to understanding the structure of such factorizations. After submission, we realized that this perspective is similar to the one in Pavlović's paper "Categorical interpolation: Descent and the Beck-Chevalley condition without direct images", but for multicategories instead of categories.
+
+We plan to undertake this multicategorical investigation of interpolation in future work, but we strongly believe that the results described in our paper, which are of syntactic, proof-theoretic nature, will be crucial for unraveling the more general and illuminating categorical story. We will add a paragraph on this perspective in the introductory section, where we will also describe the relationship of our work with the other (few) attempts at a category-theoretic understanding of Craig interpolation (Pavlović, Čubrić, Pitts, Makkai).
+
+* R2: "why the technical developments in the paper are of particular interest to the logic and automated reasoning community"
 
 As for relevance to logic and automated reasoning, one reason we find well-definedness important is that interpolation is often understood as an extraction procedure from proofs. A well-defined interpolation procedure could lead to an equational theory of interpolants, where one only has to extract an interpolant once, and the interpolants of equivalent derivations can then be obtained from it by composition.
+
+* Omitted/incomplete proofs
+
+In the proofs of Theorem 4 and 7, we only show one of the many possible cases for space reason. Nevertheless, we have checked all cases with pen and paper. The Agda formalization would serve as additonal evidence of the correctness of our results, but most importantly we will use it as the starting point for the formal investigation of proof-relevant and well-defined interpolation for richer logics. When the formalization is finishedm, we will write an extended version of this work which inclused full explanations and proofs.
+
+* R1: "I do not see why a chain of this particular shape [zig-zag] is forced by the definition"
+
+The zig-zag is necessary because equivalent derivations need not produce interpolant formulae that are connected by a simple chain of derivations. In particular, there are equivalent derivations whose interpolants do not imply each other, but can imply or be implied by the interpolant extracted from a third equivalent derivation. For example, consider these two equivalent derivations:
+
+⊗R (⊗R (⇒L (f , f') , f''), ⇒L (k , (⊗R (k' , k''))))
+≗
+⊗R (⇒L (f , ⊗R (f' , f'')) , ⊗R (⇒L (k , k') , k''))
+
+The two interpolant formulae are
+
+((D₀ ⇒ E₀) ⊗ F₀) ⊗ (D₁ ⇒ (E₁ ⊗ F₁))  and
+(D₀ ⇒ (E₀ ⊗ F₀)) ⊗ ((D₁ ⇒ E₁) ⊗ F₁).
+
+They do not imply each other. However, they are both implied by ((D₀ ⇒ E₀) ⊗ F₀) ⊗ ((D₁ ⇒ E₁) ⊗ F₁), the interpolant formula of the derivation
+
+⊗R (⇒L (f , ⊗R (f' , f'')) , ⇒L (k , (⊗R (k' , k''))))
+
+which is equivalent to the two derivations above. We will add this explanation after Definition 1. 
+
+* R3: "Perhaps I am missing something, but I found case (iii) to be odd"
+
+We thank the reviewer for pointing out the possible issue with case (iii) on page 6. Our current phrasing is ambiguous. The intention was to say "two consecutive applications of left rules on different formulae and in different sequents". The combinator-style representation of the proof equivalence then looks like associativity, e.g. ⇒L (f , ⇐L (f' , f'')) ≗ ⇐L (⇒L (f , f') , f''). We will revise this part to make the intended condition explicit.
