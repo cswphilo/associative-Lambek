@@ -6,34 +6,49 @@ We thank the reviewers for their detailed and thoughtful comments. In the revisi
 
 We agree with the reviewers that the paper currently does not include an extended reflection, or bird-eye view, on the connection between the structure of Maehara interpolants, cut admissibility and equality of proofs in substructural logics. But we believe that such a perspective can be given using the language of category theory, in particular employing the multicategories of Lambek. Multicategory have morphisms with a list of objects as domain, not necessarily a single object, and as such have strong connections to sequent calculi for variants of intuitionistic logic.
 
-In multicategorical models of sequent calculus, the cut rule is intepreted as morphism composition and interpolant triples would be interpreted as certain factorizations of morphisms. In this setting, studying well-definedness and equivalence of interpolation triples translates to understanding the structure of such factorizations. After submission, we realized that this perspective is similar to the one in Pavlović's paper "Categorical interpolation: Descent and the Beck-Chevalley condition without direct images", but for multicategories instead of categories.
+In multicategorical models of sequent calculus, the cut rule is interpreted as morphism composition and interpolant triples would be interpreted as certain factorizations of morphisms. In this setting, studying well-definedness and equivalence of interpolation triples translates to understanding the structure of such factorizations. After submission, we realized that this perspective is similar to the one in Pavlović's paper "Categorical interpolation: Descent and the Beck-Chevalley condition without direct images", but for multicategories instead of categories.
 
 We plan to undertake this multicategorical investigation of interpolation in future work, but we strongly believe that the results described in our paper, which are of syntactic, proof-theoretic nature, will be crucial for unraveling the more general and illuminating categorical story. We will add a paragraph on this perspective in the introductory section, where we will also describe the relationship of our work with the other (few) attempts at a category-theoretic understanding of Craig interpolation (Pavlović, Čubrić, Pitts, Makkai).
 
 * R2: "why the technical developments in the paper are of particular interest to the logic and automated reasoning community"
 
-As for relevance to logic and automated reasoning, one reason we find well-definedness important is that interpolation is often understood as an extraction procedure from proofs. A well-defined interpolation procedure could lead to an equational theory of interpolants, where one only has to extract an interpolant once, and the interpolants of equivalent derivations can then be obtained from it by composition.
+As for relevance to logic and automated reasoning, one reason we find well-definedness interesting is that a well-defined interpolation procedure could possibly provide an alternative way to extract interpolants when given a derivation f, its interpolation triple (D , g ,h) and a derivation f' such that f ≗ f'. We can calculate the interpolation triple for f' by inspecting the chain of permutation between f and f' to find a zig-zag  of the interpolation formulae and produce the corresponding interpolation triple for f'.
 
 * Omitted/incomplete proofs
 
-In the proofs of Theorem 4 and 7, we only show one of the many possible cases for space reason. Nevertheless, we have checked all cases with pen and paper. The Agda formalization would serve as additonal evidence of the correctness of our results, but most importantly we will use it as the starting point for the formal investigation of proof-relevant and well-defined interpolation for richer logics. When the formalization is finishedm, we will write an extended version of this work which inclused full explanations and proofs.
+In the proofs of Theorem 4 and 7, we only show one of the many possible cases for space reason. Nevertheless, we have checked all cases with pen and paper. The Agda formalization would serve as additional evidence of the correctness of our results, but most importantly we will use it as the starting point for the formal investigation of proof-relevant and well-defined interpolation for richer logics. When the formalization is finished, we will write an extended version of this work which includes full explanations and proofs.
 
 * R1: "I do not see why a chain of this particular shape [zig-zag] is forced by the definition"
 
-The zig-zag is necessary because equivalent derivations need not produce interpolant formulae that are connected by a simple chain of derivations. In particular, there are equivalent derivations whose interpolants do not imply each other, but can imply or be implied by the interpolant extracted from a third equivalent derivation. For example, consider these two equivalent derivations:
+The zig-zag is necessary because equivalent derivations need not produce interpolant formulae that are connected by a simple chain of derivations. In particular, there are equivalent derivations whose interpolants do not imply each other, but can imply or be implied by the interpolant extracted from a third equivalent derivation. For example, consider this sequent 
 
-⊗R (⊗R (⇒L (f , f') , f''), ⇒L (k , (⊗R (k' , k''))))
+Γ , Δ₀ , Δ₁ , A ⇒ B , Λ , Ω , Ψ , Θ , N ⇐ M , Ξ₀ , Ξ₁ , Σ  ⊢ (A' ⊗ B') ⊗ (M' ⊗ N') 
+
+and two equivalent derivations of it:
+
+⊗R (⊗R (⇒L (f , f') , f''), ⇐L (k', (⊗R (k , k''))))
 ≗
-⊗R (⇒L (f , ⊗R (f' , f'')) , ⊗R (⇒L (k , k') , k''))
+⊗R (⇒L (f , ⊗R (f' , f'')) , ⊗R (k , ⇐L (k',k'')))
+where
+f : Δ₀ , Δ₁ ⊢ A 
+f' : Γ , B , Λ ⊢ A'
+f'' : Ω ⊢ B'
+k : ψ ⊢ M'
+k' : Ξ₀ , Ξ₁ ⊢ M
+k'' : Θ , N , Σ ⊢ N'.
 
-The two interpolant formulae are
+Consider the interpolation context Δ₁ , A ⇒ B , Λ , Ω , Ψ , Θ , N ⇐ M , Ξ₀.
 
-((D₀ ⇒ E₀) ⊗ F₀) ⊗ (D₁ ⇒ (E₁ ⊗ F₁))  and
-(D₀ ⇒ (E₀ ⊗ F₀)) ⊗ ((D₁ ⇒ E₁) ⊗ F₁).
+The two interpolant formulae of the derivations are
 
-They do not imply each other. However, they are both implied by ((D₀ ⇒ E₀) ⊗ F₀) ⊗ ((D₁ ⇒ E₁) ⊗ F₁), the interpolant formula of the derivation
+((D₀ ⇒ E₀) ⊗ F₀) ⊗ ((D₁ ⊗ F₁) ⇐ E₁)
+and
+(D₀ ⇒ (E₀ ⊗ F₀)) ⊗ (D₁ ⊗ (F₁ ⇐ E₁))
+where D₀ is the interpolant formula of f, E₀ is the one of f', F₀ is the one of f'' and so on.
 
-⊗R (⇒L (f , ⊗R (f' , f'')) , ⇒L (k , (⊗R (k' , k''))))
+They do not imply each other. However, they are both implied by ((D₀ ⇒ E₀) ⊗ F₀) ⊗ ((D₁ ⊗ F₁) ⇐ E₁), the interpolant formula of the derivation
+
+⊗R (⇒L (f , ⊗R (f' , f'')) , ⇐L (k' , (⊗R (k , k''))))
 
 which is equivalent to the two derivations above. We will add this explanation after Definition 1. 
 
