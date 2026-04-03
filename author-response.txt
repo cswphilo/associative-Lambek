@@ -1,28 +1,30 @@
-We thank the reviewers for their detailed and thoughtful comments. In the revision, we will correct all typos and grammatical issues, improve readability and notation, and add an example derivation in the introduction.
+We thank the reviewers for their detailed and thoughtful comments. In the revised version of the paper, we will correct all typos and grammatical issues, improve readability and notation.
 
-* R1: "I found somewhat lacking is an extended reflection on these results"
+Below we answer to the reviewers' main comments and describe the revisions necessary to address them.
+
+* R1: "What I found somewhat lacking is an extended reflection on these results"
   R2: "A more explicit bird-eye view connecting these aspects ... would further strengthen the contribution"
   R3: "the broader theoretical implications of these observations remain unclear"
 
-We agree with the reviewers that the paper currently does not include an extended reflection, or bird-eye view, on the connection between the structure of Maehara interpolants, cut admissibility and equality of proofs in substructural logics. But we believe that such a perspective can be given using the language of category theory, in particular employing the multicategories of Lambek. Multicategory have morphisms with a list of objects as domain, not necessarily a single object, and as such have strong connections to sequent calculi for variants of intuitionistic logic.
+We agree with the reviewers that the paper currently does not include an extended reflection, or bird-eye view, on the connection between the structure of Maehara interpolants, cut admissibility and equality of proofs in substructural logics. But we believe that such a perspective can be given using the language of category theory, in particular employing the multicategories of Lambek. Multicategories have morphisms with a list of objects as domain, not necessarily a single object, and as such have strong connections to sequent calculi for variants of intuitionistic logic.
 
-In multicategorical models of sequent calculus, the cut rule is interpreted as morphism composition and interpolant triples would be interpreted as certain factorizations of morphisms. In this setting, studying well-definedness and equivalence of interpolation triples translates to understanding the structure of such factorizations. After submission, we realized that this perspective is similar to the one in Pavlović's paper "Categorical interpolation: Descent and the Beck-Chevalley condition without direct images", but for multicategories instead of categories.
+In multicategorical models of sequent calculus, the cut rule is interpreted as morphism composition and interpolant triples should be interpreted as certain factorizations of morphisms. In this setting, studying well-definedness and equivalence of interpolation triples translates to understanding the structure of such factorizations. After submission, we realized that this perspective is similar to the one in Pavlović's paper "Categorical interpolation: Descent and the Beck-Chevalley condition without direct images", but for multicategories instead of categories.
 
-We plan to undertake this multicategorical investigation of interpolation in future work, but we strongly believe that the results described in our paper, which are of syntactic, proof-theoretic nature, will be crucial for unraveling the more general and illuminating categorical story. We will add a paragraph on this perspective in the introductory section, where we will also describe the relationship of our work with the other (few) attempts at a category-theoretic understanding of Craig interpolation (Pavlović, Čubrić, Pitts, Makkai).
+We plan to undertake this multicategorical investigation of interpolation in future work, but we strongly believe that the results described in our paper, which are of syntactic, proof-theoretic nature, will be crucial for unraveling the more general and illuminating multicategorical story. We will add a paragraph on this perspective in the introductory section, where we will also describe the relationship of our work to the other (few) attempts at a category-theoretic understanding of Craig interpolation (Pavlović, Čubrić, Pitts, Makkai).
 
 * R2: "why the technical developments in the paper are of particular interest to the logic and automated reasoning community"
 
 The study of well-defined Maehara interpolation, and in particular the structure of interpolant triples and their equivalence, is important for understanding how differences in proofs (differences that preserve proof denotations, i.e. that result in equivalent proofs) translates to differences in the corresponding interpolants computed by Maehara's method.
 
-Being able to quantify this difference can be useful in applications. For example, in program verification. Model checkers based on interpolation produce loop invariants by iteratively finding a proof of a certain (un)reachability condition and then applying an interpolation algorithm (such as Maehara's method) on this proof. Our work, and its extension to more expressive logical systems and different interpolation algorithms, could potentially be used for the analysis of these model checkers, for understanding how the modification of the proof search procedure translates to the production of different loop invariants.
+Being able to quantify this difference can be useful in applications. For example in program verification. Model checkers based on interpolation construct loop invariants by iteratively finding a proof of a certain (un)reachability condition and then applying an interpolation algorithm (such as Maehara's method) on this proof. Our work, and its extension to more expressive logical systems and different interpolation algorithms, could potentially be used for the analysis of these model checkers, for understanding how the modification of the proof search procedure translates to the production of different loop invariants.
 
-We also conjecture possible uses of well-defined interpolation for the efficient computation of interpolants. For example, given equivalent proofs f ≗ g and an interpolant D for f produced by Maehara's algorithm, then we should be able to compute an interpolant for g, equivalent to D, directly by inspecting the given equality of proofs, without the need of running Maehara's method also on g. This could be efficient if the differences between f and g are small and located towards the lower parts of the proof trees.
+We also conjecture possible uses of well-defined interpolation for the efficient computation of interpolants. For example, given equivalent proofs f ≗ g and an interpolant D for f produced by Maehara's algorithm, we should be able to compute an interpolant for g, equivalent to D, directly by inspecting the given equality of proofs, without the need of running Maehara's method also on g. This could be efficient if the differences between f and g are small and located towards the lower parts of the proof trees.
 
-We will add a discussion on these ideas and conjectures to the conclusive section of the paper.
+We will add a discussion on these ideas/conjectures to the conclusive section of the paper.
 
-* Omitted/incomplete proofs
+* R1 and R3: Omitted/incomplete proofs
 
-In the proofs of Theorem 4 and 7, we only show one of the many possible cases for space reason. Nevertheless, we have checked all cases with pen and paper. The Agda formalization would serve as additional evidence of the correctness of our results, but most importantly we will use it as the starting point for the formal investigation of proof-relevant and well-defined interpolation for richer logics. When the formalization is finished, we will write an extended version of this work which includes full explanations and proofs.
+In the proofs of Theorem 4 and 7, we only show one of the many possible cases for space reason. Nevertheless, we have checked all cases with pen and paper. The Agda formalization would serve as additional evidence of the correctness of our results, but most importantly we will use it as the starting point for the formal investigation of proof-relevant and well-defined interpolation for richer logics. When the formalization is finished, we will write an extended version of this work which includes full explanations and proofs, as well as a link to the Agda code.
 
 * R1: "I do not see why a chain of this particular shape [zig-zag] is forced by the definition"
 
@@ -32,6 +34,10 @@ For example, we found two equivalent derivations f and f', to which Maehara's me
 
 We will add this concrete example motivating the need of zig-zags after Definition 1.
 
-* R3: "Perhaps I am missing something, but I found case (iii) to be odd"
+* R2: "It would be helpful to illustrate this phenomenon with a small illustrative example, or refer the reader to the one on page 8"
+
+We agree, we will add an example in the introduction.
+
+* R3: "p.6 - Perhaps I am missing something, but I found case (iii) to be odd"
 
 We thank the reviewer for pointing out the possible issue with case (iii) on page 6. Our current phrasing is ambiguous. The intention was to say "two consecutive applications of left rules on different formulae and in different sequents". The combinator-style representation of the proof equivalence then looks like associativity, e.g. ⇒L (f , ⇐L (f' , f'')) ≗ ⇐L (⇒L (f , f') , f''). We will revise this part to make the intended condition explicit.
