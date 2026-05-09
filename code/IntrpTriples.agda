@@ -58,58 +58,72 @@ data _~_ {Γ Δ Λ : Cxt} {C : Fma} : MIP Γ Δ Λ C → MIP Γ Δ Λ C → Set 
 ~-trans (↝∷ x eq₁) eq₂ = ↝∷ x (~-trans eq₁ eq₂)
 ~-trans (↜∷ x eq₁) eq₂ = ↜∷ x (~-trans eq₁ eq₂)
 
-cutaxA-right : ∀ {Γ A}
-    → (f : Γ ⊢ A)
-    → cut [] f ax refl ≗ f
-cutaxA-right f = refl
+g~ : ∀ {Γ Δ Λ C D} {g g' : Γ ++ D ∷ Λ ⊢ C} {h : Δ ⊢ D}
+  → g ≗ g'
+  → intrp D g h ~ intrp D g' h
+g~ {Γ} {h = h} p = ↝∷ (ax , (p ∘ (~ cutaxA-left Γ _ refl)) , cutaxA-right h) refl
 
-cutaxA-left' : (Γ : Cxt) → ∀ {Λ Ω A C}
-    → (f : Ω ⊢ C)
-    → (eq : Ω ≡ Γ ++ A ∷ Λ)
-    → cut Γ ax f eq ≡ subst-cxt eq f
-cutaxA-left' Γ IR eq = ⊥-elim ([]disj∷ Γ eq)
-cutaxA-left' Γ {Λ} (IL {Γ₁} {Δ} f) eq with cases++ Γ Γ₁ Λ (I ∷ Δ) eq
-cutaxA-left' Γ {Λ} (IL {Γ₁} {Δ} f) refl | inj₁ (Ω , refl , refl) = cong (IL {Γ ++ _ ∷ Ω}) (cutaxA-left' Γ f refl)
-cutaxA-left' Γ {Λ} (IL {Γ₁} {Δ} f) refl | inj₂ ([] , refl , refl) = refl
-cutaxA-left' Γ {Λ} (IL {Γ₁} {Δ} f) refl | inj₂ (_ ∷ Ω , refl , refl) = cong IL (cutaxA-left' (Γ₁ ++ Ω) f refl)
-cutaxA-left' Γ {Λ} (⊗R {Γ₁} {Δ} f f₁) eq with cases++ Γ Γ₁ Λ Δ eq
-cutaxA-left' Γ {Λ} (⊗R {Γ₁} {Δ} f f₁) refl | inj₁ (Ω , refl , refl) = cong (λ x → ⊗R {Γ ++ _ ∷ Ω} x f₁) (cutaxA-left' Γ f refl)
-cutaxA-left' Γ {Λ} (⊗R {Γ₁} {Δ} f f₁) refl | inj₂ (Ω , refl , refl) = cong (λ x → ⊗R f x) (cutaxA-left' Ω f₁ refl)
-cutaxA-left' Γ {Λ} (⊗L {Γ₁} {Δ} {A} {B} f) eq with cases++ Γ Γ₁ Λ (A ⊗ B ∷ Δ) eq
-cutaxA-left' Γ {Λ} (⊗L {Γ₁} {Δ} {A} {B} f) refl | inj₁ (Ω , refl , refl) = cong (⊗L {Γ ++ _ ∷ Ω}) (cutaxA-left' Γ f refl)
-cutaxA-left' Γ {Λ} (⊗L {Γ₁} {Δ} {A} {B} f) refl | inj₂ ([] , refl , refl) = refl
-cutaxA-left' Γ {Λ} (⊗L {Γ₁} {Δ} {A} {B} f) refl | inj₂ (_ ∷ Ω , refl , refl) = cong ⊗L (cutaxA-left' (Γ₁ ++ A ∷ B ∷ Ω) f refl)
-cutaxA-left' Γ (⇒R f) refl = cong ⇒R (cutaxA-left' (_ ∷ Γ) f refl)
-cutaxA-left' Γ {Λ} (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} f g) eq with cases++ Γ (Γ₁ ++ Δ) Λ (A ⇒ B ∷ Λ₁) eq
-... | inj₁ (Ω , eq₁ , refl) with cases++ Γ Γ₁ Ω Δ eq₁
-cutaxA-left' Γ {._} (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₁ (Ω , refl , refl) | inj₁ (Ω' , refl , refl) 
-  = cong (λ x → ⇒L {Γ ++ _ ∷ Ω'} f x) (cutaxA-left' Γ g refl)
-cutaxA-left' Γ {._} (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₁ (Ω , refl , refl) | inj₂ (Ω' , refl , refl) = cong (λ x → ⇒L x g) (cutaxA-left' Ω' f refl)
-cutaxA-left' Γ {Λ} (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₂ ([] , refl , refl) = refl
-cutaxA-left' Γ {Λ} (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₂ (_ ∷ Ω , refl , refl) = cong (λ x → ⇒L f x) (cutaxA-left' (Γ₁ ++ B ∷ Ω) g refl)
-cutaxA-left' [] ax refl = refl
-cutaxA-left' (x ∷ Γ) ax eq = ⊥-elim ([]disj∷ Γ (inj∷ eq .proj₂))
+h~ : ∀ {Γ Δ Λ C D} {g : Γ ++ D ∷ Λ ⊢ C} {h h' : Δ ⊢ D}
+  → h ≗ h'
+  → intrp D g h ~ intrp D g h'
+h~ {Γ} {g = g} {h = h} p = ↝∷ (ax , (~ cutaxA-left Γ g refl) , (cutaxA-right h ∘ p)) refl
 
-cutaxA-left : (Γ : Cxt) → ∀ {Λ Ω A C}
-    → (f : Ω ⊢ C)
-    → (eq : Ω ≡ Γ ++ A ∷ Λ)
-    → cut Γ ax f eq ≗ subst-cxt eq f
-cutaxA-left Γ f eq = ≡to≗ (cutaxA-left' Γ f eq)
+cutIL-cases++₁ : (Γ₀ Γ₁ Λ : Cxt) → ∀ {Δ C D}
+  → {f : Δ ⊢ D} {g : Γ₀ ++ Γ₁ ++ D ∷ Λ ⊢ C}
+  → IL {Γ₀} {Γ₁ ++ Δ ++ Λ} (cut (Γ₀ ++ Γ₁) f g refl) ≡ cut (Γ₀ ++ I ∷ Γ₁) f (IL {Γ₀} {Γ₁ ++ D ∷ Λ} g) refl
+cutIL-cases++₁ Γ₀ Γ₁ Λ {D = D}
+  rewrite cases++-inj₂ (I ∷ Γ₁) Γ₀ Λ D = refl
 
-postulate 
-  cut⊗L≗ : (Γ Δ₀ Δ₁ : Cxt) → ∀ {Λ Ω A B C D} 
-    → (f : Δ₀ ++ A ∷ B ∷ Δ₁ ⊢ D) (g : Ω ⊢ C) (eq : Ω ≡ Γ ++ D ∷ Λ ) 
-    → cut Γ (⊗L f) g eq ≗ ⊗L {Γ ++ Δ₀} (cut Γ f g eq)
-  cut⇒L≗ : (Γ : Cxt) → ∀ {Δ Δ₀ Δ₁ Λ Ω A B C D}
-    → (f : Δ ⊢ A) (f₁ : Δ₀ ++ B ∷ Δ₁ ⊢ D)
-    → (g : Ω ⊢ C) 
-    → (eq : Ω ≡ Γ ++ D ∷ Λ)
-    → cut Γ (⇒L f f₁) g eq ≗ ⇒L {Γ ++ Δ₀} f (cut Γ f₁ g eq)
-  cut-cong₂ : (Γ : Cxt) → ∀ {Δ Λ Ω C D}
-    → {f : Δ ⊢ D} {g g' : Ω ⊢ C}
-    → (eq : Ω ≡ Γ ++ D ∷ Λ)
-    → (p : g ≗ g')
-    → cut Γ f g eq ≗ cut Γ f g' eq
+cutIL-cases++₂ : (Γ Λ₀ Λ₁ : Cxt) → ∀ {Δ C D}
+  → {f : Δ ⊢ D} {g : Γ ++ D ∷ Λ₀ ++ Λ₁ ⊢ C}
+  → IL {Γ ++ Δ ++ Λ₀} {Λ₁} (cut Γ f g refl) ≡ cut Γ f (IL {Γ ++ D ∷ Λ₀} {Λ₁} g) refl
+cutIL-cases++₂ Γ Λ₀ Λ₁ {D = D}
+  rewrite cases++-inj₁ Γ Λ₀ (I ∷ Λ₁) D = refl
+
+IL~Γ' : {Γ₀ Γ₁ Δ Λ : Cxt} {C : Fma}
+  → (n : MIP (Γ₀ ++ Γ₁) Δ Λ C)
+  → MIP (Γ₀ ++ I ∷ Γ₁) Δ Λ C
+IL~Γ' {Γ₀} {Γ₁} {Λ = Λ} (intrp D g h) = intrp D (IL {Γ₀} {Γ₁ ++ D ∷ Λ} g) h
+
+IL~Γ : {Γ₀ Γ₁ Δ Λ : Cxt} {C : Fma}
+  → {n n' : MIP (Γ₀ ++ Γ₁) Δ Λ C}
+  → n ~ n'
+  → IL~Γ' n ~ IL~Γ' n'
+IL~Γ refl = refl
+IL~Γ {Γ₀} {Γ₁} {Λ = Λ} (↝∷ (t , eqg , eqh) eq) =
+  ↝∷ (t , (IL {Γ₀} {Γ₁ ++ _ ∷ Λ} eqg ∘ ≡to≗ (cutIL-cases++₁ Γ₀ Γ₁ Λ)) , eqh) (IL~Γ eq)
+IL~Γ {Γ₀} {Γ₁} {Λ = Λ} (↜∷ (t , eqg , eqh) eq) =
+  ↜∷ (t , (IL {Γ₀} {Γ₁ ++ _ ∷ Λ} eqg ∘ ≡to≗ (cutIL-cases++₁ Γ₀ Γ₁ Λ)) , eqh) (IL~Γ eq)
+
+IL~Δ' : {Γ Δ₀ Δ₁ Λ : Cxt} {C : Fma}
+  → (n : MIP Γ (Δ₀ ++ Δ₁) Λ C)
+  → MIP Γ (Δ₀ ++ I ∷ Δ₁) Λ C
+IL~Δ' (intrp D g h) = intrp D g (IL h)
+
+IL~Δ : {Γ Δ₀ Δ₁ Λ : Cxt} {C : Fma}
+  → {n n' : MIP Γ (Δ₀ ++ Δ₁) Λ C}
+  → n ~ n'
+  → IL~Δ' n ~ IL~Δ' n'
+IL~Δ refl = refl
+IL~Δ {Δ₀ = Δ₀} {Δ₁} (↝∷ (t , eqg , eqh) eq) =
+  ↝∷ (t , eqg , (cutIL≗ [] Δ₀ Δ₁ _ t refl ∘ IL {Δ₀} {Δ₁ ++ []} eqh)) (IL~Δ eq)
+IL~Δ {Δ₀ = Δ₀} {Δ₁} (↜∷ (t , eqg , eqh) eq) =
+  ↜∷ (t , eqg , (cutIL≗ [] Δ₀ Δ₁ _ t refl ∘ IL {Δ₀} {Δ₁ ++ []} eqh)) (IL~Δ eq)
+
+IL~Λ' : {Γ Δ Λ₀ Λ₁ : Cxt} {C : Fma}
+  → (n : MIP Γ Δ (Λ₀ ++ Λ₁) C)
+  → MIP Γ Δ (Λ₀ ++ I ∷ Λ₁) C
+IL~Λ' {Γ} {Λ₀ = Λ₀} {Λ₁} (intrp D g h) = intrp D (IL {Γ ++ D ∷ Λ₀} {Λ₁} g) h
+
+IL~Λ : {Γ Δ Λ₀ Λ₁ : Cxt} {C : Fma}
+  → {n n' : MIP Γ Δ (Λ₀ ++ Λ₁) C}
+  → n ~ n'
+  → IL~Λ' n ~ IL~Λ' n'
+IL~Λ refl = refl
+IL~Λ {Γ} {Λ₀ = Λ₀} {Λ₁} (↝∷ (t , eqg , eqh) eq) =
+  ↝∷ (t , (IL {Γ ++ _ ∷ Λ₀} {Λ₁} eqg ∘ ≡to≗ (cutIL-cases++₂ Γ Λ₀ Λ₁)) , eqh) (IL~Λ eq)
+IL~Λ {Γ} {Λ₀ = Λ₀} {Λ₁} (↜∷ (t , eqg , eqh) eq) =
+  ↜∷ (t , (IL {Γ ++ _ ∷ Λ₀} {Λ₁} eqg ∘ ≡to≗ (cutIL-cases++₂ Γ Λ₀ Λ₁)) , eqh) (IL~Λ eq)
 
 cut⊗L-cases++₁ : (Γ₀ Γ₁ Λ : Cxt) → ∀ {Δ A B C D}
   → {f : Δ ⊢ D} {g : Γ₀ ++ A ∷ B ∷ Γ₁ ++ D ∷ Λ ⊢ C}
@@ -145,6 +159,11 @@ cut⊗L-cases++₂ Γ Λ₀ Λ₁ {A = A} {B} {D = D}
 ⊗L~Δ {Δ₀ = Δ₀} {Δ₁} (↝∷ (t , eqg , eqh) eq) = ↝∷ (t , eqg , (cut⊗L≗ [] Δ₀ Δ₁ _ t refl ∘ ⊗L eqh)) (⊗L~Δ eq)
 ⊗L~Δ {Δ₀ = Δ₀} {Δ₁} (↜∷ (t , eqg , eqh) eq) = ↜∷ (t , eqg , (cut⊗L≗ [] Δ₀ Δ₁ _ t refl ∘ ⊗L eqh)) (⊗L~Δ eq)
 
+⊗L~Δ' : {Γ Δ₀ Δ₁ Λ : Cxt} {A B C : Fma}
+  → (n : MIP Γ (Δ₀ ++ A ∷ B ∷ Δ₁) Λ C)
+  → MIP Γ (Δ₀ ++ A ⊗ B ∷ Δ₁) Λ C
+⊗L~Δ' (intrp D g h) = intrp D g (⊗L h)
+
 ⊗L~Λ : {Γ Δ Λ₀ Λ₁ : Cxt} {A B C : Fma}   
   → {n n' : MIP Γ Δ (Λ₀ ++ A ∷ B ∷ Λ₁) C}
   → n ~ n'
@@ -153,6 +172,11 @@ cut⊗L-cases++₂ Γ Λ₀ Λ₁ {A = A} {B} {D = D}
 ⊗L~Λ {Γ} {Λ₀ = Λ₀} {Λ₁} (↝∷ (t , eqg , eqh) eq) = ↝∷ (t , (⊗L {Γ ++ _ ∷ Λ₀} eqg ∘ ≡to≗ (cut⊗L-cases++₂ Γ Λ₀ Λ₁)) , eqh) (⊗L~Λ eq)
 ⊗L~Λ {Γ} {Λ₀ = Λ₀} {Λ₁} (↜∷ (t , eqg , eqh) eq) = ↜∷ (t , (⊗L {Γ ++ _ ∷ Λ₀} eqg ∘ ≡to≗ (cut⊗L-cases++₂ Γ Λ₀ Λ₁)) , eqh) (⊗L~Λ eq)
 
+⊗L~Λ' : {Γ Δ Λ₀ Λ₁ : Cxt} {A B C : Fma}
+  → (n : MIP Γ Δ (Λ₀ ++ A ∷ B ∷ Λ₁) C)
+  → MIP Γ Δ (Λ₀ ++ A ⊗ B ∷ Λ₁) C
+⊗L~Λ' {Γ} {Λ₀ = Λ₀} (intrp D g h) = intrp D (⊗L {Γ ++ D ∷ Λ₀} g) h
+
 ⇒R~ : {Γ Δ Λ : Cxt} {A C : Fma}   
   → {n n' : MIP (A ∷ Γ) Δ Λ C}
   → n ~ n'
@@ -160,6 +184,11 @@ cut⊗L-cases++₂ Γ Λ₀ Λ₁ {A = A} {B} {D = D}
 ⇒R~ refl = refl
 ⇒R~ (↝∷ (t , eqg , eqh) eq) = ↝∷ (t , ⇒R eqg , eqh) (⇒R~ eq)
 ⇒R~ (↜∷ (t , eqg , eqh) eq) = ↜∷ (t , ⇒R eqg , eqh) (⇒R~ eq)
+
+⇒R~' : {Γ Δ Λ : Cxt} {A C : Fma}
+  → (n : MIP (A ∷ Γ) Δ Λ C)
+  → MIP Γ Δ Λ (A ⇒ C)
+⇒R~' (intrp D g h) = intrp D (⇒R g) h
 
 cut⊗Rcases++₁ : (Γ Λ Ω : Cxt) → ∀ {Δ A B D}
   → {f : Δ ⊢ D} {g : Γ ++ D ∷ Λ ⊢ A} {h : Ω ⊢ B}
@@ -185,6 +214,12 @@ cut⊗R⊗Lcases++ Γ Λ {A = A} {B} rewrite cases++-inj₂ [] Γ Λ (A ⊗ B) =
 ⊗R~₁ {Γ} {n = n} {f' = f'} refl q = ↝∷ (ax , (⊗R refl q ∘ (~ cutaxA-left Γ (⊗R (MIP.g n) f') refl)) , cutaxA-right (MIP.h n)) refl
 ⊗R~₁ {Γ} {Λ = Λ} {Ω} (↝∷ (t , eqg , eqh) eq) q = ↝∷ (t , (⊗R eqg refl ∘ ≡to≗ (cut⊗Rcases++₁ Γ Λ Ω)) , eqh) (⊗R~₁ eq q)
 ⊗R~₁ {Γ} {Λ = Λ} {Ω} (↜∷ (t , eqg , eqh) eq) q = ↜∷ (t , (⊗R eqg refl ∘ ≡to≗ (cut⊗Rcases++₁ Γ Λ Ω)) , eqh) (⊗R~₁ eq q)
+
+⊗R~₁' : {Γ Δ Λ Ω : Cxt} {A B : Fma}
+  → (n : MIP Γ Δ Λ A)
+  → (f : Ω ⊢ B)
+  → MIP Γ Δ (Λ ++ Ω) (A ⊗ B)
+⊗R~₁' (intrp D g h) f = intrp D (⊗R g f) h
 
 ⊗R~₂' : {Γ Δ Λ Ω : Cxt} {A B : Fma}   
   → (n : MIP Γ Δ Λ B) 
@@ -429,3 +464,115 @@ cut⇒L-cases++-assoc Γ₀ Γ₁ {Λ₀ = Λ₀} {Λ₁} {A = A} {B} {D = D}
     ∘ (~ cut⊗L≗ Γ₀ [] [] (⊗R ax t) (⊗L {Γ₀} (⇒L {Γ₀ ++ E ∷ []} g g')) refl)) , 
     ⊗R (cutaxA-right _) eqh) 
     (⇒L~⊗ p q)
+
+⇒L⇒R~Γ : ∀ {Γ₀ Γ₁ Δ Λ Ω A B A' B'}
+  → (n : MIP (A' ∷ Γ₀ ++ B ∷ Γ₁) Δ Λ B')
+  → (f : Ω ⊢ A)
+  → ⇒L~Γ' {Γ₀ = Γ₀} {Γ₁ = Γ₁} (⇒R~' n) f ~ ⇒R~' (⇒L~Γ' n f)
+⇒L⇒R~Γ (intrp D g h) f = g~ ⇒L⇒R
+
+⇒L⇒R~⇒ : ∀ {Γ Δ₀ Δ₁ Λ₀ Λ₁ A B A' B'}
+  → (n : MIP [] Δ₀ Δ₁ A)
+  → (m : MIP (A' ∷ Γ) (B ∷ Λ₀) Λ₁ B')
+  → ⇒L~⇒' n (⇒R~' m) ~ ⇒R~' (⇒L~⇒' n m)
+⇒L⇒R~⇒ (intrp D g h) (intrp E g' h') = g~ ⇒L⇒R
+
+⇒L⇒R~ΓΛ : ∀ {Γ₀ Γ₁ Λ₀ Λ₁ Ω A B A' C}
+  → (n : MIP (A' ∷ Γ₀) (Γ₁ ++ B ∷ Λ₀) Λ₁ C)
+  → (f : Ω ⊢ A)
+  → ⇒L~ΓΛ' (⇒R~' n) f ~ ⇒R~' (⇒L~ΓΛ' n f)
+⇒L⇒R~ΓΛ (intrp D g h) f = refl
+
+⇒L⇒R~⊗ : ∀ {Γ₀ Γ₁ Δ₀ Δ₁ Λ A B A' B'}
+  → (n : MIP [] Δ₀ Δ₁ A)
+  → (m : MIP (A' ∷ Γ₀) Γ₁ (B ∷ Λ) B')
+  → ⇒L~⊗' n (⇒R~' m) ~ ⇒R~' (⇒L~⊗' n m)
+⇒L⇒R~⊗ (intrp D g h) (intrp E g' h') = g~ (⊗L ⇒L⇒R ∘ ⊗L⇒R)
+
+⇒L⇒R~Δ : ∀ {Γ Γ₁ Δ Λ Λ₁ A B A' B'}
+  → (n : MIP Γ Δ Λ A)
+  → (g : A' ∷ Γ₁ ++ B ∷ Λ₁ ⊢ B')
+  → ⇒L~Δ' n (⇒R g) ~ ⇒R~' (⇒L~Δ' n g)
+⇒L⇒R~Δ (intrp D g' h) g = g~ ⇒L⇒R
+
+⇒L⇒R~Λ : ∀ {Γ Δ Λ₀ Λ₁ Ω A B A' B'}
+  → (n : MIP (A' ∷ Γ) Δ (Λ₀ ++ B ∷ Λ₁) B')
+  → (f : Ω ⊢ A)
+  → ⇒L~Λ' (⇒R~' n) f ~ ⇒R~' (⇒L~Λ' n f)
+⇒L⇒R~Λ (intrp D g h) f = g~ ⇒L⇒R
+
+⊗L⇒R~Γ : ∀ {Γ₀ Γ₁ Δ Λ A B A' C}
+  → (n : MIP (A' ∷ Γ₀ ++ A ∷ B ∷ Γ₁) Δ Λ C)
+  → ⊗L~Γ' {Γ₀ = Γ₀} {Γ₁ = Γ₁} (⇒R~' n) ~ ⇒R~' (⊗L~Γ' {Γ₀ = A' ∷ Γ₀} {Γ₁ = Γ₁} n)
+⊗L⇒R~Γ {Γ₀ = Γ₀} {Γ₁ = Γ₁} {Λ = Λ} {A = A} {B = B} {A' = A'} {C = C} (intrp D g h) =
+  g~ (⊗L⇒R {Γ = Γ₀} {Δ = Γ₁ ++ D ∷ Λ} {A = A} {B = B} {A' = A'} {B' = C})
+
+⊗L⇒R~Δ : ∀ {Γ Δ₀ Δ₁ Λ A B A' C}
+  → (n : MIP (A' ∷ Γ) (Δ₀ ++ A ∷ B ∷ Δ₁) Λ C)
+  → ⊗L~Δ' (⇒R~' n) ~ ⇒R~' (⊗L~Δ' n)
+⊗L⇒R~Δ (intrp D g h) = refl
+
+⊗L⇒R~Λ : ∀ {Γ Δ Λ₀ Λ₁ A B A' C}
+  → (n : MIP (A' ∷ Γ) Δ (Λ₀ ++ A ∷ B ∷ Λ₁) C)
+  → ⊗L~Λ' (⇒R~' n) ~ ⇒R~' (⊗L~Λ' n)
+⊗L⇒R~Λ {Γ = Γ} {Λ₀ = Λ₀} {Λ₁ = Λ₁} {A = A} {B = B} {A' = A'} {C = C} (intrp D g h) =
+  g~ (⊗L⇒R {Γ = Γ ++ D ∷ Λ₀} {Δ = Λ₁} {A = A} {B = B} {A' = A'} {B' = C})
+
+IL⊗R₁~Γ : ∀ {Γ₀ Γ₁ Δ Λ Ω A B}
+  → (n : MIP (Γ₀ ++ Γ₁) Δ Λ A)
+  → (f : Ω ⊢ B)
+  → IL~Γ' {Γ₀ = Γ₀} {Γ₁ = Γ₁} {Δ = Δ} {Λ = Λ ++ Ω} (⊗R~₁' n f)
+      ~ ⊗R~₁' (IL~Γ' {Γ₀ = Γ₀} {Γ₁ = Γ₁} {Δ = Δ} {Λ = Λ} n) f
+IL⊗R₁~Γ {Γ₀ = Γ₀} {Γ₁ = Γ₁} {Λ = Λ} (intrp D g h) f =
+  g~ (IL⊗R₁ {Γ = Γ₀} {Δ = Γ₁ ++ D ∷ Λ})
+
+IL⊗R₁~Δ : ∀ {Γ Δ₀ Δ₁ Ω Λ A B}
+  → (n : MIP Γ (Δ₀ ++ Δ₁) [] A)
+  → (m : MIP [] Ω Λ B)
+  → IL~Δ' {Γ = Γ} {Δ₀ = Δ₀} {Δ₁ = Δ₁ ++ Ω} {Λ = Λ} (⊗R~' n m)
+      ~ ⊗R~' (IL~Δ' {Γ = Γ} {Δ₀ = Δ₀} {Δ₁ = Δ₁} {Λ = []} n) m
+IL⊗R₁~Δ {Γ = Γ} {Δ₀ = Δ₀} {Δ₁ = Δ₁} {Ω = Ω} (intrp D g h) (intrp E g' h') =
+  h~ (IL⊗R₁ {Γ = Δ₀} {Δ = Δ₁} {Λ = Ω} {f = h} {g = h'})
+
+IL⊗R₁~Λ : ∀ {Γ Δ Λ₀ Λ₁ Ω A B}
+  → (n : MIP Γ Δ (Λ₀ ++ Λ₁) A)
+  → (f : Ω ⊢ B)
+  → IL~Λ' {Γ = Γ} {Δ = Δ} {Λ₀ = Λ₀} {Λ₁ = Λ₁ ++ Ω} (⊗R~₁' n f)
+      ~ ⊗R~₁' (IL~Λ' {Γ = Γ} {Δ = Δ} {Λ₀ = Λ₀} {Λ₁ = Λ₁} n) f
+IL⊗R₁~Λ {Γ = Γ} {Λ₀ = Λ₀} {Λ₁ = Λ₁} (intrp D g h) f =
+  g~ (IL⊗R₁ {Γ = Γ ++ D ∷ Λ₀} {Δ = Λ₁})
+
+IL⊗R₂~Γ : ∀ {Γ₀ Γ₁ Δ Λ Ω A B}
+  → (n : MIP (Γ₀ ++ Γ₁) Δ Λ B)
+  → (f : Ω ⊢ A)
+  → IL~Γ' {Γ₀ = Ω ++ Γ₀} {Γ₁ = Γ₁} {Δ = Δ} {Λ = Λ} (⊗R~₂' n f)
+      ~ ⊗R~₂' (IL~Γ' {Γ₀ = Γ₀} {Γ₁ = Γ₁} {Δ = Δ} {Λ = Λ} n) f
+IL⊗R₂~Γ {Γ₀ = Γ₀} {Γ₁ = Γ₁} {Λ = Λ} {Ω = Ω} (intrp D g h) f =
+  g~ (IL⊗R₂ {Γ = Ω} {Δ = Γ₀} {Λ = Γ₁ ++ D ∷ Λ} {f = f} {g = g})
+
+IL⊗R₂~Δ : ∀ {Γ Δ₀ Δ₁ Δ₂ Λ A B}
+  → (n : MIP Γ Δ₀ [] A)
+  → (m : MIP [] (Δ₁ ++ Δ₂) Λ B)
+  → IL~Δ' {Γ = Γ} {Δ₀ = Δ₀ ++ Δ₁} {Δ₁ = Δ₂} {Λ = Λ} (⊗R~' n m)
+      ~ ⊗R~' n (IL~Δ' {Γ = []} {Δ₀ = Δ₁} {Δ₁ = Δ₂} {Λ = Λ} m)
+IL⊗R₂~Δ {Δ₀ = Δ₀} {Δ₁ = Δ₁} {Δ₂ = Δ₂} (intrp D g h) (intrp E g' h') =
+  h~ (IL⊗R₂ {Γ = Δ₀} {Δ = Δ₁} {Λ = Δ₂} {f = h} {g = h'})
+
+IL⊗R₂~Λ : ∀ {Γ Δ Λ₀ Λ₁ Ω A B}
+  → (n : MIP Γ Δ (Λ₀ ++ Λ₁) B)
+  → (f : Ω ⊢ A)
+  → IL~Λ' {Γ = Ω ++ Γ} {Δ = Δ} {Λ₀ = Λ₀} {Λ₁ = Λ₁} (⊗R~₂' n f)
+      ~ ⊗R~₂' (IL~Λ' {Γ = Γ} {Δ = Δ} {Λ₀ = Λ₀} {Λ₁ = Λ₁} n) f
+IL⊗R₂~Λ {Γ = Γ} {Λ₀ = Λ₀} {Λ₁ = Λ₁} {Ω = Ω} (intrp D g h) f =
+  g~ (IL⊗R₂ {Γ = Ω} {Δ = Γ ++ D ∷ Λ₀} {Λ = Λ₁} {f = f} {g = g})
+
+IL⊗R₁~Γ⊗R : ∀ {Γ₀ Γ₁ Δ₀ Δ₁ Λ A B}
+  → (n : MIP (Γ₀ ++ Γ₁) Δ₀ [] A)
+  → (m : MIP [] Δ₁ Λ B)
+  → IL~Γ' {Γ₀ = Γ₀} {Γ₁ = Γ₁} {Δ = Δ₀ ++ Δ₁} {Λ = Λ} (⊗R~' n m)
+      ~ ⊗R~' (IL~Γ' {Γ₀ = Γ₀} {Γ₁ = Γ₁} {Δ = Δ₀} {Λ = []} n) m
+IL⊗R₁~Γ⊗R {Γ₀ = Γ₀} {Γ₁ = Γ₁} {Λ = Λ} (intrp D g h) (intrp E g' h') =
+  g~
+    (IL⊗L-comm₁ {Γ = Γ₀} {Δ = Γ₁} {Λ = Λ} {f = ⊗R g g'}
+    ∘ ⊗L {Γ = Γ₀ ++ I ∷ Γ₁} {Δ = Λ} {A = D} {B = E}
+        (IL⊗R₁ {Γ = Γ₀} {Δ = Γ₁ ++ D ∷ []} {Λ = E ∷ Λ} {f = g} {g = g'}))

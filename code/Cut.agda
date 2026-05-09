@@ -124,3 +124,58 @@ cut Γ {Λ = Λ} f (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} g h) refl | inj₂ (D ∷ 
 cut [] f ax refl = f
 cut (D ∷ Γ) f ax eq = ⊥-elim ([]disj∷ Γ (inj∷ eq .proj₂))
   
+cutaxA-right : ∀ {Γ A}
+    → (f : Γ ⊢ A)
+    → cut [] f ax refl ≗ f
+cutaxA-right f = refl
+
+cutaxA-left' : (Γ : Cxt) → ∀ {Λ Ω A C}
+    → (f : Ω ⊢ C)
+    → (eq : Ω ≡ Γ ++ A ∷ Λ)
+    → cut Γ ax f eq ≡ subst-cxt eq f
+cutaxA-left' Γ IR eq = ⊥-elim ([]disj∷ Γ eq)
+cutaxA-left' Γ {Λ} (IL {Γ₁} {Δ} f) eq with cases++ Γ Γ₁ Λ (I ∷ Δ) eq
+cutaxA-left' Γ {Λ} (IL {Γ₁} {Δ} f) refl | inj₁ (Ω , refl , refl) = cong (IL {Γ ++ _ ∷ Ω}) (cutaxA-left' Γ f refl)
+cutaxA-left' Γ {Λ} (IL {Γ₁} {Δ} f) refl | inj₂ ([] , refl , refl) = refl
+cutaxA-left' Γ {Λ} (IL {Γ₁} {Δ} f) refl | inj₂ (_ ∷ Ω , refl , refl) = cong IL (cutaxA-left' (Γ₁ ++ Ω) f refl)
+cutaxA-left' Γ {Λ} (⊗R {Γ₁} {Δ} f f₁) eq with cases++ Γ Γ₁ Λ Δ eq
+cutaxA-left' Γ {Λ} (⊗R {Γ₁} {Δ} f f₁) refl | inj₁ (Ω , refl , refl) = cong (λ x → ⊗R {Γ ++ _ ∷ Ω} x f₁) (cutaxA-left' Γ f refl)
+cutaxA-left' Γ {Λ} (⊗R {Γ₁} {Δ} f f₁) refl | inj₂ (Ω , refl , refl) = cong (λ x → ⊗R f x) (cutaxA-left' Ω f₁ refl)
+cutaxA-left' Γ {Λ} (⊗L {Γ₁} {Δ} {A} {B} f) eq with cases++ Γ Γ₁ Λ (A ⊗ B ∷ Δ) eq
+cutaxA-left' Γ {Λ} (⊗L {Γ₁} {Δ} {A} {B} f) refl | inj₁ (Ω , refl , refl) = cong (⊗L {Γ ++ _ ∷ Ω}) (cutaxA-left' Γ f refl)
+cutaxA-left' Γ {Λ} (⊗L {Γ₁} {Δ} {A} {B} f) refl | inj₂ ([] , refl , refl) = refl
+cutaxA-left' Γ {Λ} (⊗L {Γ₁} {Δ} {A} {B} f) refl | inj₂ (_ ∷ Ω , refl , refl) = cong ⊗L (cutaxA-left' (Γ₁ ++ A ∷ B ∷ Ω) f refl)
+cutaxA-left' Γ (⇒R f) refl = cong ⇒R (cutaxA-left' (_ ∷ Γ) f refl)
+cutaxA-left' Γ {Λ} (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} f g) eq with cases++ Γ (Γ₁ ++ Δ) Λ (A ⇒ B ∷ Λ₁) eq
+... | inj₁ (Ω , eq₁ , refl) with cases++ Γ Γ₁ Ω Δ eq₁
+cutaxA-left' Γ {._} (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₁ (Ω , refl , refl) | inj₁ (Ω' , refl , refl) 
+  = cong (λ x → ⇒L {Γ ++ _ ∷ Ω'} f x) (cutaxA-left' Γ g refl)
+cutaxA-left' Γ {._} (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₁ (Ω , refl , refl) | inj₂ (Ω' , refl , refl) = cong (λ x → ⇒L x g) (cutaxA-left' Ω' f refl)
+cutaxA-left' Γ {Λ} (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₂ ([] , refl , refl) = refl
+cutaxA-left' Γ {Λ} (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₂ (_ ∷ Ω , refl , refl) = cong (λ x → ⇒L f x) (cutaxA-left' (Γ₁ ++ B ∷ Ω) g refl)
+cutaxA-left' [] ax refl = refl
+cutaxA-left' (x ∷ Γ) ax eq = ⊥-elim ([]disj∷ Γ (inj∷ eq .proj₂))
+
+cutaxA-left : (Γ : Cxt) → ∀ {Λ Ω A C}
+    → (f : Ω ⊢ C)
+    → (eq : Ω ≡ Γ ++ A ∷ Λ)
+    → cut Γ ax f eq ≗ subst-cxt eq f
+cutaxA-left Γ f eq = ≡to≗ (cutaxA-left' Γ f eq)
+
+postulate 
+  cutIL≗ : (Γ Δ₀ Δ₁ : Cxt) → ∀ {Λ Ω C D}
+    → (f : Δ₀ ++ Δ₁ ⊢ D) (g : Ω ⊢ C) (eq : Ω ≡ Γ ++ D ∷ Λ)
+    → cut Γ (IL {Δ₀} {Δ₁} f) g eq ≗ IL {Γ ++ Δ₀} {Δ₁ ++ Λ} (cut Γ f g eq)
+  cut⊗L≗ : (Γ Δ₀ Δ₁ : Cxt) → ∀ {Λ Ω A B C D} 
+    → (f : Δ₀ ++ A ∷ B ∷ Δ₁ ⊢ D) (g : Ω ⊢ C) (eq : Ω ≡ Γ ++ D ∷ Λ ) 
+    → cut Γ (⊗L f) g eq ≗ ⊗L {Γ ++ Δ₀} (cut Γ f g eq)
+  cut⇒L≗ : (Γ : Cxt) → ∀ {Δ Δ₀ Δ₁ Λ Ω A B C D}
+    → (f : Δ ⊢ A) (f₁ : Δ₀ ++ B ∷ Δ₁ ⊢ D)
+    → (g : Ω ⊢ C) 
+    → (eq : Ω ≡ Γ ++ D ∷ Λ)
+    → cut Γ (⇒L f f₁) g eq ≗ ⇒L {Γ ++ Δ₀} f (cut Γ f₁ g eq)
+  cut-cong₂ : (Γ : Cxt) → ∀ {Δ Λ Ω C D}
+    → {f : Δ ⊢ D} {g g' : Ω ⊢ C}
+    → (eq : Ω ≡ Γ ++ D ∷ Λ)
+    → (p : g ≗ g')
+    → cut Γ f g eq ≗ cut Γ f g' eq

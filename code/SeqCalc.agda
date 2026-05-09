@@ -80,10 +80,10 @@ data _≗_ : {Γ : Cxt} {A : Fma} → Γ ⊢ A → Γ ⊢ A → Set where
   _∘_ : ∀{Γ A} {f g h : Γ ⊢ A} → f ≗ g → g ≗ h → f ≗ h
 
 -- congruence
-  -- IL : ∀ {Γ Δ C}
-  --   → {f g : Γ ++ Δ ⊢ C}
-  --   → f ≗ g
-  --   → IL {Γ} {Δ} f ≗ IL g
+  IL : ∀ {Γ Δ C}
+    → {f g : Γ ++ Δ ⊢ C}
+    → f ≗ g
+    → IL {Γ} {Δ} f ≗ IL g
   ⇒R : ∀{Γ A B}
     → {f g : A ∷ Γ ⊢ B} 
     → f ≗ g
@@ -127,28 +127,28 @@ data _≗_ : {Γ : Cxt} {A : Fma} → Γ ⊢ A → Γ ⊢ A → Set where
     → {f : Γ ⊢ A'}
     → {g : Δ ++ A ∷ B ∷ Λ ⊢ B'}
     → ⊗L {Γ ++ Δ} (⊗R f g) ≗ ⊗R f (⊗L g)
-  -- IL⊗R₁ : ∀{Γ Δ Λ A' B'}
-  --   → {f : Γ ++ Δ ⊢ A'}
-  --   → {g : Λ ⊢ B'}
-  --   → IL (⊗R f g) ≗ ⊗R (IL {Γ} {Δ} f) g
-  -- IL⊗R₂ : ∀{Γ Δ Λ A' B'}
-  --   → {f : Γ ⊢ A'}
-  --   → {g : Δ ++ Λ ⊢ B'}
-  --   → IL {Γ ++ Δ} (⊗R f g) ≗ ⊗R f (IL {Δ} {Λ} g)
+  IL⊗R₁ : ∀{Γ Δ Λ A' B'}
+    → {f : Γ ++ Δ ⊢ A'}
+    → {g : Λ ⊢ B'}
+    → IL (⊗R f g) ≗ ⊗R (IL {Γ} {Δ} f) g
+  IL⊗R₂ : ∀{Γ Δ Λ A' B'}
+    → {f : Γ ⊢ A'}
+    → {g : Δ ++ Λ ⊢ B'}
+    → IL {Γ ++ Δ} (⊗R f g) ≗ ⊗R f (IL {Δ} {Λ} g)
   ⊗L⊗L : ∀ {Γ Δ Λ A B A' B' C} 
     → {f : Γ ++ A ∷ B ∷ Δ ++ A' ∷ B' ∷ Λ ⊢ C}
     → ⊗L {Γ ++ A ⊗ B ∷ Δ} (⊗L f) ≗ ⊗L (⊗L {Γ ++ A ∷ B ∷ Δ} f)
-  -- ILIL : ∀ {Γ Δ Λ C} 
-  --   → {f : Γ ++ Δ ++ Λ ⊢ C}
-  --   → IL {Γ ++ I ∷ Δ} {Λ} (IL f) ≗ IL (IL {Γ ++ Δ} f)
+  ILIL : ∀ {Γ Δ Λ C} 
+    → {f : Γ ++ Δ ++ Λ ⊢ C}
+    → IL {Γ ++ I ∷ Δ} {Λ} (IL f) ≗ IL (IL {Γ ++ Δ} f)
   
-  -- IL⊗L-comm₁ : ∀ {Γ Δ Λ A B C}
-  --   → {f : Γ ++ Δ ++ A ∷ B ∷ Λ ⊢ C}
-  --   → IL (⊗L {Γ ++ Δ} f) ≗ ⊗L {Γ ++ I ∷ Δ} (IL f)
+  IL⊗L-comm₁ : ∀ {Γ Δ Λ A B C}
+    → {f : Γ ++ Δ ++ A ∷ B ∷ Λ ⊢ C}
+    → IL (⊗L {Γ ++ Δ} f) ≗ ⊗L {Γ ++ I ∷ Δ} (IL f)
 
-  -- IL⊗L-comm₂ : ∀ {Γ Δ Λ A B C}
-  --   → {f : Γ ++ A ∷ B ∷ Δ ++ Λ ⊢ C}
-  --   → IL {Γ ++ A ⊗ B ∷ Δ} {Λ} (⊗L f) ≗ ⊗L (IL {Γ ++ A ∷ B ∷ Δ} f)
+  IL⊗L-comm₂ : ∀ {Γ Δ Λ A B C}
+    → {f : Γ ++ A ∷ B ∷ Δ ++ Λ ⊢ C}
+    → IL {Γ ++ A ⊗ B ∷ Δ} {Λ} (⊗L f) ≗ ⊗L (IL {Γ ++ A ∷ B ∷ Δ} f)
 
   ⊗L⇒L-assoc : ∀{Γ Δ₀ Δ₁ Λ A B A' B' C}
     → {f : Δ₀ ++ A' ∷ B' ∷ Δ₁ ⊢ A} {g : Γ ++ B ∷ Λ ⊢ C}
@@ -160,15 +160,15 @@ data _≗_ : {Γ : Cxt} {A : Fma} → Γ ⊢ A → Γ ⊢ A → Set where
     → {f : Δ ⊢ A} {g : Γ ++ B ∷ Λ ++ A' ∷ B' ∷ Ω ⊢ C}
     → ⊗L {Γ ++ Δ ++ A ⇒ B ∷ Λ} (⇒L f g) ≗ ⇒L f (⊗L {Γ ++ B ∷ Λ} g) 
 
-  -- IL⇒L-assoc : ∀{Γ Δ₀ Δ₁ Λ A B C}
-  --   → {f : Δ₀ ++ Δ₁ ⊢ A} {g : Γ ++ B ∷ Λ ⊢ C}
-  --   → IL {Γ ++ Δ₀} (⇒L f g) ≗ ⇒L (IL {Δ₀} {Δ₁} f) g
-  -- IL⇒L-comm₁ : ∀{Γ Δ Λ Ω A B C} 
-  --   → {f : Δ ⊢ A} {g : Γ ++ Λ ++ B ∷ Ω ⊢ C}
-  --   → IL (⇒L {Γ ++ Λ} f g) ≗ ⇒L {Γ ++ I ∷ Λ} f (IL g) 
-  -- IL⇒L-comm₂ : ∀{Γ Δ Λ Ω A B C} 
-  --   → {f : Δ ⊢ A} {g : Γ ++ B ∷ Λ ++ Ω ⊢ C}
-  --   → IL {Γ ++ Δ ++ A ⇒ B ∷ Λ} (⇒L f g) ≗ ⇒L f (IL {Γ ++ B ∷ Λ} {Ω} g) 
+  IL⇒L-assoc : ∀{Γ Δ₀ Δ₁ Λ A B C}
+    → {f : Δ₀ ++ Δ₁ ⊢ A} {g : Γ ++ B ∷ Λ ⊢ C}
+    → IL {Γ ++ Δ₀} (⇒L f g) ≗ ⇒L (IL {Δ₀} {Δ₁} f) g
+  IL⇒L-comm₁ : ∀{Γ Δ Λ Ω A B C} 
+    → {f : Δ ⊢ A} {g : Γ ++ Λ ++ B ∷ Ω ⊢ C}
+    → IL (⇒L {Γ ++ Λ} f g) ≗ ⇒L {Γ ++ I ∷ Λ} f (IL g) 
+  IL⇒L-comm₂ : ∀{Γ Δ Λ Ω A B C} 
+    → {f : Δ ⊢ A} {g : Γ ++ B ∷ Λ ++ Ω ⊢ C}
+    → IL {Γ ++ Δ ++ A ⇒ B ∷ Λ} (⇒L f g) ≗ ⇒L f (IL {Γ ++ B ∷ Λ} {Ω} g) 
 
   ⇒L⇒L-assoc : ∀{Γ₀ Γ₁ Δ Λ₀ Λ₁ A B A' B' C}
     → {f : Δ ⊢ A'}
