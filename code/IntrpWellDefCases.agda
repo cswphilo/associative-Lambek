@@ -4,6 +4,7 @@ module IntrpWellDefCases where
 
 open import IntrpWellDefCases.ImpLImpR public
 open import IntrpWellDefCases.TensorLImpR public
+open import IntrpWellDefCases.ILImpR public
 open import IntrpWellDefCases.ImpLTensorR1 public
 open import IntrpWellDefCases.ImpLTensorR2 public
 open import IntrpWellDefCases.TensorLTensorR1 public

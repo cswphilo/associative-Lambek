@@ -88,7 +88,7 @@ mip≗IL⇒L-assoc .(Γ₁ ++ Ξ) .(Ω₁ ++ I ∷ Ω) Λ {Γ₁} {.(Ξ ++ Ω₁
           cases++-inj₂ (Ω₁ ++ Δ₁) (Γ₁ ++ Ξ) Ξ' (A ⇒ B) |
           cases++-inj₂ Ω₁ Ξ Δ₁ I |
           ++?-inj₁ Ξ Γ₁ (Ω₁ ++ Δ₁)
-            = intrp≗ (h~ ({!IL⇒R!} ∘ ⇒R IL⇒L-assoc))
+            = intrp≗ (h~ (IL⇒R ∘ ⇒R IL⇒L-assoc))
 mip≗IL⇒L-assoc ._ .(Ω₁ ++ I ∷ Ω) Λ {Γ₁} {._} {Δ₁} {Λ₁} {A} {B} refl | inj₂ (Ω₁ , refl , refl) | inj₁ (Ω , refl , refl) | inj₁ ([] , refl , refl) | inj₂ (Ξ' , refl , refl)
   rewrite cases++-inj₁ Ω₁ Ω (Ξ' ++ A ⇒ B ∷ Λ₁) I |
           ++?-inj₁ (Ω₁ ++ I ∷ Ω) Γ₁ (Ξ' ++ A ⇒ B ∷ Λ₁) |
