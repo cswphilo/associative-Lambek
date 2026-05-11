@@ -51,7 +51,9 @@ mip≗⇒L⇒L-comm Γ ._ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {._} {A = A} {B} {A
           ++?-inj₁ (Δ₁ ++ A' ⇒ B' ∷ Ω₀) (Γ ++ E ∷ Ω₃ ++ B ∷ Λ₁) Λ |
           cases++-inj₁ Δ₁ Ω₀ Λ (A' ⇒ B') | 
           cases++-inj₂ (E ∷ Ω₃ ++ B ∷ Λ₁ ++ Δ₁) Γ Ω₀ (A' ⇒ B') |
-          ++?-inj₂ Γ (Ω₃ ++ B ∷ Λ₁) Δ₁ E = intrp≗ (↝∷ (ax , (~ cutaxA-left Γ _ refl) , ⇒L⇒L-comm) refl)
+          ++?-inj₂ Γ (Ω₃ ++ B ∷ Λ₁) Δ₁ E 
+            = intrp≗ (h~ ⇒L⇒L-comm)
+            -- intrp≗ (↝∷ (ax , (~ cutaxA-left Γ _ refl) , ⇒L⇒L-comm) refl)
   
 mip≗⇒L⇒L-comm Γ ._ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {._} {A = A} {B} {A'} {B'} refl | inj₁ (._ , refl , refl) | inj₁ (Ω₀ , refl , refl) | inj₁ (E ∷ ._ , refl , refl) | inj₁ (Ω₂ , refl , refl) | inj₂ (Ω₃ , refl , refl) 
   rewrite cases++-inj₂ (E ∷ Ω₂ ++ A ⇒ B ∷ Λ₁ ++ Δ₁) (Γ₁ ++ Ω₃) Ω₀ (A' ⇒ B') |
