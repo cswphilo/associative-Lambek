@@ -2,6 +2,7 @@
 
 module IntrpWellDefCases.Base where
 
+open import Data.Sum using (inj₁; inj₂) public
 open import Data.List using (List; []; _∷_; _++_) public
 open import Relation.Binary.PropositionalEquality using (_≡_; refl; sym; cong; cong₂; subst) public
 open import Data.Product public
