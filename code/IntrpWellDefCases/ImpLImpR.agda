@@ -19,7 +19,7 @@ mip≗⇒L⇒R Γ Δ Λ {Γ₁} {Δ₁} {.(Ω' ++ Λ)} {A} {B} {A'} {f = f} {g} 
   rewrite ++?-inj₁ (Δ₁ ++ A ⇒ B ∷ Ω'' ++ Δ) Γ₁ Λ |
           cases++-inj₁ Δ₁ (Ω'' ++ Δ) Λ (A ⇒ B) |
           cases++-inj₁ (Γ₁ ++ Δ₁) Ω'' Δ (A ⇒ B) 
-            = intrp≗ (↝∷ (ax , ((⇒L⇒R ∘ (~ cutaxA-left (Γ₁ ++ Δ₁ ++ A ⇒ B ∷ Ω'') (⇒R (⇒L {_ ∷ Γ₁} f (MIP.g (mip (A' ∷ Γ₁ ++ B ∷ Ω'') Δ Λ g refl)))) refl)) , refl)) refl)
+            = intrp≗ (g~ ⇒L⇒R)
 ... | inj₂ (Ω'' , refl , eq3) with ++? Γ Γ₁ Ω'' Δ₁ eq3
 mip≗⇒L⇒R Γ .(Ω'' ++ A ⇒ B ∷ Ω') Λ {Γ₁} {Δ₁} {.(Ω' ++ Λ)} {A} {B} refl | inj₁ (.(Δ₁ ++ A ⇒ B ∷ Ω') , refl , refl) | inj₁ (Ω' , refl , refl) | inj₂ (Ω'' , refl , refl) | inj₁ (Ω''' , refl , refl) 
   rewrite ++?-inj₁ (Ω''' ++ Ω'' ++ A ⇒ B ∷ Ω') Γ₁ Λ = {!  !}
