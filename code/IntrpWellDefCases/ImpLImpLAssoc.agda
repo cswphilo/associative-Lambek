@@ -1,4 +1,4 @@
-{-# OPTIONS --rewriting --allow-unsolved-metas #-}
+{-# OPTIONS --rewriting #-}
 
 module IntrpWellDefCases.ImpLImpLAssoc where
 
@@ -27,7 +27,8 @@ mip≗⇒L⇒L-assoc ._ Δ Λ {Γ₀} {Γ₁} {Δ₁} {Λ₀} {Λ₁} {A} {B} {A
           ++?-inj₁ (Γ₀ ++ B' ∷ Λ₀ ++ A ⇒ B ∷ Ω₃ ++ Δ) Γ₁ Λ |
           cases++-inj₁ (Γ₀ ++ B' ∷ Λ₀) (Ω₃ ++ Δ) Λ (A ⇒ B) |
           cases++-inj₁ (Γ₁ ++ Γ₀ ++ B' ∷ Λ₀) Ω₃ Δ (A ⇒ B)
-            = intrp≗ (↝∷ (ax , (⇒L⇒L-assoc ∘ (~ cutaxA-left (Γ₁ ++ Γ₀ ++ Δ₁ ++ A' ⇒ B' ∷ Λ₀ ++ A ⇒ B ∷ Ω₃) _ refl)) , refl) refl)
+            = intrp≗ (g~ ⇒L⇒L-assoc)
+            -- intrp≗ (↝∷ (ax , (⇒L⇒L-assoc ∘ (~ cutaxA-left (Γ₁ ++ Γ₀ ++ Δ₁ ++ A' ⇒ B' ∷ Λ₀ ++ A ⇒ B ∷ Ω₃) _ refl)) , refl) refl)
 
 mip≗⇒L⇒L-assoc ._ Δ Λ {[]} {Γ₁} {Δ₁} {Λ₀} {Λ₁} {A} {B} {A'} {B'} {f = f} {g} {h} refl | inj₁ (._ , refl , refl) | inj₁ (._ , refl , refl) | inj₁ (Ω₁ , refl , refl) | inj₁ (Ω₂ , refl , refl) | inj₂ (Ω₃ , refl , refl) 
   rewrite ++?-inj₁ (Δ₁ ++ A' ⇒ B' ∷ Ω₂ ++ Ω₃ ++ A ⇒ B ∷ Ω₁) Γ₁ Λ |
@@ -55,7 +56,8 @@ mip≗⇒L⇒L-assoc ._ Δ Λ {E ∷ Γ₀} {Γ₁} {Δ₁} {Λ₀} {Λ₁} {A} 
           cases++-inj₁ (Γ₀ ++ B' ∷ Ω₂ ++ Ω₃) Ω₁ Λ (A ⇒ B) |
           cases++-inj₂ Ω₃ (Γ₁ ++ E ∷ Γ₀ ++ B' ∷ Ω₂) Ω₁ (A ⇒ B) |
           ++?-inj₁ (E ∷ Γ₀ ++ B' ∷ Ω₂) Γ₁ Ω₃ 
-            = intrp≗ (↝∷ (ax , ⇒L⇒L-assoc {E ∷ Γ₀} ∘ (~ cutaxA-left (Γ₁ ++ E ∷ Γ₀ ++ Δ₁ ++ A' ⇒ B' ∷ Ω₂) _ refl) , refl) refl)
+            = intrp≗ (g~ ⇒L⇒L-assoc)
+            -- intrp≗ (↝∷ (ax , ⇒L⇒L-assoc {E ∷ Γ₀} ∘ (~ cutaxA-left (Γ₁ ++ E ∷ Γ₀ ++ Δ₁ ++ A' ⇒ B' ∷ Ω₂) _ refl) , refl) refl)
 
 mip≗⇒L⇒L-assoc Γ Δ Λ {Γ₀} {Γ₁} {Δ₁} {Λ₀} {Λ₁} {A} {B} {A'} {B'} eq | inj₁ (._ , refl , eq₂) | inj₁ (Ω₀ , refl , refl) | inj₁ (Ω₁ , refl , refl) | inj₂ (Ω₂ , refl , eq₄) with ++? Γ (Γ₁ ++ Γ₀) Ω₂ Δ₁ eq₄
 mip≗⇒L⇒L-assoc Γ ._ Λ {Γ₀} {Γ₁} {Δ₁} {Λ₀} {Λ₁} {A} {B} {A'} {B'} {f = f} {g} {h} refl | inj₁ (._ , refl , refl) | inj₁ (._ , refl , refl) | inj₁ (Ω₁ , refl , refl) | inj₂ (Ω₂ , refl , refl) | inj₁ (Ω₃ , refl , refl) 
@@ -91,7 +93,8 @@ mip≗⇒L⇒L-assoc Γ ._ Λ {Γ₀} {Γ₁} {Δ₁} {Λ₀} {Λ₁} {A} {B} {A
           cases++-inj₁ (Γ₀ ++ B' ∷ Λ₀) Ω₁ Λ (A ⇒ B) |
           cases++-inj₂ (E ∷ Ω₄ ++ Γ₀ ++ B' ∷ Λ₀) Γ Ω₁ (A ⇒ B) |
           ++?-inj₂ Γ Ω₄ (Γ₀ ++ B' ∷ Λ₀) E 
-            = intrp≗ (↝∷ (ax , (~ cutaxA-left _ _ refl) , ⇒L⇒L-assoc) refl)
+            = intrp≗ (h~ ⇒L⇒L-assoc)
+            -- intrp≗ (↝∷ (ax , (~ cutaxA-left _ _ refl) , ⇒L⇒L-assoc) refl)
 
 mip≗⇒L⇒L-assoc Γ ._ Λ {Γ₀} {Γ₁} {Δ₁} {Λ₀} {Λ₁} {A} {B} {A'} {B'} refl | inj₁ (._ , refl , refl) | inj₁ (._ , refl , refl) | inj₁ (Ω₁ , refl , refl) | inj₂ (._ , refl , refl) | inj₂ (E , Ω₃ , refl , refl) | inj₂ (Ω₄ , refl , refl) 
   rewrite ++?-inj₁ (Ω₄ ++ E ∷ Ω₃ ++ Δ₁ ++ A' ⇒ B' ∷ Λ₀ ++ A ⇒ B ∷ Ω₁) Γ₁ Λ |
@@ -103,7 +106,8 @@ mip≗⇒L⇒L-assoc Γ ._ Λ {Γ₀} {Γ₁} {Δ₁} {Λ₀} {Λ₁} {A} {B} {A
           cases++-inj₁  (Ω₄ ++ E ∷ Ω₃ ++ B' ∷ Λ₀) Ω₁ Λ (A ⇒ B) |
           cases++-inj₂ (E ∷ Ω₃ ++ B' ∷ Λ₀) (Γ₁ ++ Ω₄) Ω₁ (A ⇒ B) |
           ++?-inj₁ Ω₄ Γ₁ (E ∷ Ω₃ ++ B' ∷ Λ₀) 
-            = intrp≗ (↝∷ (ax , (~ cutaxA-left (Γ₁ ++ Ω₄) _ refl) , (⇒L⇒R ∘ ⇒R ⇒L⇒L-assoc)) refl)
+            = intrp≗ (h~ (⇒L⇒R ∘ ⇒R ⇒L⇒L-assoc))
+            -- intrp≗ (↝∷ (ax , (~ cutaxA-left (Γ₁ ++ Ω₄) _ refl) , (⇒L⇒R ∘ ⇒R ⇒L⇒L-assoc)) refl)
 
 mip≗⇒L⇒L-assoc Γ Δ Λ {Γ₀} {Γ₁} {Δ₁} {Λ₀} {Λ₁} {A} {B} {A'} {B'} eq | inj₁ (._ , refl , eq₂) | inj₁ (Ω₀ , refl , refl) | inj₂ (Ω₁ , refl , refl) with cases++ (Γ₁ ++ Γ₀ ++ Δ₁) Γ Ω₀ Δ eq₂
 
@@ -138,7 +142,9 @@ mip≗⇒L⇒L-assoc Γ Δ ._ {E₁ ∷ Γ₀} {Γ₁} {Δ₁} {Λ₀} {Λ₁} {
           cases++-inj₁ Δ₁ Ω₀ Ω₁ (A' ⇒ B') |
           ++?-inj₁ (E₁ ∷ Γ₀ ++ B' ∷ Ω₀) (Γ ++ E ∷ Ω₄) (Ω₁ ++ A ⇒ B ∷ Λ₁) |
           cases++-inj₂ Ω₁ (Γ₀ ++ B' ∷ Ω₀) Λ₁ (A ⇒ B) |
-          ++?-inj₁ (E ∷ Ω₄) Γ (E₁ ∷ Γ₀ ++ B' ∷ Ω₀) = intrp≗ (↝∷ (ax , (~ cutaxA-left Γ _ refl) , ⇒L⊗R₂) refl)
+          ++?-inj₁ (E ∷ Ω₄) Γ (E₁ ∷ Γ₀ ++ B' ∷ Ω₀) 
+            = intrp≗ (h~ ⇒L⊗R₂)
+            -- intrp≗ (↝∷ (ax , (~ cutaxA-left Γ _ refl) , ⇒L⊗R₂) refl)
           -- ++? [] Γ₀ (E₁ ∷ Γ₀ ++ Δ₁) Δ₁ refl
 -- These two are morally the same.
 
@@ -174,10 +180,11 @@ mip≗⇒L⇒L-assoc Γ Δ ._ {E ∷ Γ₀} {Γ₁} {Δ₁} {Λ₀} {Λ₁} {A} 
           ++?-inj₁ (E ∷ Γ₀ ++ B' ∷ Ω₀) Γ₁ (Ω₁ ++ A ⇒ B ∷ Λ₁) |
           cases++-inj₂ Ω₁ (Γ₀ ++ B' ∷ Ω₀) Λ₁ (A ⇒ B) |
           ++?-inj₂ Γ₁ Γ₀ (B' ∷ Ω₀) E 
-            = intrp≗ (↝∷ (ax , 
-              (⇒L⇒L-assoc 
-              ∘ (~ cutaxA-left (Γ₁ ++ E ∷ Γ₀ ++ Ω₃) (⇒L (⇒L {E ∷ Γ₀} (MIP.h (mip [] Ω₃ Ω₂ f refl)) (MIP.g (mip (E ∷ Γ₀) (B' ∷ Ω₀) Ω₁ g refl))) h) refl)) , 
-              refl) refl)
+            = intrp≗ (g~ ⇒L⇒L-assoc)
+            -- intrp≗ (↝∷ (ax , 
+            --   (⇒L⇒L-assoc 
+            --   ∘ (~ cutaxA-left (Γ₁ ++ E ∷ Γ₀ ++ Ω₃) (⇒L (⇒L {E ∷ Γ₀} (MIP.h (mip [] Ω₃ Ω₂ f refl)) (MIP.g (mip (E ∷ Γ₀) (B' ∷ Ω₀) Ω₁ g refl))) h) refl)) , 
+            --   refl) refl)
 
 -- These three are morally the same. The additional cases come from the beauracracy of ++?.
 
@@ -238,4 +245,5 @@ mip≗⇒L⇒L-assoc Γ Δ ._ {Γ₀} {Γ₁} {Δ₁} {Λ₀} {Λ₁} {A} {B} {A
           ++?-inj₁ (E₁ ∷ Ω₁ ++ Δ) Γ₁ (E ∷ Ω ++ B' ∷ Λ₀ ++ A ⇒ B ∷ Λ₁) |
           cases++-inj₂ (E ∷ Ω ++ B' ∷ Λ₀) (Ω₁ ++ Δ) Λ₁ (A ⇒ B) |
           ++?-inj₂ Γ₁ Ω₁ Δ E₁ 
-            = intrp≗ (↝∷ (ax , (⇒L⇒L-assoc {E₁ ∷ Ω₁ ++ _ ∷ E ∷ Ω} ∘ (~ cutaxA-left (Γ₁ ++ E₁ ∷ Ω₁) _ refl)) , refl) refl)
+            = intrp≗ (g~ ⇒L⇒L-assoc)
+            -- intrp≗ (↝∷ (ax , (⇒L⇒L-assoc {E₁ ∷ Ω₁ ++ _ ∷ E ∷ Ω} ∘ (~ cutaxA-left (Γ₁ ++ E₁ ∷ Ω₁) _ refl)) , refl) refl)

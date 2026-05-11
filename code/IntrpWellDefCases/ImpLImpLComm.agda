@@ -28,11 +28,12 @@ mip≗⇒L⇒L-comm Γ Δ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {._} {A = A} {B} {A
           cases++-inj₁ Δ₁ Ω₀ Λ (A' ⇒ B') |
           cases++-inj₂ Δ₁ (Γ₁ ++ B ∷ Λ₁) Ω₀ (A' ⇒ B') |
           ++?-inj₁ [] (Γ₁ ++ B ∷ Λ₁) Δ₁ 
-            = intrp≗ (↝∷ (ax , 
-              (⇒L⇒L-comm 
-              ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Λ₁) (⇒L {Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Λ₁} (MIP.h (mip [] [] Δ₁ f' refl))
-              (⇒L f (MIP.g (mip (Γ₁ ++ B ∷ Λ₁) (B' ∷ Ω₀) Λ g refl)))) refl)) , 
-              refl) refl)
+            = intrp≗ (g~ ⇒L⇒L-comm)
+            -- intrp≗ (↝∷ (ax , 
+              -- (⇒L⇒L-comm 
+              -- ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Λ₁) (⇒L {Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Λ₁} (MIP.h (mip [] [] Δ₁ f' refl))
+              -- (⇒L f (MIP.g (mip (Γ₁ ++ B ∷ Λ₁) (B' ∷ Ω₀) Λ g refl)))) refl)) , 
+              -- refl) refl)
 
 ... | inj₁ (E ∷ Ω₁ , refl , eq₄) with cases++ Γ (Γ₁ ++ Δ₀) Ω₁ (A ⇒ B ∷ Λ₁) eq₄
 ... | inj₁ (Ω₂ , eq₅ , refl) with cases++ Γ Γ₁ Ω₂ Δ₀ eq₅
@@ -67,7 +68,8 @@ mip≗⇒L⇒L-comm Γ ._ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {._} {A = A} {B} {A
           cases++-inj₁ Δ₁ Ω₀ Λ (A' ⇒ B') |
           cases++-inj₂ (B ∷ Λ₁ ++ Δ₁) Γ₁ Ω₀ (A' ⇒ B') |
           ++?-inj₂ Γ₁ Λ₁ Δ₁ B 
-            = intrp≗ (↝∷ (ax , (~ cutaxA-left (Γ₁ ++ Ω₃) _ refl) , (⇒R ⇒L⇒L-comm ∘ (~ ⇒L⇒R))) refl)
+            = intrp≗ (h~ (⇒R ⇒L⇒L-comm ∘ (~ ⇒L⇒R)))
+            -- intrp≗ (↝∷ (ax , (~ cutaxA-left (Γ₁ ++ Ω₃) _ refl) , (⇒R ⇒L⇒L-comm ∘ (~ ⇒L⇒R))) refl)
 mip≗⇒L⇒L-comm Γ Δ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {._} {A = A} {B} {A'} {B'} {f = f} {f'} {g} refl | inj₁ (._ , refl , refl) | inj₁ (Ω₀ , refl , refl) | inj₁ (E ∷ Ω₁ , refl , refl) | inj₂ ([] , refl , refl) 
   rewrite cases++-inj₂ (A ⇒ B ∷ Λ₁ ++ Δ₁) (Γ₁ ++ Δ₀) Ω₀ (A' ⇒ B') |
           ++?-inj₂ (Γ₁ ++ Δ₀) Ω₁ Δ₁ (A ⇒ B) |
@@ -83,8 +85,9 @@ mip≗⇒L⇒L-comm Γ Δ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {._} {A = A} {B} {A
           cases++-inj₁ Δ₁ Ω₀ Λ (A' ⇒ B') |
           cases++-inj₂ (B ∷ Ω₁ ++ Δ₁) Γ₁ Ω₀ (A' ⇒ B') |
           ++?-inj₂ Γ₁ Ω₁ Δ₁ B 
-            = intrp≗ (↝∷ (ax , (~ cutaxA-left (Γ₁ ++ Δ₀) (⇒L (MIP.h (mip [] Δ₀ [] f refl))
-        (MIP.g (mip Γ₁ (B ∷ Ω₁ ++ B' ∷ Ω₀) Λ g refl))) refl) , (⇒R ⇒L⇒L-comm ∘ (~ ⇒L⇒R))) refl) 
+            = intrp≗ (h~ (⇒R ⇒L⇒L-comm ∘ (~ ⇒L⇒R)))
+            --  intrp≗ (↝∷ (ax , (~ cutaxA-left (Γ₁ ++ Δ₀) (⇒L (MIP.h (mip [] Δ₀ [] f refl))
+        -- (MIP.g (mip Γ₁ (B ∷ Ω₁ ++ B' ∷ Ω₀) Λ g refl))) refl) , (⇒R ⇒L⇒L-comm ∘ (~ ⇒L⇒R))) refl) 
 
             -- intrp≗ (↝∷ (ax , 
             --   (((⇒L (~ cutaxA-right _) (~ cutaxA-left Γ₁ _ refl) 
@@ -109,7 +112,9 @@ mip≗⇒L⇒L-comm Γ Δ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {._} {A = A} {B} {A
           ++?-inj₁ (Δ₁ ++ A' ⇒ B' ∷ Ω₀) (Γ₁ ++ B ∷ Ω₂ ++ E ∷ Ω₁) Λ |
           cases++-inj₁ Δ₁ Ω₀ Λ (A' ⇒ B') |
           cases++-inj₂ (E ∷ Ω₁ ++ Δ₁) (Γ₁ ++ B ∷ Ω₂) Ω₀ (A' ⇒ B') |
-          ++?-inj₂ (Γ₁ ++ B ∷ Ω₂) Ω₁ Δ₁ E = intrp≗ (↝∷ (ax , (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Ω₂) _ refl) , cutaxA-right _) refl)
+          ++?-inj₂ (Γ₁ ++ B ∷ Ω₂) Ω₁ Δ₁ E 
+            = intrp≗ refl
+            -- intrp≗ (↝∷ (ax , (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Ω₂) _ refl) , cutaxA-right _) refl)
           -- intrp context is in Γ ++ B ∷ Λ ++ B' ∷ Ξ ⊢ C and does not split Δ₀ nor Δ₁.
 
 mip≗⇒L⇒L-comm Γ Δ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} {B'} eq | inj₁ (Ω , refl , eq₂) | inj₁ (Ω₀ , refl , refl) | inj₂ (E , Ω₁ , refl , eq₄) with cases++ Δ₁ (E ∷ Ω₁) Ω₀ Δ (sym eq₄)
@@ -123,7 +128,8 @@ mip≗⇒L⇒L-comm ._ Δ Λ {Γ₁} {Δ₀} {[]} {Λ₁} {._} {A = A} {B} {A'} 
           cases++-inj₁ (Γ₁ ++ Δ₀) (Λ₁ ++ A' ⇒ B' ∷ Ω₁) Δ (A ⇒ B) |
           ++?-inj₁ (A' ⇒ B' ∷ Ω₁ ++ Δ) (Γ₁ ++ B ∷ Λ₁) Λ |
           cases++-inj₁ (Γ₁ ++ B ∷ Λ₁) Ω₁ Δ (A' ⇒ B') 
-            = intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Λ₁ ++ A' ⇒ B' ∷ Ω₁) _ refl)) , refl) refl)
+            = intrp≗ (g~ ⇒L⇒L-comm)
+            -- intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Λ₁ ++ A' ⇒ B' ∷ Ω₁) _ refl)) , refl) refl)
 mip≗⇒L⇒L-comm ._ Δ Λ {Γ₁} {Δ₀} {E ∷ Δ₁} {Λ₁} {._} {A = A} {B} {A'} {B'} refl | inj₁ (._ , refl , refl) | inj₁ (Ω₀ , refl , refl) | inj₂ (E , Ω₁ , refl , refl) | inj₁ (Ω₂ , refl , refl) 
   rewrite cases++-inj₁ (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Λ₁ ++ E ∷ Δ₁) Ω₂ Δ (A' ⇒ B') |
           ++?-inj₁ (Δ₀ ++ A ⇒ B ∷ Λ₁ ++ B' ∷ Ω₂ ++ Δ) Γ₁ Λ |
@@ -135,7 +141,8 @@ mip≗⇒L⇒L-comm ._ Δ Λ {Γ₁} {Δ₀} {E ∷ Δ₁} {Λ₁} {._} {A = A} 
           ++?-inj₁ (E ∷ Δ₁ ++ A' ⇒ B' ∷ Ω₂ ++ Δ) (Γ₁ ++ B ∷ Λ₁) Λ |
           cases++-inj₁ Δ₁ (Ω₂ ++ Δ) Λ (A' ⇒ B') |
           cases++-inj₁ (Γ₁ ++ B ∷ Λ₁ ++ E ∷ Δ₁) Ω₂ Δ (A' ⇒ B') 
-            = intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Λ₁ ++ E ∷ Δ₁ ++ A' ⇒ B' ∷ Ω₂) _ refl)) , refl) refl)
+            = intrp≗ (g~ ⇒L⇒L-comm)
+            -- intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Λ₁ ++ E ∷ Δ₁ ++ A' ⇒ B' ∷ Ω₂) _ refl)) , refl) refl)
 
 mip≗⇒L⇒L-comm ._ Δ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} {B'} refl | inj₁ (._ , refl , refl) | inj₁ (Ω₀ , refl , refl) | inj₂ (E , Ω₁ , refl , refl) | inj₂ (Ω₂ , refl , refl) 
   rewrite cases++-inj₂ Ω₂ (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Λ₁ ++ E ∷ Ω₁) Ω₀ (A' ⇒ B') |
@@ -150,7 +157,8 @@ mip≗⇒L⇒L-comm ._ Δ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A
           cases++-inj₁ (Ω₁ ++ Ω₂) Ω₀ Λ (A' ⇒ B') |
           cases++-inj₂ Ω₂ (Γ₁ ++ B ∷ Λ₁ ++ E ∷ Ω₁) Ω₀ (A' ⇒ B') |
           ++?-inj₁ (E ∷ Ω₁) (Γ₁ ++ B ∷ Λ₁) Ω₂ 
-            = intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Λ₁ ++ E ∷ Ω₁) _ refl)) , refl) refl)
+            = intrp≗ (g~ ⇒L⇒L-comm)
+            -- intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Λ₁ ++ E ∷ Ω₁) _ refl)) , refl) refl)
 
 mip≗⇒L⇒L-comm Γ Δ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} {B'} eq | inj₁ (Ω , refl , eq₂) | inj₂ (Ω₀ , refl , refl) with cases++ (Γ₁ ++ Δ₀) Γ (Λ₁ ++ Ω) Δ eq₂
 ... | inj₁ (Ω₁ , refl , eq₄) with  ++? Ω₁ Λ₁ Δ Ω eq₄
@@ -165,9 +173,10 @@ mip≗⇒L⇒L-comm ._ Δ ._ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A
           ++?-inj₁ Ω (Γ₁ ++ B ∷ Ω₁) (Ω₀ ++ A' ⇒ B' ∷ Ξ) |
           cases++-inj₂ Ω₀ Ω Ξ (A' ⇒ B') |
           ++?-inj₁ [] (Γ₁ ++ B ∷ Ω₁) Ω 
-            = intrp≗ (↝∷ (ax , 
-              (((~ ⊗L⇒L-comm₂) ∘ ⊗L {Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Ω₁} ⇒L⇒L-comm) ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Ω₁) _ refl)) , 
-              refl) refl)
+            = intrp≗ (g~ ((~ ⊗L⇒L-comm₂) ∘ ⊗L {Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Ω₁} ⇒L⇒L-comm))
+            -- intrp≗ (↝∷ (ax , 
+              -- (((~ ⊗L⇒L-comm₂) ∘ ⊗L {Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Ω₁} ⇒L⇒L-comm) ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Ω₁) _ refl)) , 
+              -- refl) refl)
 mip≗⇒L⇒L-comm ._ Δ ._ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} {B'} refl | inj₁ (Ω , refl , refl) | inj₂ (Ω₀ , refl , refl) | inj₁ (Ω₁ , refl , refl) | inj₁ (E ∷ Ω₂ , refl , refl) 
   rewrite ++?-inj₂ (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Λ₁) Ω₂ Δ E |
           ++?-inj₁ (Δ₀ ++ A ⇒ B ∷ Λ₁ ++ E ∷ Ω₂ ++ Δ) Γ₁ (Ω₀ ++ A' ⇒ B' ∷ Ξ) |
@@ -176,7 +185,8 @@ mip≗⇒L⇒L-comm ._ Δ ._ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A
           ++?-inj₁ (E ∷ Ω₂ ++ Δ) (Γ₁ ++ B ∷ Λ₁) (Ω₀ ++ A' ⇒ B' ∷ Ξ) |
           cases++-inj₂ Ω₀ (Ω₂ ++ Δ) Ξ (A' ⇒ B') |
           ++?-inj₂ (Γ₁ ++ B ∷ Λ₁) Ω₂ Δ E 
-            = intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Λ₁ ++ E ∷ Ω₂) _ refl)) , refl) refl)
+            = intrp≗ (g~ ⇒L⇒L-comm)
+            -- intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Λ₁ ++ E ∷ Ω₂) _ refl)) , refl) refl)
 mip≗⇒L⇒L-comm ._ Δ ._ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} {B'} refl | inj₁ (Ω , refl , refl) | inj₂ (Ω₀ , refl , refl) | inj₁ (Ω₁ , refl , refl) | inj₂ (E , Ω₂ , refl , refl) 
   rewrite ++?-inj₁ (E ∷ Ω₂) (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Ω₁) Ω |
           ++?-inj₁ (Δ₀ ++ A ⇒ B ∷ Ω₁ ++ E ∷ Ω₂) Γ₁ (B' ∷ Ξ) |
@@ -188,9 +198,10 @@ mip≗⇒L⇒L-comm ._ Δ ._ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A
           ++?-inj₁ Ω (Γ₁ ++ B ∷ Ω₁ ++ E ∷ Ω₂) (Ω₀ ++ A' ⇒ B' ∷ Ξ) |
           cases++-inj₂ Ω₀ Ω Ξ (A' ⇒ B') |
           ++?-inj₁ (E ∷ Ω₂) (Γ₁ ++ B ∷ Ω₁) Ω 
-            = intrp≗ (↝∷ (ax , 
-              (((~ ⊗L⇒L-comm₂) ∘ ⊗L {Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Ω₁} ⇒L⇒L-comm) ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Ω₁) _ refl)) , 
-              refl) refl)
+            = intrp≗ (g~ ((~ ⊗L⇒L-comm₂) ∘ ⊗L {Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Ω₁} ⇒L⇒L-comm))
+            -- intrp≗ (↝∷ (ax , 
+            --   (((~ ⊗L⇒L-comm₂) ∘ ⊗L {Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Ω₁} ⇒L⇒L-comm) ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Ω₁) _ refl)) , 
+            --   refl) refl)
 mip≗⇒L⇒L-comm Γ Δ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} {B'} eq | inj₁ (Ω , refl , eq₂) | inj₂ (Ω₀ , refl , refl) | inj₂ (Ω₁ , refl , eq₄) with ++? Γ Γ₁ Ω₁ Δ₀ eq₄
 mip≗⇒L⇒L-comm Γ ._ ._ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} {B'} {f = f} {f'} {g} refl | inj₁ (Ω , refl , refl) | inj₂ (Ω₀ , refl , refl) | inj₂ (Ω₁ , refl , refl) | inj₁ (Ω₂ , refl , refl) 
   rewrite ++?-inj₁ (Ω₁ ++ A ⇒ B ∷ Λ₁) (Γ₁ ++ Ω₂) Ω |
@@ -234,7 +245,8 @@ mip≗⇒L⇒L-comm Γ ._ ._ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A
           ++?-inj₁ Ω (Γ ++ E ∷ Ω₂ ++ B ∷ Λ₁) (Ω₀ ++ A' ⇒ B' ∷ Ξ) |
           cases++-inj₂ Ω₀ Ω Ξ (A' ⇒ B') |
           ++?-inj₁ (E ∷ Ω₂ ++ B ∷ Λ₁) Γ Ω 
-            = intrp≗ (↝∷ (ax , (~ cutaxA-left Γ _ refl) , ⇒L⊗R₁) refl)
+            = intrp≗ (h~ ⇒L⊗R₁)
+            -- intrp≗ (↝∷ (ax , (~ cutaxA-left Γ _ refl) , ⇒L⊗R₁) refl)
 mip≗⇒L⇒L-comm Γ Δ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} {B'} eq | inj₂ (E , Ω , eq₁ , refl) with cases++ (Γ₁ ++ Δ₀) (Γ ++ Δ) Λ₁ (E ∷ Ω) (sym eq₁)
 ... | inj₁ (Ω₀ , eq₂ , refl) with cases++ (Γ₁ ++ Δ₀) Γ Ω₀ Δ eq₂
 mip≗⇒L⇒L-comm Γ Δ ._ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} {B'} refl | inj₂ (E , Ω , refl , refl) | inj₁ (Ω₀ , refl , refl) | inj₁ (Ω₁ , refl , refl) 
@@ -245,7 +257,8 @@ mip≗⇒L⇒L-comm Γ Δ ._ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A
           cases++-inj₁ Δ₀ (Ω₁ ++ Δ) (E ∷ Ω ++ Δ₁ ++ A' ⇒ B' ∷ Ξ) (A ⇒ B) |
           cases++-inj₁ (Γ₁ ++ Δ₀) Ω₁ Δ (A ⇒ B) |
           ++?-inj₂ (Γ₁ ++ B ∷ Ω₁ ++ Δ) Ω (Δ₁ ++ A' ⇒ B' ∷ Ξ) E 
-            = intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Ω₁) _ refl)) , refl) refl)
+            = intrp≗ (g~ ⇒L⇒L-comm)
+            -- intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ Δ₀ ++ A ⇒ B ∷ Ω₁) _ refl)) , refl) refl)
           
 ... | inj₂ (Ω₁ , refl , eq₄) with ++? Γ Γ₁ Ω₁ Δ₀ eq₄
 mip≗⇒L⇒L-comm Γ ._ ._ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} {B'} {f = f} {f'} {g} refl | inj₂ (E , Ω , refl , refl) | inj₁ (Ω₀ , refl , refl) | inj₂ (Ω₁ , refl , refl) | inj₁ (Ω₂ , refl , refl) 
@@ -258,7 +271,8 @@ mip≗⇒L⇒L-comm Γ ._ ._ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A
           cases++-inj₂ Ω₁ (Γ₁ ++ Ω₂) Ω₀ (A ⇒ B) |
           ++?-inj₁ Ω₂ Γ₁ Ω₁ |
           ++?-inj₂ (Γ₁ ++ B ∷ Ω₀) Ω (Δ₁ ++ A' ⇒ B' ∷ Ξ) E 
-            = intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ Ω₂) _ refl)) , refl) refl)
+            = intrp≗ (g~ ⇒L⇒L-comm)
+            -- intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ Ω₂) _ refl)) , refl) refl)
             
             -- intrp≗ (↝∷ (ax , 
             --   {!  cut⇒R⇒Lcases++   !} , 
@@ -275,7 +289,8 @@ mip≗⇒L⇒L-comm Γ ._ ._ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A
           cases++-inj₂ (E ∷ Ω₂ ++ Δ₀) Γ Ω₀ (A ⇒ B) |
           ++?-inj₂ Γ Ω₂ Δ₀ E |
           ++?-inj₂ (Γ ++ E ∷ Ω₂ ++ B ∷ Ω₀) Ω (Δ₁ ++ A' ⇒ B' ∷ Ξ) E₁ 
-            = intrp≗ (↝∷ (ax , (~ cutaxA-left Γ (⇒L {Γ ++ _ ∷ E₁ ∷ Ω} f' (MIP.g (mip Γ (E ∷ Ω₂ ++ B ∷ Ω₀) (E₁ ∷ Ω ++ B' ∷ Ξ) g refl))) refl) , cutaxA-right _) refl)
+            = intrp≗ refl
+            -- intrp≗ (↝∷ (ax , (~ cutaxA-left Γ (⇒L {Γ ++ _ ∷ E₁ ∷ Ω} f' (MIP.g (mip Γ (E ∷ Ω₂ ++ B ∷ Ω₀) (E₁ ∷ Ω ++ B' ∷ Ξ) g refl))) refl) , cutaxA-right _) refl)
 
 mip≗⇒L⇒L-comm Γ Δ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} {B'} eq | inj₂ (E , Ω , eq₁ , refl) | inj₂ (Ω₀ , eq₂ , eq₃) with ++? (Γ ++ Δ) Γ₁ Ω₀ Δ₀ eq₃
 ... | inj₁ (Ω₁ , refl , eq₅) with ++? Γ₁ Γ Ω₁ Δ eq₅
@@ -287,7 +302,8 @@ mip≗⇒L⇒L-comm Γ Δ ._ {Γ₁} {._} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} 
           cases++-inj₂ [] Ω₁ (Ω ++ Δ₁ ++ A' ⇒ B' ∷ Ξ) (A ⇒ B) |
           ++?-inj₁ Ω₂ Γ Ω₁ |
           ++?-inj₂ (Γ ++ Ω₂) Ω (Δ₁ ++ A' ⇒ B' ∷ Ξ) B 
-            = intrp≗ (↝∷ (ax , (⊗L ⇒L⇒L-comm ∘ ⊗L⇒L-comm₁) ∘ (~ cutaxA-left Γ _ refl) , refl) refl)
+            = intrp≗ (g~ (⊗L ⇒L⇒L-comm ∘ ⊗L⇒L-comm₁))
+            -- intrp≗ (↝∷ (ax , (⊗L ⇒L⇒L-comm ∘ ⊗L⇒L-comm₁) ∘ (~ cutaxA-left Γ _ refl) , refl) refl)
             
             -- intrp≗ (↝∷ (ax , 
             --   (⊗L ((⇒L⇒L-comm ∘ ⇒L refl (((~ cutaxA-left (Γ ++ MIP.D (mip Γ Ω₂ (B ∷ Λ₁ ++ B' ∷ Ξ) g refl) ∷ []) _ refl) 
@@ -307,7 +323,8 @@ mip≗⇒L⇒L-comm Γ Δ ._ {Γ₁} {._} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} 
           cases++-inj₂ (F ∷ Ω₀) Ω₁ (Λ₁ ++ Δ₁ ++ A' ⇒ B' ∷ Ξ) (A ⇒ B) |
           ++?-inj₁ Ω₂ Γ Ω₁ |
           ++?-inj₂ (Γ ++ Ω₂) Λ₁ (Δ₁ ++ A' ⇒ B' ∷ Ξ) B
-            = intrp≗ (↝∷ (ax , (⊗L ⇒L⇒L-comm ∘ ⊗L⇒L-comm₁) ∘ (~ cutaxA-left Γ _ refl) , refl) refl)
+            = intrp≗ (g~ (⊗L ⇒L⇒L-comm ∘ ⊗L⇒L-comm₁))
+            -- intrp≗ (↝∷ (ax , (⊗L ⇒L⇒L-comm ∘ ⊗L⇒L-comm₁) ∘ (~ cutaxA-left Γ _ refl) , refl) refl)
             
 mip≗⇒L⇒L-comm Γ Δ ._  {Γ₁} {._} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} {B'} refl | inj₂ (E₁ , Λ₁ , refl , refl) | inj₂ ([] , refl , refl) | inj₁ (Ω₁ , refl , refl) | inj₂ (E , Ω₂ , refl , refl) 
   rewrite ++?-inj₁ (E ∷ Ω₂ ++ Δ) Γ₁ (A ⇒ B ∷ Λ₁ ++ B' ∷ Ξ) |
@@ -315,7 +332,9 @@ mip≗⇒L⇒L-comm Γ Δ ._  {Γ₁} {._} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'}
           ++?-inj₂ Γ₁ Ω₂ Δ E | 
           ++?-inj₁ (E ∷ Ω₂ ++ Δ) Γ₁ (A ⇒ B ∷ Λ₁ ++ Δ₁ ++ A' ⇒ B' ∷ Ξ) |
           cases++-inj₂ [] (Ω₂ ++ Δ) (Λ₁ ++ Δ₁ ++ A' ⇒ B' ∷ Ξ) (A ⇒ B) |
-          ++?-inj₂ Γ₁ Ω₂ Δ E = intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ E ∷ Ω₂) _ refl)) , cutaxA-right _) refl)
+          ++?-inj₂ Γ₁ Ω₂ Δ E 
+            = intrp≗ (g~ ⇒L⇒L-comm)
+            -- intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ E ∷ Ω₂) _ refl)) , cutaxA-right _) refl)
           -- intrp context in f : E ∷ Ω₂ ++ Δ ⊢ A 
 
 mip≗⇒L⇒L-comm Γ Δ ._ {Γ₁} {._} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} {B'} refl | inj₂ (E₀ , Ω , refl , refl) | inj₂ (E₁ ∷ Ω₀ , refl , refl) | inj₁ (Ω₁ , refl , refl) | inj₂ (E , Ω₂ , refl , refl) 
@@ -324,7 +343,9 @@ mip≗⇒L⇒L-comm Γ Δ ._ {Γ₁} {._} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A'} 
           ++?-inj₂ Γ₁ Ω₂ Δ E |
           ++?-inj₁ (E ∷ Ω₂ ++ Δ) Γ₁ (E₁ ∷ Ω₀ ++ A ⇒ B ∷ Λ₁ ++ Δ₁ ++ A' ⇒ B' ∷ Ξ) |
           cases++-inj₂ (E₁ ∷ Ω₀) (Ω₂ ++ Δ) (Λ₁ ++ Δ₁ ++ A' ⇒ B' ∷ Ξ) (A ⇒ B) |
-          ++?-inj₂ Γ₁ Ω₂ Δ E = intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ E ∷ Ω₂) _ refl)) , cutaxA-right _) refl)
+          ++?-inj₂ Γ₁ Ω₂ Δ E 
+            = intrp≗ (g~ ⇒L⇒L-comm)
+            -- intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left (Γ₁ ++ E ∷ Ω₂) _ refl)) , cutaxA-right _) refl)
   --         -- same as the case above, not yet know if this can be optimized. 
   --         -- We need another with function if we don't pattern-match on Ω₀
 
@@ -332,6 +353,7 @@ mip≗⇒L⇒L-comm Γ Δ ._ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A = A} {B} {A
   rewrite ++?-inj₂ (Γ ++ Δ) Ω₁ (Δ₀ ++ A ⇒ B ∷ Λ₁ ++ B' ∷ Ξ) E |
           ++?-inj₂ (Γ ++ Δ) Ω₁ (Δ₀ ++ A ⇒ B ∷ Λ₁ ++ Δ₁ ++ A' ⇒ B' ∷ Ξ) E |
           ++?-inj₂ (Γ ++ Δ) (Ω₁ ++ B ∷ Λ₁) (Δ₁ ++ A' ⇒ B' ∷ Ξ) E 
-            = intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left Γ _ refl))  , cutaxA-right _) refl)
+            = intrp≗ (g~ ⇒L⇒L-comm)
+            -- intrp≗ (↝∷ (ax , (⇒L⇒L-comm ∘ (~ cutaxA-left Γ _ refl))  , cutaxA-right _) refl)
             -- intrp context in g : Γ ++ Δ ++ E ∷ Ω₁ ++ B ∷ Λ₁ ++ B' ∷ Ξ ⊢ C, where its Γ splits
  
