@@ -1,9 +1,8 @@
-{-# OPTIONS --rewriting --allow-unsolved-metas #-}
+{-# OPTIONS --rewriting #-}
 
 module IntrpWellDefCases.ILIL where
 
 open import IntrpWellDefCases.Base
-open import Utilities
 
 mip≗ILIL : ∀ Γ Δ Λ
   {Γ₁ Δ₁ Λ₁ : Cxt} {C : Fma}

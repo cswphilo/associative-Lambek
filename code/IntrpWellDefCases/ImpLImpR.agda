@@ -1,4 +1,4 @@
-{-# OPTIONS --rewriting --allow-unsolved-metas #-}
+{-# OPTIONS --rewriting #-}
 
 module IntrpWellDefCases.ImpLImpR where
 
@@ -19,11 +19,32 @@ mip≗⇒L⇒R Γ Δ Λ {Γ₁} {Δ₁} {.(Ω' ++ Λ)} {A} {B} {A'} {f = f} {g} 
   rewrite ++?-inj₁ (Δ₁ ++ A ⇒ B ∷ Ω'' ++ Δ) Γ₁ Λ |
           cases++-inj₁ Δ₁ (Ω'' ++ Δ) Λ (A ⇒ B) |
           cases++-inj₁ (Γ₁ ++ Δ₁) Ω'' Δ (A ⇒ B) 
-            = intrp≗ (↝∷ (ax , ((⇒L⇒R ∘ (~ cutaxA-left (Γ₁ ++ Δ₁ ++ A ⇒ B ∷ Ω'') (⇒R (⇒L {_ ∷ Γ₁} f (MIP.g (mip (A' ∷ Γ₁ ++ B ∷ Ω'') Δ Λ g refl)))) refl)) , refl)) refl)
+            = intrp≗ (g~ ⇒L⇒R)
 ... | inj₂ (Ω'' , refl , eq3) with ++? Γ Γ₁ Ω'' Δ₁ eq3
 mip≗⇒L⇒R Γ .(Ω'' ++ A ⇒ B ∷ Ω') Λ {Γ₁} {Δ₁} {.(Ω' ++ Λ)} {A} {B} refl | inj₁ (.(Δ₁ ++ A ⇒ B ∷ Ω') , refl , refl) | inj₁ (Ω' , refl , refl) | inj₂ (Ω'' , refl , refl) | inj₁ (Ω''' , refl , refl) 
-  rewrite ++?-inj₁ (Ω''' ++ Ω'' ++ A ⇒ B ∷ Ω') Γ₁ Λ = {!  !}
-... | inj₂ (C' , Ω''' , refl , refl) = {!!}
-mip≗⇒L⇒R Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {A'} eq | inj₁ (Ω , eq1 , eq2) | inj₂ (Ω' , refl , refl) = {!!}
-mip≗⇒L⇒R Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {A'} eq | inj₂ y = {!!}
+  rewrite ++?-inj₁ (Ω''' ++ Ω'' ++ A ⇒ B ∷ Ω') Γ₁ Λ |
+          cases++-inj₁ (Ω''' ++ Ω'') Ω' Λ (A ⇒ B) |
+          cases++-inj₂ Ω'' (Γ₁ ++ Ω''') Ω' (A ⇒ B) |
+          ++?-inj₁ Ω''' Γ₁ Ω''
+            = intrp≗ (g~ ⇒L⇒R)
+mip≗⇒L⇒R Γ .(Ω'' ++ A ⇒ B ∷ Ω') Λ {Γ₁} {Δ₁} {.(Ω' ++ Λ)} {A} {B} refl | inj₁ (.(Δ₁ ++ A ⇒ B ∷ Ω') , refl , refl) | inj₁ (Ω' , refl , refl) | inj₂ (Ω'' , refl , refl) | inj₂ (C' , Ω''' , refl , refl)
+  rewrite ++?-inj₁ (Δ₁ ++ A ⇒ B ∷ Ω') (Γ ++ C' ∷ Ω''') Λ |
+          cases++-inj₁ Δ₁ Ω' Λ (A ⇒ B) |
+          cases++-inj₂ (C' ∷ Ω''' ++ Δ₁) Γ Ω' (A ⇒ B) |
+          ++?-inj₂ Γ Ω''' Δ₁ C'
+            = intrp≗ refl
+mip≗⇒L⇒R Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {A'} eq | inj₁ (Ω , refl , eq2) | inj₂ (Ω' , refl , refl) with ++? Γ₁ Γ Ω Δ eq2
+mip≗⇒L⇒R Γ Δ .(Ω' ++ A ⇒ B ∷ Λ₁) {Γ₁} {.(Ω ++ Ω')} {Λ₁} {A} {B} {A'} refl | inj₁ (Ω , refl , refl) | inj₂ (Ω' , refl , refl) | inj₁ (Ω'' , refl , refl)
+  rewrite ++?-inj₁ Ω (Γ ++ Ω'') (Ω' ++ A ⇒ B ∷ Λ₁) |
+          cases++-inj₂ Ω' Ω Λ₁ (A ⇒ B) |
+          ++?-inj₁ Ω'' Γ Ω
+            = intrp≗ (g~ (⊗L ⇒L⇒R ∘ ⊗L⇒R))
+mip≗⇒L⇒R Γ Δ .(Ω' ++ A ⇒ B ∷ Λ₁) {Γ₁} {.(Ω ++ Ω')} {Λ₁} {A} {B} {A'} refl | inj₁ (Ω , refl , refl) | inj₂ (Ω' , refl , refl) | inj₂ (C' , Ω'' , refl , refl)
+  rewrite ++?-inj₁ (C' ∷ Ω'' ++ Δ) Γ₁ (Ω' ++ A ⇒ B ∷ Λ₁) |
+          cases++-inj₂ Ω' (Ω'' ++ Δ) Λ₁ (A ⇒ B) |
+          ++?-inj₂ Γ₁ Ω'' Δ C'
+            = intrp≗ (g~ ⇒L⇒R)
+mip≗⇒L⇒R Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {A'} refl | inj₂ (C' , Ω , refl , refl)
+  rewrite ++?-inj₂ (Γ ++ Δ) Ω (Δ₁ ++ A ⇒ B ∷ Λ₁) C'
+    = intrp≗ (g~ ⇒L⇒R)
  
