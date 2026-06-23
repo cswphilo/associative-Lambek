@@ -11,4 +11,4 @@ mip≗⇒L⊗R₂ : ∀ Γ Δ Λ
   → MIP≗ Γ Δ Λ (A' ⊗ B')
       (mip Γ Δ Λ (⇒L {Ω₁ ++ Γ₁} f (⊗R g h)) eq)
       (mip Γ Δ Λ (⊗R g (⇒L f h)) eq)
-mip≗⇒L⊗R₂ Γ Δ Λ eq = {!   !}
+mip≗⇒L⊗R₂ Γ Δ Λ = {!!}

@@ -26,112 +26,131 @@ mip≗ : ∀ Γ Δ Λ {Ω} {C}
   → (p : f ≗ f')
   → MIP≗ Γ Δ Λ C (mip Γ Δ Λ f eq) (mip Γ Δ Λ f' eq)
 
-mip≗ Γ Δ Λ eq refl = intrp≗ refl
-mip≗ Γ Δ Λ eq (~ p) = intrp≗ (~-sym (MIP≗.eq (mip≗ Γ Δ Λ eq p)))
-mip≗ Γ Δ Λ eq (p ∘ p') =
-  intrp≗ (~-trans (MIP≗.eq (mip≗ Γ Δ Λ eq p)) (MIP≗.eq (mip≗ Γ Δ Λ eq p')))
+mip≗ Γ [] Λ refl p = intrp≗ (g~ (IL {Γ} {Λ} p))
+mip≗ Γ (x ∷ Δ) Λ eq refl = intrp≗ refl
+mip≗ Γ (x ∷ Δ) Λ eq (~ p) = intrp≗ (~-sym (MIP≗.eq (mip≗ Γ (x ∷ Δ) Λ eq p)))
+mip≗ Γ (x ∷ Δ) Λ eq (p ∘ p') =
+  intrp≗ (~-trans (MIP≗.eq (mip≗ Γ (x ∷ Δ) Λ eq p)) (MIP≗.eq (mip≗ Γ (x ∷ Δ) Λ eq p')))
 
-mip≗ Γ Δ Λ eq (IL {Γ₁} {Δ₁} p) with cases++ Γ₁ Γ Δ₁ (Δ ++ Λ) (sym eq)
-mip≗ Γ Δ Λ refl (IL {Γ₁} {Δ₁} p) | inj₁ (Ω , refl , refl) =
-  intrp≗ (IL~Γ {Γ₀ = Γ₁} {Γ₁ = Ω} (MIP≗.eq (mip≗ (Γ₁ ++ Ω) Δ Λ refl p)))
-... | inj₂ (Ω , eq₁ , refl) with cases++ Ω Δ Δ₁ Λ eq₁
-mip≗ Γ Δ Λ (refl) (IL {._} {Δ₁} p) | inj₂ (Ω , refl , refl) | inj₁ (Θ , refl , refl) =
-  intrp≗ (IL~Δ {Δ₀ = Ω} {Δ₁ = Θ} (MIP≗.eq (mip≗ Γ (Ω ++ Θ) Λ refl p)))
-mip≗ Γ Δ Λ (refl) (IL {._} {Δ₁} p) | inj₂ (Ω , refl , refl) | inj₂ (Θ , refl , refl) =
-  intrp≗ (IL~Λ {Λ₀ = Θ} {Λ₁ = Δ₁} (MIP≗.eq (mip≗ Γ Δ (Θ ++ Δ₁) refl p)))
+-- IL
+mip≗ Γ (x ∷ Δ) Λ eq (IL {Γ₁} {Δ₁} p)
+  with ++? Γ Γ₁ (x ∷ Δ ++ Λ) (I ∷ Δ₁) eq
+... | inj₁ ([] , refl , refl) =
+  intrp≗ (IL~Δ {Δ₀ = []} {Δ₁ = Δ} (MIP≗.eq (mip≗ Γ Δ Λ refl p)))
+... | inj₁ (y ∷ Ω , refl , refl) =
+  intrp≗ (IL~Γ {Γ₀ = Γ₁} {Γ₁ = Ω} (MIP≗.eq (mip≗ (Γ₁ ++ Ω) (x ∷ Δ) Λ refl p)))
+... | inj₂ (E , Ω , refl , eq2)
+  with cases++ Ω Δ Δ₁ Λ (inj∷ eq2 .proj₂)
+mip≗ Γ (x ∷ Δ) Λ refl (IL {._} {Δ₁} p) | inj₂ (E , Ω , refl , refl) | inj₁ (Ω' , refl , refl) =
+  intrp≗ (IL~Δ {Δ₀ = x ∷ Ω} {Δ₁ = Ω'} (MIP≗.eq (mip≗ Γ (x ∷ Ω ++ Ω') Λ refl p)))
+mip≗ Γ (x ∷ Δ) Λ refl (IL {._} {Δ₁} p) | inj₂ (E , Ω , refl , refl) | inj₂ (Ω' , refl , refl) =
+  intrp≗ (IL~Λ {Λ₀ = Ω'} {Λ₁ = Δ₁} (MIP≗.eq (mip≗ Γ (x ∷ Δ) (Ω' ++ Δ₁) refl p)))
 
-mip≗ Γ Δ Λ refl (⇒R p) =
-  intrp≗ (⇒R~ (MIP≗.eq (mip≗ (_ ∷ Γ) Δ Λ refl p)))
+-- ⇒R
+mip≗ Γ (x ∷ Δ) Λ refl (⇒R p) =
+  intrp≗ (⇒R~ (MIP≗.eq (mip≗ (_ ∷ Γ) (x ∷ Δ) Λ refl p)))
 
-mip≗ Γ Δ Λ eq (⇒L {Γ₁} {Δ₁} {Λ₁} {A} {B} p q)
-  with ++? (Γ ++ Δ) Γ₁ Λ (Δ₁ ++ A ⇒ B ∷ Λ₁) eq
-... | inj₁ (Ω , eq₁ , eq₂) with cases++ Δ₁ Ω Λ₁ Λ (sym eq₁)
-... | inj₁ (Ω' , refl , refl) with cases++ (Γ₁ ++ Δ₁) Γ Ω' Δ eq₂
-mip≗ Γ Δ Λ refl (⇒L {Γ₁} {Δ₁} {._} {A} {B} p q)
-  | inj₁ (._ , refl , refl) | inj₁ (Ω' , refl , refl) | inj₁ (Ω'' , refl , refl) =
-  intrp≗ (⇒L~Γ {Γ₀ = Γ₁} {Γ₁ = Ω''} (MIP≗.eq (mip≗ (Γ₁ ++ B ∷ Ω'') Δ Λ refl q)) p)
-... | inj₂ (Ω'' , refl , eq₄) with ++? Γ Γ₁ Ω'' Δ₁ eq₄
-mip≗ Γ ._ Λ refl (⇒L {Γ₁} {Δ₁} {._} {A} {B} p q)
-  | inj₁ (._ , refl , refl) | inj₁ (Ω' , refl , refl) | inj₂ (Ω'' , refl , refl) | inj₁ (Ω''' , refl , refl) =
-  intrp≗ (⇒L~⇒ {Γ = Γ₁} {Δ₀ = Ω'''} {Δ₁ = Ω''} {Λ₀ = Ω'} {Λ₁ = Λ}
+-- ⇒L
+mip≗ Γ (x ∷ Δ) Λ eq (⇒L {Γ₁} {Δ₁} {Λ₁} {A₀} {B₀} p q)
+  with ++? Γ (Γ₁ ++ Δ₁) (x ∷ Δ ++ Λ) (A₀ ⇒ B₀ ∷ Λ₁) eq
+... | inj₁ ([] , refl , refl) =
+  intrp≗ (⇒L~⇒ {Γ = Γ₁} {Δ₀ = Δ₁} {Δ₁ = []} {Λ₀ = Δ} {Λ₁ = Λ}
+    (MIP≗.eq (mip≗ [] Δ₁ [] refl p))
+    (MIP≗.eq (mip≗ Γ₁ (B₀ ∷ Δ) Λ refl q)))
+... | inj₁ (y ∷ Ω , refl , refl) =
+  intrp≗ (⇒L~Γ {Γ₀ = Γ₁} {Γ₁ = Ω} (MIP≗.eq (mip≗ (Γ₁ ++ B₀ ∷ Ω) (x ∷ Δ) Λ refl q)) p)
+... | inj₂ (E , Ω , eq1 , eq2)
+  with cases++ Γ Γ₁ Ω Δ₁ eq1
+... | inj₁ (Ω' , refl , refl)
+  with cases++ (Ω' ++ Δ₁) Δ Λ₁ Λ (inj∷ eq2 .proj₂)
+mip≗ Γ (x ∷ Δ) Λ eq (⇒L {._} {Δ₁} {Λ₁} {A₀} {B₀} p q) | inj₂ (E , ._ , eq1 , refl) | inj₁ (Ω' , refl , refl) | inj₁ (Ω'' , refl , refl) =
+  intrp≗ (⇒L~ΓΛ {Γ₀ = Γ} {Γ₁ = E ∷ Ω'} {Λ₀ = Ω''} {Λ₁ = Λ}
+    (MIP≗.eq (mip≗ Γ (E ∷ Ω' ++ B₀ ∷ Ω'') Λ refl q)) p)
+... | inj₂ (Ω'' , refl , eq4)
+  with ++? Δ Ω' Ω'' Δ₁ eq4
+mip≗ Γ (x ∷ Δ) ._ eq (⇒L {._} {Δ₁} {Λ₁} {A₀} {B₀} p q) | inj₂ (E , ._ , eq1 , refl) | inj₁ (Ω' , refl , refl) | inj₂ (Ω'' , refl , eq4) | inj₁ (Ω''' , refl , refl) =
+  intrp≗ (⇒L~⊗ {Γ₀ = Γ} {Γ₁ = E ∷ Ω'} {Δ₀ = Ω'''} {Δ₁ = Ω''} {Λ = Λ₁}
     (MIP≗.eq (mip≗ [] Ω''' Ω'' refl p))
-    (MIP≗.eq (mip≗ Γ₁ (B ∷ Ω') Λ refl q)))
-mip≗ Γ ._ Λ refl (⇒L {Γ₁} {Δ₁} {._} {A} {B} p q)
-  | inj₁ (._ , refl , refl) | inj₁ (Ω' , refl , refl) | inj₂ (Ω'' , refl , refl) | inj₂ (E , Ω''' , refl , refl) =
-  intrp≗ (⇒L~ΓΛ {Γ₀ = Γ} {Γ₁ = E ∷ Ω'''} {Λ₀ = Ω'} {Λ₁ = Λ}
-    (MIP≗.eq (mip≗ Γ (E ∷ Ω''' ++ B ∷ Ω') Λ refl q)) p)
-mip≗ Γ Δ Λ eq (⇒L {Γ₁} {Δ₁} {Λ₁} {A} {B} p q)
-  | inj₁ (Ω , eq₁ , eq₂) | inj₂ (Ω' , refl , refl) with ++? Γ₁ Γ Ω Δ eq₂
-mip≗ Γ Δ ._ refl (⇒L {Γ₁} {._} {Λ₁} {A} {B} p q)
-  | inj₁ (Ω , eq₁ , refl) | inj₂ (Ω' , refl , refl) | inj₁ (Ω'' , refl , refl) =
-  intrp≗ (⇒L~⊗ {Γ₀ = Γ} {Γ₁ = Ω''} {Δ₀ = Ω} {Δ₁ = Ω'} {Λ = Λ₁}
-    (MIP≗.eq (mip≗ [] Ω Ω' refl p))
-    (MIP≗.eq (mip≗ Γ Ω'' (B ∷ Λ₁) refl q)))
-mip≗ Γ Δ ._ refl (⇒L {Γ₁} {._} {Λ₁} {A} {B} p q)
-  | inj₁ (Ω , eq₁ , refl) | inj₂ (Ω' , refl , refl) | inj₂ (E , Ω'' , refl , refl) =
-  intrp≗ (⇒L~Δ {Γ = E ∷ Ω''} {Γ₁ = Γ₁}
-    (MIP≗.eq (mip≗ (E ∷ Ω'') Δ Ω' refl p)) q)
-mip≗ Γ Δ Λ refl (⇒L {Γ₁} {Δ₁} {Λ₁} {A} {B} p q) | inj₂ (E , Ω , refl , refl) =
-  intrp≗ (⇒L~Λ {Γ = Γ} {Λ₀ = E ∷ Ω} {Λ₁ = Λ₁}
-    (MIP≗.eq (mip≗ Γ Δ (E ∷ Ω ++ B ∷ Λ₁) refl q)) p)
+    (MIP≗.eq (mip≗ Γ (E ∷ Ω') (B₀ ∷ Λ₁) refl q)))
+mip≗ Γ (x ∷ Δ) ._ eq (⇒L {._} {Δ₁} {Λ₁} {A₀} {B₀} p q) | inj₂ (E , ._ , eq1 , refl) | inj₁ (Ω' , refl , refl) | inj₂ (Ω'' , refl , eq4) | inj₂ (F , Ω''' , refl , refl) =
+  intrp≗ (⇒L~Λ {Γ = Γ} {Λ₀ = F ∷ Ω'''} {Λ₁ = Λ₁}
+    (MIP≗.eq (mip≗ Γ (E ∷ Δ) (F ∷ Ω''' ++ B₀ ∷ Λ₁) refl q)) p)
+mip≗ Γ (x ∷ Δ) Λ eq (⇒L {Γ₁} {Δ₁} {Λ₁} {A₀} {B₀} p q) | inj₂ (E , Ω , eq1 , eq2) | inj₂ (Ω' , refl , refl)
+  with cases++ Ω Δ Λ₁ Λ (inj∷ eq2 .proj₂)
+mip≗ .(Γ₁ ++ Ω') (x ∷ Δ) Λ eq (⇒L {Γ₁} {._} {Λ₁} {A₀} {B₀} p q) | inj₂ (E , Ω , eq1 , refl) | inj₂ (Ω' , refl , refl) | inj₁ (Ω'' , refl , refl) =
+  intrp≗ (⇒L~⇒ {Γ = Γ₁} {Δ₀ = Ω'} {Δ₁ = E ∷ Ω} {Λ₀ = Ω''} {Λ₁ = Λ}
+    (MIP≗.eq (mip≗ [] Ω' (E ∷ Ω) refl p))
+    (MIP≗.eq (mip≗ Γ₁ (B₀ ∷ Ω'') Λ refl q)))
+mip≗ .(Γ₁ ++ Ω') (x ∷ Δ) Λ eq (⇒L {Γ₁} {._} {Λ₁} {A₀} {B₀} p q) | inj₂ (E , Ω , eq1 , refl) | inj₂ (Ω' , refl , refl) | inj₂ (Ω'' , refl , refl) =
+  intrp≗ (⇒L~Δ {Γ = Ω'} {Γ₁ = Γ₁} (MIP≗.eq (mip≗ Ω' (E ∷ Δ) Ω'' refl p)) q)
 
-mip≗ Γ Δ Λ eq (⊗R {Γ₁} {Δ₁} p q) with ++? (Γ ++ Δ) Γ₁ Λ Δ₁ eq
-... | inj₁ (Ω , refl , eq₂) with ++? Γ₁ Γ Ω Δ eq₂
-mip≗ Γ Δ Λ refl (⊗R {._} {._} p q) | inj₁ (Ω , refl , refl) | inj₁ (Θ , refl , refl) =
-  intrp≗ (⊗R~ (MIP≗.eq (mip≗ Γ Θ [] refl p)) (MIP≗.eq (mip≗ [] Ω Λ refl q)))
-mip≗ Γ Δ Λ refl (⊗R {Γ₁} {._} p q) | inj₁ (Ω , refl , refl) | inj₂ (E , Θ , refl , refl) =
-  intrp≗ (⊗R~₂ {Γ = E ∷ Θ} {Ω = Γ₁} (MIP≗.eq (mip≗ (E ∷ Θ) Δ Λ refl q)) p)
-mip≗ Γ Δ Λ refl (⊗R {Γ₁} {Δ₁} p q) | inj₂ (E , Ω , refl , refl) =
-  intrp≗ (⊗R~₁ {Γ = Γ} {Λ = E ∷ Ω} (MIP≗.eq (mip≗ Γ Δ (E ∷ Ω) refl p)) q)
+-- ⊗R
+mip≗ Γ (x ∷ Δ) Λ eq (⊗R {Γ₁} {Δ₁} p q)
+  with ++? Γ Γ₁ (x ∷ Δ ++ Λ) Δ₁ eq
+... | inj₁ (Ω , refl , refl) =
+  intrp≗ (⊗R~₂ {Γ = Ω} {Ω = Γ₁} (MIP≗.eq (mip≗ Ω (x ∷ Δ) Λ refl q)) p)
+... | inj₂ (E , Ω , refl , eq2)
+  with ++? Ω Δ Δ₁ Λ (inj∷ eq2 .proj₂)
+mip≗ Γ (x ∷ Δ) Λ refl (⊗R {._} {Δ₁} p q) | inj₂ (E , Ω , refl , refl) | inj₁ (Ω' , refl , refl) =
+  intrp≗ (⊗R~₁ {Γ = Γ} {Λ = Ω'} (MIP≗.eq (mip≗ Γ (x ∷ Δ) Ω' refl p)) q)
+mip≗ Γ (x ∷ Δ) Λ refl (⊗R {._} {._} p q) | inj₂ (E , Ω , refl , refl) | inj₂ (E' , Ω' , refl , refl) =
+  intrp≗ (⊗R~ (MIP≗.eq (mip≗ Γ (x ∷ Ω) [] refl p)) (MIP≗.eq (mip≗ [] (E' ∷ Ω') Λ refl q)))
 
-mip≗ Γ Δ Λ eq (⊗L {Γ₁} {Δ₁} p) with cases++ Γ₁ Γ Δ₁ (Δ ++ Λ) (sym eq)
-mip≗ Γ Δ Λ refl (⊗L {Γ₁} {Δ₁} p) | inj₁ (Ω , refl , refl) =
-  intrp≗ (⊗L~Γ {Γ₀ = Γ₁} {Γ₁ = Ω} (MIP≗.eq (mip≗ (Γ₁ ++ _ ∷ _ ∷ Ω) Δ Λ refl p)))
-... | inj₂ (Ω , eq₁ , refl) with cases++ Ω Δ Δ₁ Λ eq₁
-mip≗ Γ Δ Λ refl (⊗L {._} {Δ₁} p) | inj₂ (Ω , refl , refl) | inj₁ (Θ , refl , refl) =
-  intrp≗ (⊗L~Δ {Δ₀ = Ω} {Δ₁ = Θ} (MIP≗.eq (mip≗ Γ (Ω ++ _ ∷ _ ∷ Θ) Λ refl p)))
-mip≗ Γ Δ Λ refl (⊗L {._} {Δ₁} p) | inj₂ (Ω , refl , refl) | inj₂ (Θ , refl , refl) =
-  intrp≗ (⊗L~Λ {Λ₀ = Θ} {Λ₁ = Δ₁} (MIP≗.eq (mip≗ Γ Δ (Θ ++ _ ∷ _ ∷ Δ₁) refl p)))
+-- ⊗L
+mip≗ Γ (x ∷ Δ) Λ eq (⊗L {Γ₁} {Δ₁} {A₀} {B₀} p)
+  with ++? Γ Γ₁ (x ∷ Δ ++ Λ) (A₀ ⊗ B₀ ∷ Δ₁) eq
+... | inj₁ ([] , refl , refl) =
+  intrp≗ (⊗L~Δ {Δ₀ = []} {Δ₁ = Δ} (MIP≗.eq (mip≗ Γ (A₀ ∷ B₀ ∷ Δ) Λ refl p)))
+... | inj₁ (y ∷ Ω , refl , refl) =
+  intrp≗ (⊗L~Γ {Γ₀ = Γ₁} {Γ₁ = Ω} (MIP≗.eq (mip≗ (Γ₁ ++ A₀ ∷ B₀ ∷ Ω) (x ∷ Δ) Λ refl p)))
+... | inj₂ (E , Ω , refl , eq2)
+  with cases++ Ω Δ Δ₁ Λ (inj∷ eq2 .proj₂)
+mip≗ Γ (x ∷ Δ) Λ refl (⊗L {._} {Δ₁} {A₀} {B₀} p) | inj₂ (E , Ω , refl , refl) | inj₁ (Ω' , refl , refl) =
+  intrp≗ (⊗L~Δ {Δ₀ = x ∷ Ω} {Δ₁ = Ω'} (MIP≗.eq (mip≗ Γ (x ∷ Ω ++ A₀ ∷ B₀ ∷ Ω') Λ refl p)))
+mip≗ Γ (x ∷ Δ) Λ refl (⊗L {._} {Δ₁} {A₀} {B₀} p) | inj₂ (E , Ω , refl , refl) | inj₂ (Ω' , refl , refl) =
+  intrp≗ (⊗L~Λ {Λ₀ = Ω'} {Λ₁ = Δ₁} (MIP≗.eq (mip≗ Γ (x ∷ Δ) (Ω' ++ A₀ ∷ B₀ ∷ Δ₁) refl p)))
 
-mip≗ Γ Δ Λ eq (⇒L⇒R {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {A} {B} {A'} {B'} {f = f} {g = g}) =
-  mip≗⇒L⇒R Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {A'} {B'} {f} {g} eq
-mip≗ Γ Δ Λ eq (⊗L⇒R {Γ = Γ₁} {Δ = Δ₁} {A} {B} {A'} {B'} {f = f}) =
-  mip≗⊗L⇒R Γ Δ Λ {Γ₁} {Δ₁} {A} {B} {A'} {B'} {f} eq
-mip≗ Γ Δ Λ eq (IL⇒R {Γ = Γ₁} {Δ₁} {A} {B} {f}) = 
-  mip≗IL⇒R Γ Δ Λ {Γ₁} {Δ₁} {A} {B} {f} eq
-mip≗ Γ Δ Λ eq (⇒L⊗R₁ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {Ω = Ω₁} {A} {B} {A'} {B'} {f = f} {g = g} {h = h}) =
-  mip≗⇒L⊗R₁ Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {Ω₁} {A} {B} {A'} {B'} {f} {g} {h} eq
-mip≗ Γ Δ Λ eq (⇒L⊗R₂ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {Ω = Ω₁} {A} {B} {A'} {B'} {f = f} {g = g} {h = h}) =
-  mip≗⇒L⊗R₂ Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {Ω₁} {A} {B} {A'} {B'} {f} {g} {h} eq
-mip≗ Γ Δ Λ eq (⊗L⊗R₁ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {A} {B} {A'} {B'} {f = f} {g = g}) =
-  mip≗⊗L⊗R₁ Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {A'} {B'} {f} {g} eq
-mip≗ Γ Δ Λ eq (⊗L⊗R₂ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {A} {B} {A'} {B'} {f = f} {g = g}) =
-  mip≗⊗L⊗R₂ Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {A'} {B'} {f} {g} eq
-mip≗ Γ Δ Λ eq (IL⊗R₁ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {f = f} {g = g}) =
-  mip≗IL⊗R₁ Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {f = f} {g = g} eq
-mip≗ Γ Δ Λ eq (IL⊗R₂ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {f = f} {g = g}) =
-  mip≗IL⊗R₂ Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {f = f} {g = g} eq
-mip≗ Γ Δ Λ eq (⊗L⊗L {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {A} {B} {A'} {B'} {C} {f = f}) =
-  mip≗⊗L⊗L Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {A'} {B'} {C} {f} eq
-mip≗ Γ Δ Λ eq (ILIL {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {C} {f = f}) =
-  mip≗ILIL Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {C} {f} eq
-mip≗ Γ Δ Λ eq (IL⊗L-comm₁ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {A} {B} {C} {f = f}) =
-  mip≗IL⊗L-comm₁ Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {C} {f} eq
-mip≗ Γ Δ Λ eq (IL⊗L-comm₂ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {A} {B} {C} {f = f}) =
-  mip≗IL⊗L-comm₂ Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {C} {f} eq
-mip≗ Γ Δ Λ eq (⊗L⇒L-assoc {Γ = Γ₁} {Δ₀ = Δ₀} {Δ₁ = Δ₁} {Λ = Λ₁} {A} {B} {A'} {B'} {C} {f = f} {g = g}) =
-  mip≗⊗L⇒L-assoc Γ Δ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {A} {B} {A'} {B'} {C} {f} {g} eq
-mip≗ Γ Δ Λ eq (⊗L⇒L-comm₁ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {Ω = Ω₁} {A} {B} {A'} {B'} {C} {f = f} {g = g}) =
-  mip≗⊗L⇒L-comm₁ Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {Ω₁} {A} {B} {A'} {B'} {C} {f} {g} eq
-mip≗ Γ Δ Λ eq (⊗L⇒L-comm₂ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {Ω = Ω₁} {A} {B} {A'} {B'} {C} {f = f} {g = g}) =
-  mip≗⊗L⇒L-comm₂ Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {Ω₁} {A} {B} {A'} {B'} {C} {f} {g} eq
-mip≗ Γ Δ Λ eq (IL⇒L-assoc {Γ = Γ₁} {Δ₀ = Δ₀} {Δ₁ = Δ₁} {Λ = Λ₁} {A} {B} {C} {f = f} {g = g}) =
-  mip≗IL⇒L-assoc Γ Δ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {A} {B} {C} {f} {g} eq
-mip≗ Γ Δ Λ eq (IL⇒L-comm₁ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {Ω = Ω₁} {A} {B} {C} {f = f} {g = g}) =
-  mip≗IL⇒L-comm₁ Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {Ω₁} {A} {B} {C} {f} {g} eq
-mip≗ Γ Δ Λ eq (IL⇒L-comm₂ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {Ω = Ω₁} {A} {B} {C} {f = f} {g = g}) =
-  mip≗IL⇒L-comm₂ Γ Δ Λ {Γ₁} {Δ₁} {Λ₁} {Ω₁} {A} {B} {C} {f} {g} eq
-mip≗ Γ Δ Λ eq (⇒L⇒L-assoc {Γ₀ = Γ₀} {Γ₁ = Γ₁} {Δ = Δ₀} {Λ₀ = Λ₀} {Λ₁ = Λ₁} {A} {B} {A'} {B'} {C} {f = f} {g = g} {h = h}) =
-  mip≗⇒L⇒L-assoc Γ Δ Λ {Γ₀} {Γ₁} {Δ₀} {Λ₀} {Λ₁} {A} {B} {A'} {B'} {C} {f} {g} {h} eq
-mip≗ Γ Δ Λ eq (⇒L⇒L-comm {Γ = Γ₁} {Δ₀ = Δ₀} {Δ₁ = Δ₁} {Λ = Λ₁} {Ξ = Ξ} {A} {B} {A'} {B'} {C} {f = f} {f' = f'} {g = g}) =
-  mip≗⇒L⇒L-comm Γ Δ Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} {C} {f} {f'} {g} eq
+-- permutative conversions
+mip≗ Γ (E ∷ Δ) Λ eq (⇒L⇒R {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {A} {B} {A'} {B'} {f = f} {g = g}) =
+  mip≗⇒L⇒R Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {A'} {B'} {f} {g} eq
+mip≗ Γ (E ∷ Δ) Λ eq (⊗L⇒R {Γ = Γ₁} {Δ = Δ₁} {A} {B} {A'} {B'} {f = f}) =
+  mip≗⊗L⇒R Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {A} {B} {A'} {B'} {f} eq
+mip≗ Γ (E ∷ Δ) Λ eq (IL⇒R {Γ = Γ₁} {Δ₁} {A} {B} {f}) =
+  mip≗IL⇒R Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {A} {B} {f} eq
+mip≗ Γ (E ∷ Δ) Λ eq (⇒L⊗R₁ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {Ω = Ω₁} {A} {B} {A'} {B'} {f = f} {g = g} {h = h}) =
+  mip≗⇒L⊗R₁ Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {Ω₁} {A} {B} {A'} {B'} {f} {g} {h} eq
+mip≗ Γ (E ∷ Δ) Λ eq (⇒L⊗R₂ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {Ω = Ω₁} {A} {B} {A'} {B'} {f = f} {g = g} {h = h}) =
+  mip≗⇒L⊗R₂ Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {Ω₁} {A} {B} {A'} {B'} {f} {g} {h} eq
+mip≗ Γ (E ∷ Δ) Λ eq (⊗L⊗R₁ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {A} {B} {A'} {B'} {f = f} {g = g}) =
+  mip≗⊗L⊗R₁ Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {A'} {B'} {f} {g} eq
+mip≗ Γ (E ∷ Δ) Λ eq (⊗L⊗R₂ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {A} {B} {A'} {B'} {f = f} {g = g}) =
+  mip≗⊗L⊗R₂ Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {A'} {B'} {f} {g} eq
+mip≗ Γ (E ∷ Δ) Λ eq (IL⊗R₁ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {f = f} {g = g}) =
+  mip≗IL⊗R₁ Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {f = f} {g = g} eq
+mip≗ Γ (E ∷ Δ) Λ eq (IL⊗R₂ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {f = f} {g = g}) =
+  mip≗IL⊗R₂ Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {f = f} {g = g} eq
+mip≗ Γ (E ∷ Δ) Λ eq (⊗L⊗L {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {A} {B} {A'} {B'} {C} {f = f}) =
+  mip≗⊗L⊗L Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {A'} {B'} {C} {f} eq
+mip≗ Γ (E ∷ Δ) Λ eq (ILIL {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {C} {f = f}) =
+  mip≗ILIL Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {C} {f} eq
+mip≗ Γ (E ∷ Δ) Λ eq (IL⊗L-comm₁ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {A} {B} {C} {f = f}) =
+  mip≗IL⊗L-comm₁ Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {C} {f} eq
+mip≗ Γ (E ∷ Δ) Λ eq (IL⊗L-comm₂ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {A} {B} {C} {f = f}) =
+  mip≗IL⊗L-comm₂ Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {C} {f} eq
+mip≗ Γ (E ∷ Δ) Λ eq (⊗L⇒L-assoc {Γ = Γ₁} {Δ₀ = Δ₀} {Δ₁ = Δ₁} {Λ = Λ₁} {A} {B} {A'} {B'} {C} {f = f} {g = g}) =
+  mip≗⊗L⇒L-assoc Γ (E ∷ Δ) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {A} {B} {A'} {B'} {C} {f} {g} eq
+mip≗ Γ (E ∷ Δ) Λ eq (⊗L⇒L-comm₁ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {Ω = Ω₁} {A} {B} {A'} {B'} {C} {f = f} {g = g}) =
+  mip≗⊗L⇒L-comm₁ Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {Ω₁} {A} {B} {A'} {B'} {C} {f} {g} eq
+mip≗ Γ (E ∷ Δ) Λ eq (⊗L⇒L-comm₂ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {Ω = Ω₁} {A} {B} {A'} {B'} {C} {f = f} {g = g}) =
+  mip≗⊗L⇒L-comm₂ Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {Ω₁} {A} {B} {A'} {B'} {C} {f} {g} eq
+mip≗ Γ (E ∷ Δ) Λ eq (IL⇒L-assoc {Γ = Γ₁} {Δ₀ = Δ₀} {Δ₁ = Δ₁} {Λ = Λ₁} {A} {B} {C} {f = f} {g = g}) =
+  mip≗IL⇒L-assoc Γ (E ∷ Δ) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {A} {B} {C} {f} {g} eq
+mip≗ Γ (E ∷ Δ) Λ eq (IL⇒L-comm₁ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {Ω = Ω₁} {A} {B} {C} {f = f} {g = g}) =
+  mip≗IL⇒L-comm₁ Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {Ω₁} {A} {B} {C} {f} {g} eq
+mip≗ Γ (E ∷ Δ) Λ eq (IL⇒L-comm₂ {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {Ω = Ω₁} {A} {B} {C} {f = f} {g = g}) =
+  mip≗IL⇒L-comm₂ Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {Ω₁} {A} {B} {C} {f} {g} eq
+mip≗ Γ (E ∷ Δ) Λ eq (⇒L⇒L-assoc {Γ₀ = Γ₀} {Γ₁ = Γ₁} {Δ = Δ₀} {Λ₀ = Λ₀} {Λ₁ = Λ₁} {A} {B} {A'} {B'} {C} {f = f} {g = g} {h = h}) =
+  mip≗⇒L⇒L-assoc Γ (E ∷ Δ) Λ {Γ₀} {Γ₁} {Δ₀} {Λ₀} {Λ₁} {A} {B} {A'} {B'} {C} {f} {g} {h} eq
+mip≗ Γ (E ∷ Δ) Λ eq (⇒L⇒L-comm {Γ = Γ₁} {Δ₀ = Δ₀} {Δ₁ = Δ₁} {Λ = Λ₁} {Ξ = Ξ} {A} {B} {A'} {B'} {C} {f = f} {f' = f'} {g = g}) =
+  mip≗⇒L⇒L-comm Γ (E ∷ Δ) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} {C} {f} {f'} {g} eq
+ 

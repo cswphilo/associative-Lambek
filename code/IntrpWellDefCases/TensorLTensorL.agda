@@ -11,4 +11,4 @@ mip≗⊗L⊗L : ∀ Γ Δ Λ
   → MIP≗ Γ Δ Λ C
       (mip Γ Δ Λ (⊗L {Γ₁ ++ A ⊗ B ∷ Δ₁} (⊗L f)) eq)
       (mip Γ Δ Λ (⊗L (⊗L {Γ₁ ++ A ∷ B ∷ Δ₁} f)) eq)
-mip≗⊗L⊗L Γ Δ Λ eq = {!   !}
+mip≗⊗L⊗L Γ Δ Λ = {!!}

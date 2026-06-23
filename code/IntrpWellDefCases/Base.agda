@@ -25,3 +25,9 @@ record MIP≗ (Γ Δ Λ : Cxt) (C : Fma) (n n' : MIP Γ Δ Λ C) : Set where
   constructor intrp≗
   field
     eq : n ~ n'
+
+mip[]≗ : ∀ Γ Λ {Ω : Cxt} {C : Fma} {f f' : Ω ⊢ C}
+  → (eq : Ω ≡ Γ ++ Λ)
+  → f ≗ f'
+  → MIP≗ Γ [] Λ C (mip Γ [] Λ f eq) (mip Γ [] Λ f' eq)
+mip[]≗ Γ Λ refl p = intrp≗ (g~ (IL p))

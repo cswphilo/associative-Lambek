@@ -11,4 +11,4 @@ mip≗IL⇒L-comm₁ : ∀ Γ Δ Λ
   → MIP≗ Γ Δ Λ C
       (mip Γ Δ Λ (IL {Γ₁} {Λ₁ ++ Δ₁ ++ A ⇒ B ∷ Ω₁} (⇒L {Γ₁ ++ Λ₁} f g)) eq)
       (mip Γ Δ Λ (⇒L {Γ₁ ++ I ∷ Λ₁} f (IL {Γ₁} {Λ₁ ++ B ∷ Ω₁} g)) eq)
-mip≗IL⇒L-comm₁ Γ Δ Λ eq = {!   !}
+mip≗IL⇒L-comm₁ Γ Δ Λ = {!!}

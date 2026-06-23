@@ -11,4 +11,4 @@ mip≗IL⊗R₁ : ∀ Γ Δ Λ
   → MIP≗ Γ Δ Λ (A' ⊗ B')
       (mip Γ Δ Λ (IL {Γ₁} {Δ₁ ++ Λ₁} (⊗R f g)) eq)
       (mip Γ Δ Λ (⊗R (IL {Γ₁} {Δ₁} f) g) eq)
-mip≗IL⊗R₁ Γ Δ Λ eq = {!   !}
+mip≗IL⊗R₁ Γ Δ Λ = {!!}
