@@ -4,7 +4,7 @@ module IntrpWellDefCases.Base where
 
 open import Data.Sum using (inj₁; inj₂) public
 open import Data.List using (List; []; _∷_; _++_) public
-open import Relation.Binary.PropositionalEquality using (_≡_; refl; sym; cong; cong₂; subst) public
+open import Relation.Binary.PropositionalEquality using (_≡_; refl; sym; trans; cong; cong₂; subst) public
 open import Data.Product public
 
 open import SeqCalc public
@@ -48,6 +48,19 @@ mipIL~Δ Γ [] Δ₁ Λ
 mipIL~Δ Γ (A ∷ Δ₀) Δ₁ Λ
   rewrite ++?-inj₂ Γ Δ₀ (I ∷ Δ₁ ++ Λ) A |
           cases++-inj₁ Δ₀ Δ₁ Λ I = refl
+
+mip⇒R~ : ∀ Γ Δ Λ {A B : Fma} {f : A ∷ Γ ++ Δ ++ Λ ⊢ B}
+  → mip Γ Δ Λ (⇒R f) refl ~ ⇒R~' (mip (A ∷ Γ) Δ Λ f refl)
+mip⇒R~ Γ [] Λ = g~ IL⇒R
+mip⇒R~ Γ (E ∷ Δ) Λ = refl
+
+mip⊗R₂~ : ∀ Γ₁ Δ₁ Δ Λ {A B : Fma}
+  {f : Γ₁ ⊢ A} {g : Δ₁ ++ Δ ++ Λ ⊢ B}
+  → mip (Γ₁ ++ Δ₁) Δ Λ (⊗R f g) refl
+      ~ ⊗R~₂' (mip Δ₁ Δ Λ g refl) f
+mip⊗R₂~ Γ₁ Δ₁ [] Λ = g~ IL⊗R₂
+mip⊗R₂~ Γ₁ Δ₁ (E ∷ Δ) Λ
+  rewrite ++?-inj₁ Δ₁ Γ₁ (E ∷ Δ ++ Λ) = refl
 
 mip⇒L~⇒ : ∀ Γ₁ Δ₀ Δ₁ Λ₀ Λ
   {A B C : Fma}
@@ -101,3 +114,11 @@ mip⊗L~Δ Γ [] Δ₁ Λ {A'} {B'}
 mip⊗L~Δ Γ (E ∷ Δ₀) Δ₁ Λ {A'} {B'}
   rewrite ++?-inj₂ Γ Δ₀ (A' ⊗ B' ∷ Δ₁ ++ Λ) E |
           cases++-inj₁ Δ₀ Δ₁ Λ (A' ⊗ B') = refl
+
+mip⊗L~Γ : ∀ Γ₀ Γ₁ Δ Λ {A' B' C}
+  {f : Γ₀ ++ A' ∷ B' ∷ Γ₁ ++ Δ ++ Λ ⊢ C}
+  → mip (Γ₀ ++ A' ⊗ B' ∷ Γ₁) Δ Λ (⊗L {Γ₀} {Γ₁ ++ Δ ++ Λ} f) refl
+      ~ ⊗L~Γ' {Γ₀} {Γ₁} {Δ} {Λ} (mip (Γ₀ ++ A' ∷ B' ∷ Γ₁) Δ Λ f refl)
+mip⊗L~Γ Γ₀ Γ₁ [] Λ = g~ IL⊗L-comm₂
+mip⊗L~Γ Γ₀ Γ₁ (E ∷ Δ) Λ {A'} {B'}
+  rewrite ++?-inj₁ (A' ⊗ B' ∷ Γ₁) Γ₀ (E ∷ Δ ++ Λ) = refl
