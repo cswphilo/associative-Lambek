@@ -15,7 +15,27 @@ open import Utilities
 open import Mip
 open import IntrpTriples
 open import IntrpWellDefCases.Base using (MIP≗; intrp≗)
-open import IntrpWellDefCases
+open import IntrpWellDefCases.ImpLImpR
+open import IntrpWellDefCases.TensorLImpR
+open import IntrpWellDefCases.ILImpR
+open import IntrpWellDefCases.ImpLTensorR1
+open import IntrpWellDefCases.ImpLTensorR2
+open import IntrpWellDefCases.TensorLTensorR1
+open import IntrpWellDefCases.TensorLTensorR2
+open import IntrpWellDefCases.ILTensorR1
+open import IntrpWellDefCases.ILTensorR2
+open import IntrpWellDefCases.TensorLTensorL
+open import IntrpWellDefCases.ILIL
+open import IntrpWellDefCases.ILTensorLComm1
+open import IntrpWellDefCases.ILTensorLComm2
+open import IntrpWellDefCases.TensorLImpLAssoc
+open import IntrpWellDefCases.TensorLImpLComm1
+open import IntrpWellDefCases.TensorLImpLComm2
+open import IntrpWellDefCases.ILImpLAssoc
+open import IntrpWellDefCases.ILImpLComm1
+open import IntrpWellDefCases.ILImpLComm2
+open import IntrpWellDefCases.ImpLImpLAssoc
+open import IntrpWellDefCases.ImpLImpLComm
 {-
 Maehara interpolation procedure is well-defined wrt. ≗
 -}

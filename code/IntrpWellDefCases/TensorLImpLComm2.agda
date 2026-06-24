@@ -3,8 +3,6 @@
 module IntrpWellDefCases.TensorLImpLComm2 where
 
 open import IntrpWellDefCases.Base
-open import IntrpWellDefCases.ILImpLAssoc using (mip⇒L~⇒; mip⇒L~Δ; mip⇒L~ΔΓ)
-open import IntrpWellDefCases.TensorLImpLAssoc using (mip⊗L~Δ; mip⊗L~Λ)
 
 mip≗⊗L⇒L-comm₂ : ∀ Γ Δ Λ
   {Γ₁ Δ₁ Λ₁ Ω₁ : Cxt} {A B A' B' C : Fma}

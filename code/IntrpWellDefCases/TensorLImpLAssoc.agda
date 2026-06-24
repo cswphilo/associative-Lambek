@@ -3,26 +3,6 @@
 module IntrpWellDefCases.TensorLImpLAssoc where
 
 open import IntrpWellDefCases.Base
-open import IntrpWellDefCases.ILImpLAssoc using (mip⇒L~⇒; mip⇒L~Δ; mip⇒L~ΔΓ)
-
-mip⊗L~Λ : ∀ Γ Δ Λ₀ Λ₁ {A' B' C}
-  {f : Γ ++ Δ ++ Λ₀ ++ A' ∷ B' ∷ Λ₁ ⊢ C}
-  → mip Γ Δ (Λ₀ ++ A' ⊗ B' ∷ Λ₁) (⊗L {Γ ++ Δ ++ Λ₀} f) refl
-      ~ ⊗L~Λ' {Γ} {Δ} {Λ₀} {Λ₁} (mip Γ Δ (Λ₀ ++ A' ∷ B' ∷ Λ₁) f refl)
-mip⊗L~Λ Γ [] Λ₀ Λ₁ = g~ IL⊗L-comm₁
-mip⊗L~Λ Γ (E ∷ Δ) Λ₀ Λ₁ {A'} {B'}
-  rewrite ++?-inj₂ Γ (Δ ++ Λ₀) (A' ⊗ B' ∷ Λ₁) E |
-          cases++-inj₂ Λ₀ Δ Λ₁ (A' ⊗ B') = refl
-
-mip⊗L~Δ : ∀ Γ Δ₀ Δ₁ Λ {A' B' C}
-  {f : Γ ++ Δ₀ ++ A' ∷ B' ∷ Δ₁ ++ Λ ⊢ C}
-  → mip Γ (Δ₀ ++ A' ⊗ B' ∷ Δ₁) Λ (⊗L {Γ ++ Δ₀} f) refl
-      ~ ⊗L~Δ' {Γ} {Δ₀} {Δ₁} {Λ} (mip Γ (Δ₀ ++ A' ∷ B' ∷ Δ₁) Λ f refl)
-mip⊗L~Δ Γ [] Δ₁ Λ {A'} {B'}
-  rewrite ++?-inj₁ [] Γ (A' ⊗ B' ∷ Δ₁ ++ Λ) = refl
-mip⊗L~Δ Γ (E ∷ Δ₀) Δ₁ Λ {A'} {B'}
-  rewrite ++?-inj₂ Γ Δ₀ (A' ⊗ B' ∷ Δ₁ ++ Λ) E |
-          cases++-inj₁ Δ₀ Δ₁ Λ (A' ⊗ B') = refl
 
 mip≗⊗L⇒L-assoc : ∀ Γ Δ Λ
   {Γ₁ Δ₀ Δ₁ Λ₁ : Cxt} {A B A' B' C : Fma}

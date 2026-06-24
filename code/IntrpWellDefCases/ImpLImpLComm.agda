@@ -3,7 +3,6 @@
 module IntrpWellDefCases.ImpLImpLComm where
 
 open import IntrpWellDefCases.Base
-open import IntrpWellDefCases.ILImpLAssoc using (mip⇒L~⇒; mip⇒L~Δ; mip⇒L~ΔΓ)
 open import Data.Sum
 
 mip⇒L~Γ : ∀ Γ₀ Γ₁ Δ Λ
