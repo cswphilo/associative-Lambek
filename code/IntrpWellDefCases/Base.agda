@@ -9,6 +9,7 @@ open import Data.Product public
 
 open import SeqCalc public
 open import Cut public
+open import CutProperties public
 open import Utilities public
 open import Mip public
 open import IntrpTriples public

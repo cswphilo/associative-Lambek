@@ -8,7 +8,6 @@ open import Data.Unit
 open import Data.Sum
 open import Data.Empty
 open import Data.Product
--- open import Fma
 open import SeqCalc
 open import Cut
 open import Utilities
@@ -36,10 +35,8 @@ open import IntrpWellDefCases.ILImpLComm1
 open import IntrpWellDefCases.ILImpLComm2
 open import IntrpWellDefCases.ImpLImpLAssoc
 open import IntrpWellDefCases.ImpLImpLComm
-{-
-Maehara interpolation procedure is well-defined wrt. ≗
--}
 
+-- Maehara interpolation procedure is well-defined wrt. ≗.
 mip≗ : ∀ Γ Δ Λ {Ω} {C}
   → {f f' : Ω ⊢ C}
   → (eq : Ω ≡ Γ ++ Δ ++ Λ)
@@ -52,7 +49,9 @@ mip≗ Γ (x ∷ Δ) Λ eq (~ p) = intrp≗ (~-sym (MIP≗.eq (mip≗ Γ (x ∷ 
 mip≗ Γ (x ∷ Δ) Λ eq (p ∘ p') =
   intrp≗ (~-trans (MIP≗.eq (mip≗ Γ (x ∷ Δ) Λ eq p)) (MIP≗.eq (mip≗ Γ (x ∷ Δ) Λ eq p')))
 
--- IL
+-- Structural rules.
+
+-- IL congruence.
 mip≗ Γ (x ∷ Δ) Λ eq (IL {Γ₁} {Δ₁} p)
   with ++? Γ Γ₁ (x ∷ Δ ++ Λ) (I ∷ Δ₁) eq
 ... | inj₁ ([] , refl , refl) =
@@ -66,11 +65,11 @@ mip≗ Γ (x ∷ Δ) Λ refl (IL {._} {Δ₁} p) | inj₂ (E , Ω , refl , refl)
 mip≗ Γ (x ∷ Δ) Λ refl (IL {._} {Δ₁} p) | inj₂ (E , Ω , refl , refl) | inj₂ (Ω' , refl , refl) =
   intrp≗ (IL~Λ {Λ₀ = Ω'} {Λ₁ = Δ₁} (MIP≗.eq (mip≗ Γ (x ∷ Δ) (Ω' ++ Δ₁) refl p)))
 
--- ⇒R
+-- ⇒R congruence.
 mip≗ Γ (x ∷ Δ) Λ refl (⇒R p) =
   intrp≗ (⇒R~ (MIP≗.eq (mip≗ (_ ∷ Γ) (x ∷ Δ) Λ refl p)))
 
--- ⇒L
+-- ⇒L congruence.
 mip≗ Γ (x ∷ Δ) Λ eq (⇒L {Γ₁} {Δ₁} {Λ₁} {A₀} {B₀} p q)
   with ++? Γ (Γ₁ ++ Δ₁) (x ∷ Δ ++ Λ) (A₀ ⇒ B₀ ∷ Λ₁) eq
 ... | inj₁ ([] , refl , refl) =
@@ -104,7 +103,7 @@ mip≗ .(Γ₁ ++ Ω') (x ∷ Δ) Λ eq (⇒L {Γ₁} {._} {Λ₁} {A₀} {B₀}
 mip≗ .(Γ₁ ++ Ω') (x ∷ Δ) Λ eq (⇒L {Γ₁} {._} {Λ₁} {A₀} {B₀} p q) | inj₂ (E , Ω , eq1 , refl) | inj₂ (Ω' , refl , refl) | inj₂ (Ω'' , refl , refl) =
   intrp≗ (⇒L~Δ {Γ = Ω'} {Γ₁ = Γ₁} (MIP≗.eq (mip≗ Ω' (E ∷ Δ) Ω'' refl p)) q)
 
--- ⊗R
+-- ⊗R congruence.
 mip≗ Γ (x ∷ Δ) Λ eq (⊗R {Γ₁} {Δ₁} p q)
   with ++? Γ Γ₁ (x ∷ Δ ++ Λ) Δ₁ eq
 ... | inj₁ (Ω , refl , refl) =
@@ -116,7 +115,7 @@ mip≗ Γ (x ∷ Δ) Λ refl (⊗R {._} {Δ₁} p q) | inj₂ (E , Ω , refl , r
 mip≗ Γ (x ∷ Δ) Λ refl (⊗R {._} {._} p q) | inj₂ (E , Ω , refl , refl) | inj₂ (E' , Ω' , refl , refl) =
   intrp≗ (⊗R~ (MIP≗.eq (mip≗ Γ (x ∷ Ω) [] refl p)) (MIP≗.eq (mip≗ [] (E' ∷ Ω') Λ refl q)))
 
--- ⊗L
+-- ⊗L congruence.
 mip≗ Γ (x ∷ Δ) Λ eq (⊗L {Γ₁} {Δ₁} {A₀} {B₀} p)
   with ++? Γ Γ₁ (x ∷ Δ ++ Λ) (A₀ ⊗ B₀ ∷ Δ₁) eq
 ... | inj₁ ([] , refl , refl) =
@@ -130,7 +129,8 @@ mip≗ Γ (x ∷ Δ) Λ refl (⊗L {._} {Δ₁} {A₀} {B₀} p) | inj₂ (E , �
 mip≗ Γ (x ∷ Δ) Λ refl (⊗L {._} {Δ₁} {A₀} {B₀} p) | inj₂ (E , Ω , refl , refl) | inj₂ (Ω' , refl , refl) =
   intrp≗ (⊗L~Λ {Λ₀ = Ω'} {Λ₁ = Δ₁} (MIP≗.eq (mip≗ Γ (x ∷ Δ) (Ω' ++ A₀ ∷ B₀ ∷ Δ₁) refl p)))
 
--- permutative conversions
+-- Permutative conversions.
+
 mip≗ Γ (E ∷ Δ) Λ eq (⇒L⇒R {Γ = Γ₁} {Δ = Δ₁} {Λ = Λ₁} {A} {B} {A'} {B'} {f = f} {g = g}) =
   mip≗⇒L⇒R Γ (E ∷ Δ) Λ {Γ₁} {Δ₁} {Λ₁} {A} {B} {A'} {B'} {f} {g} eq
 mip≗ Γ (E ∷ Δ) Λ eq (⊗L⇒R {Γ = Γ₁} {Δ = Δ₁} {A} {B} {A'} {B'} {f = f}) =

@@ -11,6 +11,7 @@ open import Data.Product
 -- open import Fma
 open import SeqCalc
 open import Cut
+open import CutProperties
 open import Utilities
 open import Mip
 
@@ -68,18 +69,6 @@ h~ : ∀ {Γ Δ Λ C D} {g : Γ ++ D ∷ Λ ⊢ C} {h h' : Δ ⊢ D}
   → intrp D g h ~ intrp D g h'
 h~ {Γ} {g = g} {h = h} p = ↝∷ (ax , (~ cutaxA-left Γ g refl) , (cutaxA-right h ∘ p)) refl
 
-cutIL-cases++₁ : (Γ₀ Γ₁ Λ : Cxt) → ∀ {Δ C D}
-  → {f : Δ ⊢ D} {g : Γ₀ ++ Γ₁ ++ D ∷ Λ ⊢ C}
-  → IL {Γ₀} {Γ₁ ++ Δ ++ Λ} (cut (Γ₀ ++ Γ₁) f g refl) ≡ cut (Γ₀ ++ I ∷ Γ₁) f (IL {Γ₀} {Γ₁ ++ D ∷ Λ} g) refl
-cutIL-cases++₁ Γ₀ Γ₁ Λ {D = D}
-  rewrite cases++-inj₂ (I ∷ Γ₁) Γ₀ Λ D = refl
-
-cutIL-cases++₂ : (Γ Λ₀ Λ₁ : Cxt) → ∀ {Δ C D}
-  → {f : Δ ⊢ D} {g : Γ ++ D ∷ Λ₀ ++ Λ₁ ⊢ C}
-  → IL {Γ ++ Δ ++ Λ₀} {Λ₁} (cut Γ f g refl) ≡ cut Γ f (IL {Γ ++ D ∷ Λ₀} {Λ₁} g) refl
-cutIL-cases++₂ Γ Λ₀ Λ₁ {D = D}
-  rewrite cases++-inj₁ Γ Λ₀ (I ∷ Λ₁) D = refl
-
 IL~Γ' : {Γ₀ Γ₁ Δ Λ : Cxt} {C : Fma}
   → (n : MIP (Γ₀ ++ Γ₁) Δ Λ C)
   → MIP (Γ₀ ++ I ∷ Γ₁) Δ Λ C
@@ -124,17 +113,6 @@ IL~Λ {Γ} {Λ₀ = Λ₀} {Λ₁} (↝∷ (t , eqg , eqh) eq) =
   ↝∷ (t , (IL {Γ ++ _ ∷ Λ₀} {Λ₁} eqg ∘ ≡to≗ (cutIL-cases++₂ Γ Λ₀ Λ₁)) , eqh) (IL~Λ eq)
 IL~Λ {Γ} {Λ₀ = Λ₀} {Λ₁} (↜∷ (t , eqg , eqh) eq) =
   ↜∷ (t , (IL {Γ ++ _ ∷ Λ₀} {Λ₁} eqg ∘ ≡to≗ (cutIL-cases++₂ Γ Λ₀ Λ₁)) , eqh) (IL~Λ eq)
-
-cut⊗L-cases++₁ : (Γ₀ Γ₁ Λ : Cxt) → ∀ {Δ A B C D}
-  → {f : Δ ⊢ D} {g : Γ₀ ++ A ∷ B ∷ Γ₁ ++ D ∷ Λ ⊢ C}
-  → ⊗L (cut (Γ₀ ++ A ∷ B ∷ Γ₁) f g refl) ≡ cut (Γ₀ ++ A ⊗ B ∷ Γ₁) f (⊗L g) refl
-cut⊗L-cases++₁ Γ₀ Γ₁ Λ {A = A} {B} {D = D} 
-  rewrite cases++-inj₂ (A ⊗ B ∷ Γ₁) Γ₀ Λ D = refl
-cut⊗L-cases++₂ : (Γ Λ₀ Λ₁ : Cxt) → ∀ {Δ A B C D}
-  → {f : Δ ⊢ D} {g : Γ ++ D ∷ Λ₀ ++ A ∷ B ∷ Λ₁ ⊢ C}
-  → ⊗L {Γ ++ Δ ++ Λ₀} (cut Γ f g refl) ≡ cut Γ f (⊗L {Γ ++ D ∷ Λ₀} g) refl
-cut⊗L-cases++₂ Γ Λ₀ Λ₁ {A = A} {B} {D = D} 
-  rewrite cases++-inj₁ Γ Λ₀ (A ⊗ B ∷ Λ₁) D = refl
 
 ⊗L~Γ' : {Γ₀ Γ₁ Δ Λ : Cxt} {A B C : Fma}   
   → (n : MIP (Γ₀ ++ A ∷ B ∷ Γ₁) Δ Λ C)
@@ -189,21 +167,6 @@ cut⊗L-cases++₂ Γ Λ₀ Λ₁ {A = A} {B} {D = D}
   → (n : MIP (A ∷ Γ) Δ Λ C)
   → MIP Γ Δ Λ (A ⇒ C)
 ⇒R~' (intrp D g h) = intrp D (⇒R g) h
-
-cut⊗Rcases++₁ : (Γ Λ Ω : Cxt) → ∀ {Δ A B D}
-  → {f : Δ ⊢ D} {g : Γ ++ D ∷ Λ ⊢ A} {h : Ω ⊢ B}
-  → ⊗R (cut Γ f g refl) h ≡ cut Γ f (⊗R g h) refl
-cut⊗Rcases++₁ Γ Λ Ω {D = D} rewrite cases++-inj₁ Γ Λ Ω D = refl
-cut⊗Rcases++₂ : (Γ Λ Ω : Cxt) → ∀ {Δ A B D}
-  → {f : Δ ⊢ D} {g : Ω ⊢ A} {h : Γ ++ D ∷ Λ ⊢ B} 
-  → ⊗R g (cut Γ f h refl) ≡ cut (Ω ++ Γ) f (⊗R g h) refl
-cut⊗Rcases++₂ Γ Λ Ω {D = D} rewrite cases++-inj₂ Γ Ω Λ D = refl
-
-cut⊗R⊗Lcases++ : (Γ Λ : Cxt) → ∀ {Δ₀ Δ₁ A B C}
-  → {f : Δ₀ ⊢ A} {g : Δ₁ ⊢ B}
-  → {h : Γ ++ A ∷ B ∷ Λ ⊢ C} 
-  → cut Γ f (cut (Γ ++ A ∷ []) g h refl) refl ≡ cut Γ (⊗R f g) (⊗L h) refl
-cut⊗R⊗Lcases++ Γ Λ {A = A} {B} rewrite cases++-inj₂ [] Γ Λ (A ⊗ B) = refl
 
 ⊗R~₁ : {Γ Δ Λ Ω : Cxt} {A B : Fma}
   → {n n' : MIP Γ Δ Λ A} 
@@ -278,13 +241,6 @@ cut⊗R⊗Lcases++ Γ Λ {A = A} {B} rewrite cases++-inj₂ [] Γ Λ (A ⊗ B) =
   → MIP (Γ₀ ++ Ω ++ A ⇒ B ∷ Γ₁) Δ Λ C
 ⇒L~Γ' (intrp D g h) f = intrp D (⇒L f g) h
 
-cut⇒L-cases++-comm₁ : (Γ₀ : Cxt) → ∀ {Γ₁ Δ Λ Ω A B C D}
-  → {f : Ω ⊢ D} 
-  → {g : Δ ⊢ A} {h : Γ₀ ++ B ∷ Γ₁ ++ D ∷ Λ ⊢ C}
-  → cut (Γ₀ ++ Δ ++ A ⇒ B ∷ Γ₁) f (⇒L g h) refl ≡ ⇒L g (cut (Γ₀ ++ B ∷ Γ₁) f h refl)
-cut⇒L-cases++-comm₁ Γ₀ {Γ₁} {Δ} {Λ} {A = A} {B} {D = D} 
-  rewrite cases++-inj₂ (A ⇒ B ∷ Γ₁) (Γ₀ ++ Δ) Λ D = refl
-
 ⇒L~Γ : {Γ₀ Γ₁ Δ Λ Ω : Cxt} {A B C : Fma}   
   → {n n' : MIP (Γ₀ ++ B ∷ Γ₁) Δ Λ C}
   → {f f' : Ω ⊢ A}
@@ -303,13 +259,6 @@ cut⇒L-cases++-comm₁ Γ₀ {Γ₁} {Δ} {Λ} {A = A} {B} {D = D}
   → MIP (Γ₁ ++ Γ) Δ (Λ ++ A ⇒ B ∷ Λ₁) C
 ⇒L~Δ'  (intrp D g h) f = intrp D (⇒L g f) h
 
-cut⇒L-cases++₁ : (Γ Γ₁ : Cxt) → ∀ {Λ Λ₁ Ω A B C D}
-  → {f : Ω ⊢ D} 
-  → {g : Γ ++ D ∷ Λ ⊢ A} {h : Γ₁ ++ B ∷ Λ₁ ⊢ C}
-  → cut (Γ₁ ++ Γ) f (⇒L g h) refl ≡ ⇒L (cut Γ f g refl) h
-cut⇒L-cases++₁ Γ Γ₁ {Λ} {Λ₁} {A = A} {B} {D = D} 
-  rewrite cases++-inj₁ (Γ₁ ++ Γ) Λ (A ⇒ B ∷ Λ₁) D | 
-          cases++-inj₂ Γ Γ₁ Λ D = refl
 ⇒L~Δ : {Γ Γ₁ Δ Λ Λ₁ : Cxt} {A B C : Fma}   
   → {n n' : MIP Γ Δ Λ A}
   → {f f' : Γ₁ ++ B ∷ Λ₁ ⊢ C}
@@ -325,13 +274,6 @@ cut⇒L-cases++₁ Γ Γ₁ {Λ} {Λ₁} {A = A} {B} {D = D}
   → MIP Γ Δ (Λ₀ ++ Ω ++ A ⇒ B ∷ Λ₁) C
 ⇒L~Λ' {Γ} {Λ₀ = Λ₀} (intrp D g h) f = intrp D (⇒L {Γ ++ _ ∷ Λ₀} f g) h
 
-cut⇒L-cases++-comm₂ : (Γ Λ₀ : Cxt) → ∀ {Δ Λ₁ Ω A B C D}
-  → {f : Ω ⊢ D} 
-  → {g : Δ ⊢ A} {h : Γ ++ D ∷ Λ₀ ++ B ∷ Λ₁ ⊢ C}
-  → cut Γ f (⇒L {Γ ++ D ∷ Λ₀} g h) refl ≡ ⇒L {Γ ++ Ω ++ Λ₀} g (cut Γ f h refl)
-cut⇒L-cases++-comm₂ Γ Λ₀ {Δ} {Λ₁} {A = A} {B} {D = D} 
-  rewrite cases++-inj₁ Γ (Λ₀ ++ Δ) (A ⇒ B ∷ Λ₁) D |
-          cases++-inj₁ Γ Λ₀ Δ D = refl
 ⇒L~Λ : {Γ Δ Λ₀ Λ₁ Ω : Cxt} {A B C : Fma}   
   → {n n' : MIP Γ Δ (Λ₀ ++ B ∷ Λ₁) C}
   → {f f' : Ω ⊢ A}
@@ -365,21 +307,6 @@ cut⇒L-cases++-comm₂ Γ Λ₀ {Δ} {Λ₁} {A = A} {B} {D = D}
   → (n : MIP [] Δ₀ Δ₁ A) (m : MIP Γ (B ∷ Λ₀) Λ₁ C)
   → MIP (Γ ++ Δ₀) (Δ₁ ++ A ⇒ B ∷ Λ₀) Λ₁ C
 ⇒L~⇒' (intrp D g h) (intrp E g' h') = intrp (D ⇒ E) (⇒L h g') (⇒R (⇒L {[]} g h'))
-
-cut⇒R⇒Lcases++ : (Γ Λ Ω : Cxt) → ∀ {Δ A B C}
-  → {f : A ∷ Δ ⊢ B}
-  → {g : Ω ⊢ A} {h : Γ ++ B ∷ Λ ⊢ C}
-  → cut (Γ ++ Ω) (⇒R f) (⇒L g h) refl ≡ cut Γ g (cut Γ f h refl) refl
-cut⇒R⇒Lcases++ Γ Λ Ω {A = A} {B} 
-  rewrite cases++-inj₂ [] (Γ ++ Ω) Λ (A ⇒ B) = refl
-
-cut⇒L-cases++-assoc : (Γ₀ Γ₁ : Cxt) → ∀ {Λ₀ Λ₁ Ω A B C D}
-  → {f : Ω ⊢ D} 
-  → {g : Γ₀ ++ D ∷ Λ₀ ⊢ A} {h : Γ₁ ++ B ∷ Λ₁ ⊢ C}
-  → cut (Γ₁ ++ Γ₀) f (⇒L g h) refl ≡ ⇒L (cut Γ₀ f g refl) h
-cut⇒L-cases++-assoc Γ₀ Γ₁ {Λ₀ = Λ₀} {Λ₁} {A = A} {B} {D = D} 
-  rewrite cases++-inj₁ (Γ₁ ++ Γ₀) Λ₀ (A ⇒ B ∷ Λ₁) D |
-          cases++-inj₂ Γ₀ Γ₁ Λ₀ D = refl
 
 ⇒L~⇒ : ∀ {Γ Δ₀ Δ₁ Λ₀ Λ₁ A B C}
   → {n n' : MIP [] Δ₀ Δ₁ A} {m m' : MIP Γ (B ∷ Λ₀) Λ₁ C}
