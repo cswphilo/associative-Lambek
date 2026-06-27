@@ -9,18 +9,15 @@ open import Data.Sum
 open import Data.Empty
 open import Data.Product
 
-open import Fma
 open import SeqCalc
 open import Cut
 open import CutProperties using
   ( cutIL≗
   ; cut⊗L≗
   ; cut⇒L≗
-  ; cut⇐L≗
   ; cut-cong₂
   ; cut⇒L-cases++₁
   ; cut⇒L-cases++-comm₂
-  ; cut⇐L-cases++
   )
 open import Mip
 open import Utilities
@@ -209,148 +206,6 @@ cut-intrp .(Γ₁ ++ Ω') (A ∷ Δ) Λ (⇒L {Γ₁} {._} {Λ₁} {A₀} {B₀}
         | cases++-inj₂ Ω' Γ₁ Ω''
             (MIP.D (mip Ω' (E ∷ Δ) Ω'' f refl)) =
   ⇒L (cut-intrp Ω' (E ∷ Δ) Ω'' f refl) refl
-
--- ⇐R.
-cut-intrp Γ (A ∷ Δ) Λ (⇐R f) refl =
-  ⇐R (cut-intrp Γ (A ∷ Δ) (Λ ++ _ ∷ []) f refl)
-
--- ⇐L.
-cut-intrp Γ (X ∷ Δ) Λ (⇐L {Γ₁} {Δ₁} {Λ₁} {A} {B} f g) eq
-  with cases++ Γ₁ (Γ ++ X ∷ Δ) (Δ₁ ++ Λ₁) Λ (sym eq)
-
-... | inj₁ (Ω , eq₁ , eq₂)
-  with cases++ Γ₁ Γ Ω (X ∷ Δ) eq₁
-
-... | inj₁ (Ω' , refl , refl)
-  with ++? (Ω' ++ X ∷ Δ) Δ₁ Λ Λ₁ eq₂
-
-... | inj₁ (Ω'' , refl , eq₄)
-  with ++? Δ₁ Ω' Ω'' (X ∷ Δ) eq₄
-
-cut-intrp ._ .Ω'' Λ (⇐L {Γ₁} {.(Ω')} {._} {A} {B} f g) refl
-  | inj₁ (._ , refl , refl) | inj₁ (Ω' , refl , refl)
-  | inj₁ (Ω'' , refl , refl) | inj₁ ([] , refl , refl)
-  rewrite cases++-inj₂ [] (Γ₁ ++ B ⇐ A ∷ Ω') Λ
-            (MIP.D (mip Ω' [] [] f refl)
-             ⊗ MIP.D (mip (Γ₁ ++ B ∷ []) Ω'' Λ g refl))
-        | cases++-inj₂
-            (B ⇐ A ∷ Ω' ++ MIP.D (mip Ω' [] [] f refl) ∷ [])
-            Γ₁ Λ
-            (MIP.D (mip (Γ₁ ++ B ∷ []) Ω'' Λ g refl))
-        | cases++-inj₂ [] (Ω' ++ MIP.D (mip Ω' [] [] f refl) ∷ []) Λ
-            (MIP.D (mip (Γ₁ ++ B ∷ []) Ω'' Λ g refl))
-        | cases++-inj₂ (B ⇐ A ∷ Ω') Γ₁ (Ω'' ++ Λ)
-            (MIP.D (mip Ω' [] [] f refl))
-        | cases++-inj₁ Ω' [] (Ω'' ++ Λ)
-            (MIP.D (mip Ω' [] [] f refl)) =
-  ⇐L (cut-intrp Ω' [] [] f refl)
-     (cut-intrp (Γ₁ ++ B ∷ []) Ω'' Λ g refl)
-
-cut-intrp ._ .(Y ∷ Ω''' ++ Ω'') Λ (⇐L {Γ₁} {.(Ω' ++ Y ∷ Ω''')} {._} {A} {B} f g) refl
-  | inj₁ (._ , refl , refl) | inj₁ (Ω' , refl , refl)
-  | inj₁ (Ω'' , refl , refl) | inj₁ (Y ∷ Ω''' , refl , refl)
-  rewrite cases++-inj₂ [] (Γ₁ ++ B ⇐ A ∷ Ω') Λ
-            (MIP.D (mip Ω' (Y ∷ Ω''') [] f refl)
-             ⊗ MIP.D (mip (Γ₁ ++ B ∷ []) Ω'' Λ g refl))
-        | cases++-inj₂
-            (B ⇐ A ∷ Ω' ++ MIP.D (mip Ω' (Y ∷ Ω''') [] f refl) ∷ [])
-            Γ₁ Λ
-            (MIP.D (mip (Γ₁ ++ B ∷ []) Ω'' Λ g refl))
-        | cases++-inj₂ [] (Ω' ++ MIP.D (mip Ω' (Y ∷ Ω''') [] f refl) ∷ []) Λ
-            (MIP.D (mip (Γ₁ ++ B ∷ []) Ω'' Λ g refl))
-        | cases++-inj₂ (B ⇐ A ∷ Ω') Γ₁ (Ω'' ++ Λ)
-            (MIP.D (mip Ω' (Y ∷ Ω''') [] f refl))
-        | cases++-inj₁ Ω' [] (Ω'' ++ Λ)
-            (MIP.D (mip Ω' (Y ∷ Ω''') [] f refl)) =
-  ⇐L (cut-intrp Ω' (Y ∷ Ω''') [] f refl)
-     (cut-intrp (Γ₁ ++ B ∷ []) Ω'' Λ g refl)
-
-cut-intrp ._ Δ Λ (⇐L {Γ₁} {Δ₁} {._} {A} {B} f g) refl
-  | inj₁ (._ , refl , refl) | inj₁ (Ω' , refl , refl)
-  | inj₁ (Ω'' , refl , refl) | inj₂ (E , Ω''' , refl , refl)
-  rewrite cases++-inj₂ (B ⇐ A ∷ Δ₁ ++ E ∷ Ω''') Γ₁ Λ
-            (MIP.D (mip (Γ₁ ++ B ∷ E ∷ Ω''') Δ Λ g refl))
-        | cases++-inj₂ (E ∷ Ω''') Δ₁ Λ
-            (MIP.D (mip (Γ₁ ++ B ∷ E ∷ Ω''') Δ Λ g refl)) =
-  ⇐L refl (cut-intrp (Γ₁ ++ B ∷ E ∷ Ω''') Δ Λ g refl)
-
-cut-intrp ._ Δ Λ (⇐L {Γ₁} {Δ₁} {Λ₁} {A} {B} f g) refl
-  | inj₁ (._ , refl , refl) | inj₁ (Ω' , refl , refl)
-  | inj₂ (E , Ω'' , refl , refl)
-  rewrite cases++-inj₂ (B ⇐ A ∷ Ω') Γ₁ (E ∷ Ω'' ++ Λ₁)
-            (MIP.D (mip Ω' Δ (E ∷ Ω'') f refl))
-        | cases++-inj₁ Ω' (E ∷ Ω'') Λ₁
-            (MIP.D (mip Ω' Δ (E ∷ Ω'') f refl)) =
-  ⇐L (cut-intrp Ω' Δ (E ∷ Ω'') f refl) refl
-
-cut-intrp Γ .(B ⇐ A ∷ Ω) Λ (⇐L {Γ₁} {Δ₁} {Λ₁} {A} {B} f g) eq
-  | inj₁ (Ω , refl , eq₂) | inj₂ ([] , refl , refl)
-  with ++? Ω Δ₁ Λ Λ₁ eq₂
-
-cut-intrp Γ .(B ⇐ A ∷ Δ₁ ++ Ω'') Λ (⇐L {._} {Δ₁} {Λ₁} {A} {B} f g) refl
-  | inj₁ (Ω , refl , refl) | inj₂ ([] , refl , refl)
-  | inj₁ (Ω'' , refl , refl) =
-  cut⇐L≗ Γ f
-    (MIP.h (mip Γ (B ∷ Ω'') Λ g refl))
-    (MIP.g (mip Γ (B ∷ Ω'') Λ g refl)) refl
-  ∘ ⇐L {Γ} refl
-      (cut-intrp Γ (B ∷ Ω'') Λ g refl)
-
-cut-intrp Γ .(B ⇐ A ∷ Ω) Λ (⇐L {._} {Δ₁} {Λ₁} {A} {B} f g) refl
-  | inj₁ (Ω , refl , refl) | inj₂ ([] , refl , refl)
-  | inj₂ (F , Ω'' , refl , refl)
-  rewrite cases++-inj₂ [] Γ (F ∷ Ω'' ++ Λ₁)
-            (MIP.D (mip Γ (B ∷ []) Λ₁ g refl)
-             ⇐ MIP.D (mip Ω (F ∷ Ω'') [] f refl)) =
-  cut-cong₂ (Γ ++ B ⇐ A ∷ Ω) refl
-    (cut⇐L≗ Γ
-      (MIP.g (mip Ω (F ∷ Ω'') [] f refl))
-      (MIP.h (mip Γ (B ∷ []) Λ₁ g refl))
-      (MIP.g (mip Γ (B ∷ []) Λ₁ g refl)) refl)
-  ∘ (≡to≗ (cut⇐L-cases++ Γ Λ₁ Ω []
-      (MIP.h (mip Γ (B ∷ []) Λ₁ g refl))
-      (MIP.g (mip Γ (B ∷ []) Λ₁ g refl)))
-  ∘ ⇐L {Γ}
-      (cut-intrp Ω (F ∷ Ω'') [] f refl)
-      (cut-intrp Γ (B ∷ []) Λ₁ g refl))
-
-cut-intrp Γ .(Y ∷ Ω' ++ B ⇐ A ∷ Ω) Λ (⇐L {Γ₁} {Δ₁} {Λ₁} {A} {B} f g) eq
-  | inj₁ (Ω , refl , eq₂) | inj₂ (Y ∷ Ω' , refl , refl)
-  with ++? Ω Δ₁ Λ Λ₁ eq₂
-
-cut-intrp Γ .(Y ∷ Ω' ++ B ⇐ A ∷ Δ₁ ++ Ω'') Λ (⇐L {._} {Δ₁} {Λ₁} {A} {B} f g) refl
-  | inj₁ (Ω , refl , refl) | inj₂ (Y ∷ Ω' , refl , refl)
-  | inj₁ (Ω'' , refl , refl) =
-  cut⇐L≗ Γ f
-    (MIP.h (mip Γ (Y ∷ Ω' ++ B ∷ Ω'') Λ g refl))
-    (MIP.g (mip Γ (Y ∷ Ω' ++ B ∷ Ω'') Λ g refl)) refl
-  ∘ ⇐L {Γ ++ Y ∷ Ω'} refl
-      (cut-intrp Γ (Y ∷ Ω' ++ B ∷ Ω'') Λ g refl)
-
-cut-intrp Γ .(Y ∷ Ω' ++ B ⇐ A ∷ Ω) Λ (⇐L {._} {Δ₁} {Λ₁} {A} {B} f g) refl
-  | inj₁ (Ω , refl , refl) | inj₂ (Y ∷ Ω' , refl , refl)
-  | inj₂ (F , Ω'' , refl , refl)
-  rewrite cases++-inj₂ [] Γ (F ∷ Ω'' ++ Λ₁)
-            (MIP.D (mip Γ (Y ∷ Ω' ++ B ∷ []) Λ₁ g refl)
-             ⇐ MIP.D (mip Ω (F ∷ Ω'') [] f refl)) =
-  cut-cong₂ (Γ ++ Y ∷ Ω' ++ B ⇐ A ∷ Ω) refl
-    (cut⇐L≗ Γ
-      (MIP.g (mip Ω (F ∷ Ω'') [] f refl))
-      (MIP.h (mip Γ (Y ∷ Ω' ++ B ∷ []) Λ₁ g refl))
-      (MIP.g (mip Γ (Y ∷ Ω' ++ B ∷ []) Λ₁ g refl)) refl)
-  ∘ (≡to≗ (cut⇐L-cases++ Γ Λ₁ Ω (Y ∷ Ω')
-      (MIP.h (mip Γ (Y ∷ Ω' ++ B ∷ []) Λ₁ g refl))
-      (MIP.g (mip Γ (Y ∷ Ω' ++ B ∷ []) Λ₁ g refl)))
-  ∘ ⇐L {Γ ++ Y ∷ Ω'}
-      (cut-intrp Ω (F ∷ Ω'') [] f refl)
-      (cut-intrp Γ (Y ∷ Ω' ++ B ∷ []) Λ₁ g refl))
-
-cut-intrp Γ (X ∷ Δ) Λ (⇐L {Γ₁} {Δ₁} {Λ₁} {A} {B} f g) refl
-  | inj₂ (Ω , refl , refl)
-  rewrite cases++-inj₁ Γ Ω (B ⇐ A ∷ Δ₁ ++ Λ₁)
-            (MIP.D (mip Γ (X ∷ Δ) (Ω ++ B ∷ Λ₁) g refl)) =
-  ⇐L {Γ ++ X ∷ Δ ++ Ω} refl
-    (cut-intrp Γ (X ∷ Δ) (Ω ++ B ∷ Λ₁) g refl)
 
 -- base cases.
 cut-intrp [] (A ∷ []) [] ax refl = refl

@@ -1,0 +1,976 @@
+{-# OPTIONS --rewriting #-}
+
+module IntrpWellDefCases.LeftImpLImpLAssoc where
+
+open import IntrpWellDefCases.Base
+
+mip⇐L~⇐mid∷ : ∀ Δ₀ E Δ₁ Λ₀ Λ₁
+  {A B C : Fma}
+  {f : Δ₀ ++ E ∷ Δ₁ ⊢ A} {g : Λ₀ ++ B ∷ Λ₁ ⊢ C}
+  → mip [] (Λ₀ ++ B ⇐ A ∷ Δ₀) (E ∷ Δ₁ ++ Λ₁)
+      (⇐L {Λ₀} {Δ₀ ++ E ∷ Δ₁} {Λ₁} f g) refl
+      ~ ⇐L~⇐' {Γ = []} {Δ₀ = Δ₀} {Δ₁ = E ∷ Δ₁} {Λ₀ = Λ₀} {Λ₁ = Λ₁}
+          (mip Δ₀ (E ∷ Δ₁) [] f refl)
+          (mip [] (Λ₀ ++ B ∷ []) Λ₁ g refl)
+mip⇐L~⇐mid∷ Δ₀ E Δ₁ [] Λ₁ {A} {B}
+  rewrite cases++-inj₁ [] Δ₀ (E ∷ Δ₁ ++ Λ₁) (B ⇐ A) |
+          cases++-inj₂ [] [] Δ₀ (B ⇐ A) |
+          ++?-inj₂ Δ₀ Δ₁ Λ₁ E = refl
+mip⇐L~⇐mid∷ Δ₀ E Δ₁ (F ∷ Λ₀) Λ₁ {A} {B}
+  rewrite cases++-inj₁ (F ∷ Λ₀) Δ₀ (E ∷ Δ₁ ++ Λ₁) (B ⇐ A) |
+          cases++-inj₂ (F ∷ Λ₀) [] Δ₀ (B ⇐ A) |
+          ++?-inj₂ Δ₀ Δ₁ Λ₁ E = refl
+
+mip≗⇐L⇒L-assoc : ∀ Γ Δ Λ
+  {Γ₀ Γ₁ Δ₀ Λ₀ Λ₁ : Cxt} {A B A' B' C : Fma}
+  {f : Δ₀ ⊢ A'} {g : Γ₀ ++ B' ∷ Λ₀ ⊢ A} {h : Γ₁ ++ B ∷ Λ₁ ⊢ C}
+  → (eq : Γ₁ ++ Γ₀ ++ B' ⇐ A' ∷ Δ₀ ++ Λ₀ ++ A ⇒ B ∷ Λ₁ ≡ Γ ++ Δ ++ Λ)
+  → MIP≗ Γ Δ Λ C
+      (mip Γ Δ Λ (⇐L {Γ₁ ++ Γ₀} {Δ₀} {Λ₀ ++ A ⇒ B ∷ Λ₁} f (⇒L {Γ₁} {Γ₀ ++ B' ∷ Λ₀} {Λ₁} g h)) eq)
+      (mip Γ Δ Λ (⇒L {Γ₁} {Γ₀ ++ B' ⇐ A' ∷ Δ₀ ++ Λ₀} {Λ₁} (⇐L {Γ₀} {Δ₀} {Λ₀} f g) h) eq)
+mip≗⇐L⇒L-assoc Γ [] Λ eq = mip[]≗ Γ Λ eq ⇐L⇒L-assoc
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} eq 
+  with ++? Γ (Δ₀ ++ Γ₁ ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁) (E ∷ Δ ++ Λ) (A ⇒ B ∷ Ξ) eq
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {[]} {Δ₀} {Δ₁} {[]} {Ξ} {A} {B} {A'} {B'} {C} {f} {g} {h} refl | inj₁ ([] , refl , refl)
+  rewrite cases++-inj₁ Δ₀ (Δ₁ ++ [] ++ A ⇒ B ∷ Δ) Λ (B' ⇐ A') |
+          cases++-inj₁ Δ₀ (Δ₁ ++ []) (A ⇒ B ∷ Δ) (B' ⇐ A') |
+          ++?-inj₁ ([] ++ A ⇒ B ∷ Δ) Δ₁ Λ |
+          ++?-inj₁ [] Δ₁ (A ⇒ B ∷ Δ) |
+          ++?-inj₁ [] Δ₁ [] |
+          ++?-inj₁ [] (Δ₀ ++ B' ∷ []) (A ⇒ B ∷ Δ ++ Λ) =
+    intrp≗ (↝∷ (⊗L {[]} {[]} (IL {[]} ax) ,
+      (⊗L {Γ = Δ₀ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ} ⇐L⇒L-assoc ∘
+      (⊗L {Γ = Δ₀ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (⇒L (~ (IL⇐L-assoc {Γ = []} {Δ₀ = Δ₁} {Δ₁ = []} {Λ = []})) refl) ∘
+      (⊗L {Γ = Δ₀ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (~ (IL⇒L-assoc {Γ = Δ₀} {Δ₀ = B' ⇐ A' ∷ Δ₁} {Δ₁ = []} {Λ = Λ})) ∘
+      (⊗L {Γ = Δ₀ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (IL {Γ = Δ₀ ++ B' ⇐ A' ∷ Δ₁}
+          {Δ = mip [] (B' ∷ []) [] g refl .MIP.D ⇒
+            mip Δ₀ (B ∷ Δ) Λ h refl .MIP.D ∷ Λ}
+          (~ (cutaxA-left (Δ₀ ++ B' ⇐ A' ∷ Δ₁)
+        (⇒L {Δ₀} {B' ⇐ A' ∷ Δ₁} {Λ}
+          (⇐L {[]} {Δ₁} {[]} f (mip [] (B' ∷ []) [] g refl .MIP.h))
+          (mip Δ₀ (B ∷ Δ) Λ h refl .MIP.g)) refl))) ∘
+      (⊗L {Γ = Δ₀ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (~ (cutIL≗ (Δ₀ ++ B' ⇐ A' ∷ Δ₁) []
+        (mip [] (B' ∷ []) [] g refl .MIP.D ⇒
+         mip Δ₀ (B ∷ Δ) Λ h refl .MIP.D ∷ []) ax
+        (⇒L {Δ₀} {B' ⇐ A' ∷ Δ₁} {Λ}
+          (⇐L {[]} {Δ₁} {[]} f (mip [] (B' ∷ []) [] g refl .MIP.h))
+          (mip Δ₀ (B ∷ Δ) Λ h refl .MIP.g)) refl)) ∘
+      (~ (cut⊗L≗ (Δ₀ ++ B' ⇐ A' ∷ Δ₁) [] [] (IL {[]} ax)
+        (⇒L {Δ₀} {B' ⇐ A' ∷ Δ₁} {Λ}
+          (⇐L {[]} {Δ₁} {[]} f (mip [] (B' ∷ []) [] g refl .MIP.h))
+          (mip Δ₀ (B ∷ Δ) Λ h refl .MIP.g)) refl))))))) , refl) refl)
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {D ∷ Γ₁} {Δ₀} {Δ₁} {[]} {Ξ} {A} {B} {A'} {B'} {C} {f} {g} {h} refl | inj₁ ([] , refl , refl)
+  rewrite cases++-inj₁ (Δ₀ ++ D ∷ Γ₁) (Δ₁ ++ [] ++ A ⇒ B ∷ Δ) Λ (B' ⇐ A') |
+          cases++-inj₁ (Δ₀ ++ D ∷ Γ₁) (Δ₁ ++ []) (A ⇒ B ∷ Δ) (B' ⇐ A') |
+          ++?-inj₁ ([] ++ A ⇒ B ∷ Δ) Δ₁ Λ |
+          ++?-inj₁ [] Δ₁ (A ⇒ B ∷ Δ) |
+          cases++-inj₁ Γ₁ Δ₁ [] (B' ⇐ A') |
+          ++?-inj₁ [] Δ₁ [] |
+          ++?-inj₁ [] (Δ₀ ++ D ∷ Γ₁ ++ B' ∷ []) (A ⇒ B ∷ Δ ++ Λ) =
+    intrp≗ (↝∷ (⊗L {[]} {[]} (IL {[]} ax) ,
+      (⊗L {Γ = Δ₀ ++ D ∷ Γ₁ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ} ⇐L⇒L-assoc ∘
+      (⊗L {Γ = Δ₀ ++ D ∷ Γ₁ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (⇒L (~ (IL⇐L-assoc {Γ = D ∷ Γ₁} {Δ₀ = Δ₁} {Δ₁ = []} {Λ = []})) refl) ∘
+      (⊗L {Γ = Δ₀ ++ D ∷ Γ₁ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (~ (IL⇒L-assoc {Γ = Δ₀} {Δ₀ = D ∷ Γ₁ ++ B' ⇐ A' ∷ Δ₁} {Δ₁ = []} {Λ = Λ})) ∘
+      (⊗L {Γ = Δ₀ ++ D ∷ Γ₁ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (IL {Γ = Δ₀ ++ D ∷ Γ₁ ++ B' ⇐ A' ∷ Δ₁}
+          {Δ = mip [] (D ∷ Γ₁ ++ B' ∷ []) [] g refl .MIP.D ⇒
+            mip Δ₀ (B ∷ Δ) Λ h refl .MIP.D ∷ Λ}
+          (~ (cutaxA-left (Δ₀ ++ D ∷ Γ₁ ++ B' ⇐ A' ∷ Δ₁)
+        (⇒L {Δ₀} {D ∷ Γ₁ ++ B' ⇐ A' ∷ Δ₁} {Λ}
+          (⇐L {D ∷ Γ₁} {Δ₁} {[]} f
+            (mip [] (D ∷ Γ₁ ++ B' ∷ []) [] g refl .MIP.h))
+          (mip Δ₀ (B ∷ Δ) Λ h refl .MIP.g)) refl))) ∘
+      (⊗L {Γ = Δ₀ ++ D ∷ Γ₁ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (~ (cutIL≗ (Δ₀ ++ D ∷ Γ₁ ++ B' ⇐ A' ∷ Δ₁) []
+        (mip [] (D ∷ Γ₁ ++ B' ∷ []) [] g refl .MIP.D ⇒
+         mip Δ₀ (B ∷ Δ) Λ h refl .MIP.D ∷ []) ax
+        (⇒L {Δ₀} {D ∷ Γ₁ ++ B' ⇐ A' ∷ Δ₁} {Λ}
+          (⇐L {D ∷ Γ₁} {Δ₁} {[]} f
+            (mip [] (D ∷ Γ₁ ++ B' ∷ []) [] g refl .MIP.h))
+          (mip Δ₀ (B ∷ Δ) Λ h refl .MIP.g)) refl)) ∘
+      (~ (cut⊗L≗ (Δ₀ ++ D ∷ Γ₁ ++ B' ⇐ A' ∷ Δ₁) [] [] (IL {[]} ax)
+        (⇒L {Δ₀} {D ∷ Γ₁ ++ B' ⇐ A' ∷ Δ₁} {Λ}
+          (⇐L {D ∷ Γ₁} {Δ₁} {[]} f
+            (mip [] (D ∷ Γ₁ ++ B' ∷ []) [] g refl .MIP.h))
+          (mip Δ₀ (B ∷ Δ) Λ h refl .MIP.g)) refl))))))) , refl) refl)
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {[]} {Δ₀} {Δ₁} {D ∷ Λ₁} {Ξ} {A} {B} {A'} {B'} {C} {f} {g} {h} refl | inj₁ ([] , refl , refl)
+  rewrite cases++-inj₁ Δ₀ (Δ₁ ++ D ∷ Λ₁ ++ A ⇒ B ∷ Δ) Λ (B' ⇐ A') |
+          cases++-inj₁ Δ₀ (Δ₁ ++ D ∷ Λ₁) (A ⇒ B ∷ Δ) (B' ⇐ A') |
+          ++?-inj₁ (D ∷ Λ₁ ++ A ⇒ B ∷ Δ) Δ₁ Λ |
+          ++?-inj₂ Δ₁ Λ₁ (A ⇒ B ∷ Δ) D |
+          ++?-inj₁ (D ∷ Λ₁) Δ₁ [] |
+          ++?-inj₁ [] (Δ₀ ++ B' ∷ D ∷ Λ₁) (A ⇒ B ∷ Δ ++ Λ) =
+    intrp≗ (g~ ⇐L⇒L-assoc)
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {F ∷ Γ₁} {Δ₀} {Δ₁} {D ∷ Λ₁} {Ξ} {A} {B} {A'} {B'} {C} {f} {g} {h} refl | inj₁ ([] , refl , refl)
+  rewrite cases++-inj₁ (Δ₀ ++ F ∷ Γ₁) (Δ₁ ++ D ∷ Λ₁ ++ A ⇒ B ∷ Δ) Λ (B' ⇐ A') |
+          cases++-inj₁ (Δ₀ ++ F ∷ Γ₁) (Δ₁ ++ D ∷ Λ₁) (A ⇒ B ∷ Δ) (B' ⇐ A') |
+          ++?-inj₁ (D ∷ Λ₁ ++ A ⇒ B ∷ Δ) Δ₁ Λ |
+          ++?-inj₂ Δ₁ Λ₁ (A ⇒ B ∷ Δ) D |
+          cases++-inj₁ Γ₁ (Δ₁ ++ D ∷ Λ₁) [] (B' ⇐ A') |
+          ++?-inj₁ (D ∷ Λ₁) Δ₁ [] |
+          ++?-inj₁ [] (Δ₀ ++ F ∷ Γ₁ ++ B' ∷ D ∷ Λ₁) (A ⇒ B ∷ Δ ++ Λ) =
+    intrp≗ (g~ ⇐L⇒L-assoc)
+
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} refl | inj₁ (x ∷ Ω , refl , refl)
+  rewrite cases++-inj₁ (Δ₀ ++ Γ₁) (Δ₁ ++ Λ₁ ++ A ⇒ B ∷ Ω ++ E ∷ Δ) Λ (B' ⇐ A') |
+          cases++-inj₁ (Δ₀ ++ Γ₁) (Δ₁ ++ Λ₁ ++ A ⇒ B ∷ Ω) (E ∷ Δ) (B' ⇐ A') |
+          ++?-inj₁ (Λ₁ ++ A ⇒ B ∷ Ω ++ E ∷ Δ) Δ₁ Λ
+  with Λ₁
+... | []
+  rewrite ++?-inj₂ Δ₁ Ω (E ∷ Δ) (A ⇒ B) |
+          ++?-inj₁ (A ⇒ B ∷ Ω) (Δ₀ ++ Γ₁ ++ B' ∷ []) (E ∷ Δ ++ Λ) =
+    intrp≗ (g~ ⇐L⇒L-assoc)
+... | D ∷ Λ₂
+  rewrite ++?-inj₂ Δ₁ (Λ₂ ++ A ⇒ B ∷ Ω) (E ∷ Δ) D |
+          ++?-inj₁ (A ⇒ B ∷ Ω) (Δ₀ ++ Γ₁ ++ B' ∷ D ∷ Λ₂) (E ∷ Δ ++ Λ) =
+    intrp≗ (g~ ⇐L⇒L-assoc)
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} eq | inj₂ (F , Ω , eq1 , eq2) 
+  with cases++ Ω Δ Ξ Λ (inj∷ eq2 .proj₂)
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} eq | inj₂ (F , Ω , eq1 , refl) | inj₁ (Ω' , refl , refl) 
+  with cases++ Γ Δ₀ Ω (Γ₁ ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁) eq1
+mip≗⇐L⇒L-assoc Γ (E ∷ .((Ω'' ++ Γ₁ ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁) ++ A ⇒ B ∷ Ω')) Λ {Γ₁} {.(Γ ++ E ∷ Ω'')} {Δ₁} {Λ₁} {.(Ω' ++ Λ)} {A} {B} {A'} {B'} refl | inj₂ (E , .(Ω'' ++ Γ₁ ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁) , refl , refl) | inj₁ (Ω' , refl , refl) | inj₁ (Ω'' , refl , refl)
+  rewrite cases++-inj₁ (Γ ++ E ∷ Ω'' ++ Γ₁) (Δ₁ ++ Λ₁ ++ A ⇒ B ∷ Ω') Λ (B' ⇐ A') |
+          cases++-inj₂ (E ∷ Ω'' ++ Γ₁) Γ (Δ₁ ++ Λ₁ ++ A ⇒ B ∷ Ω') (B' ⇐ A') |
+          ++?-inj₁ (Λ₁ ++ A ⇒ B ∷ Ω') Δ₁ Λ |
+          ++?-inj₂ Γ (Ω'' ++ Γ₁ ++ B' ∷ Λ₁) (A ⇒ B ∷ Ω' ++ Λ) E |
+          cases++-inj₁ (Ω'' ++ Γ₁ ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁) Ω' Λ (A ⇒ B) |
+          cases++-inj₁ Γ Ω'' (Γ₁ ++ B' ∷ Λ₁) E |
+          cases++-inj₁ (Ω'' ++ Γ₁ ++ B' ∷ Λ₁) Ω' Λ (A ⇒ B) =
+    intrp≗ (h~ ⇐L⇒L-assoc)
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} eq | inj₂ (F , Ω , eq1 , refl) | inj₁ (Ω' , refl , refl) | inj₂ (Ω'' , eq2 , refl) 
+  with cases++ Ω'' Γ₁ Ω (B' ⇐ A' ∷ Δ₁ ++ Λ₁) eq2
+mip≗⇐L⇒L-assoc .(Δ₀ ++ Ω'') (E ∷ .(Ω ++ A ⇒ B ∷ Ω')) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {.(Ω' ++ Λ)} {A} {B} {A'} {B'} refl | inj₂ (E , Ω , refl , refl) | inj₁ (Ω' , refl , refl) | inj₂ (Ω'' , refl , refl) | inj₁ (Ω''' , refl , refl)
+  rewrite cases++-inj₁ (Δ₀ ++ Ω'' ++ E ∷ Ω''') (Δ₁ ++ Λ₁ ++ A ⇒ B ∷ Ω') Λ (B' ⇐ A') |
+          cases++-inj₂ (E ∷ Ω''') (Δ₀ ++ Ω'') (Δ₁ ++ Λ₁ ++ A ⇒ B ∷ Ω') (B' ⇐ A') |
+          ++?-inj₁ (Λ₁ ++ A ⇒ B ∷ Ω') Δ₁ Λ |
+          ++?-inj₂ (Δ₀ ++ Ω'') (Ω''' ++ B' ∷ Λ₁) (A ⇒ B ∷ Ω' ++ Λ) E |
+          cases++-inj₂ Ω'' Δ₀ (Ω''' ++ B' ∷ Λ₁) E |
+          cases++-inj₁ (Ω''' ++ B' ∷ Λ₁) Ω' Λ (A ⇒ B) |
+          cases++-inj₁ (Ω''' ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁) Ω' Λ (A ⇒ B) =
+    intrp≗
+      (~-trans (h~ (⇐L⇒R ∘ ⇒R ⇐L⇒L-assoc))
+        (⇒L~⇒ (~-sym (mip⇐L~Λ [] Ω'' (E ∷ Ω''') Λ₁)) refl))
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} eq | inj₂ (F , Ω , eq1 , refl) | inj₁ (Ω' , refl , refl) | inj₂ (Ω'' , eq2 , refl) | inj₂ (Ω''' , eq3 , refl) 
+  with cases++ Ω''' (B' ⇐ A' ∷ Δ₁) Ω Λ₁ eq3
+mip≗⇐L⇒L-assoc .(Δ₀ ++ Γ₁ ++ []) (E ∷ .(Ω ++ A ⇒ B ∷ Ω')) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {.(Ω' ++ Λ)} {A} {B} {A'} {B'} refl | inj₂ (E , Ω , refl , refl) | inj₁ (Ω' , refl , refl) | inj₂ (.(Γ₁ ++ []) , refl , refl) | inj₂ ([] , refl , refl) | inj₁ (Ξ' , refl , refl)
+  rewrite cases++-inj₁ (Δ₀ ++ Γ₁) (Δ₁ ++ Λ₁ ++ A ⇒ B ∷ Ω') Λ (B' ⇐ A') |
+          cases++-inj₂ [] (Δ₀ ++ Γ₁) (Δ₁ ++ Λ₁ ++ A ⇒ B ∷ Ω') (B' ⇐ A') |
+          ++?-inj₁ (Λ₁ ++ A ⇒ B ∷ Ω') Δ₁ Λ |
+          ++?-inj₂ (Δ₀ ++ Γ₁) Λ₁ (A ⇒ B ∷ Ω' ++ Λ) B' |
+          cases++-inj₂ Γ₁ Δ₀ Λ₁ B' |
+          cases++-inj₁ Λ₁ Ω' Λ (A ⇒ B) |
+          cases++-inj₁ (Δ₁ ++ Λ₁) Ω' Λ (A ⇒ B) =
+    intrp≗
+      (~-trans (h~ (⇐L⇒R ∘ ⇒R ⇐L⇒L-assoc))
+        (⇒L~⇒ (~-sym (mip⇐L~Λ [] Γ₁ [] Λ₁)) refl))
+mip≗⇐L⇒L-assoc .(Δ₀ ++ [] ++ (B' ⇐ A') ∷ Ω''') (E ∷ .(Ω ++ A ⇒ B ∷ Ω')) Λ {[]} {Δ₀} {Δ₁} {Λ₁} {.(Ω' ++ Λ)} {A} {B} {A'} {B'} {C} {f} {g} {h} refl | inj₂ (E , Ω , refl , refl) | inj₁ (Ω' , refl , refl) | inj₂ (.((B' ⇐ A') ∷ Ω''') , refl , refl) | inj₂ (.(B' ⇐ A') ∷ Ω''' , refl , refl) | inj₁ (Ξ' , refl , refl)
+  rewrite cases++-inj₁ (Δ₀ ++ []) (Ω''' ++ E ∷ Ξ' ++ Λ₁ ++ A ⇒ B ∷ Ω') Λ (B' ⇐ A') |
+          cases++-inj₁ (Δ₀ ++ []) Ω''' (E ∷ Ξ' ++ Λ₁ ++ A ⇒ B ∷ Ω') (B' ⇐ A') |
+          ++?-inj₁ (Λ₁ ++ A ⇒ B ∷ Ω') (Ω''' ++ E ∷ Ξ') Λ |
+          ++?-inj₁ (E ∷ Ξ') Ω''' (Λ₁ ++ A ⇒ B ∷ Ω') |
+          cases++-inj₁ (Ξ' ++ Λ₁) Ω' Λ (A ⇒ B) with Λ₁
+... | [] rewrite ++?-inj₁ [] (Δ₀ ++ B' ∷ []) (A ⇒ B ∷ Ω' ++ Λ) |
+                 ++?-inj₂ Ω''' Ξ' [] E =
+  intrp≗
+    (↝∷
+      (⇒R (⊗L {Γ = _ ∷ []} {Δ = []}
+        (⇒L {Γ = []} {Δ = _ ∷ _ ∷ []} {Λ = []}
+          (⇐L {Γ = []} {Δ = _ ∷ []} {Λ = []} ax ax)
+          ax)) ,
+      ((⊗L {Γ = Δ₀ ++ B' ⇐ A' ∷ Ω'''} {Δ = Λ}
+          (⇐L⇒L-assoc {Γ₀ = []} {Γ₁ = Δ₀}
+                       {Δ = Ω''' ++ _ ∷ []} {Λ₀ = []} {Λ₁ = Λ})
+        ∘
+        let Fm = mip Ω''' (E ∷ Ξ') [] f refl
+            Gm = mip [] (B' ∷ []) [] g refl
+            Km = mip Δ₀ (B ∷ Ω') Λ h refl
+            q = ⇐L (MIP.g Fm) (MIP.h Gm)
+            l = ⇐L {Γ = []} {Δ = MIP.D Fm ∷ []} {Λ = []} ax ax
+            kg = MIP.g Km
+            pref = B' ⇐ A' ∷ Ω'''
+            p =
+              (((~ (cutaxA-left pref q refl))
+                ∘ cut-cong₂ pref refl (~ (cutaxA-right q)))
+               ∘ (~ (≡to≗
+                   (cut⇐R⇐Lcases++ [] [] (MIP.D Fm ∷ [])
+                     {Δ = pref} {f = q} {g = ax} {h = ax}))))
+            p⇐ =
+              ⇒L p refl
+              ∘ (~ (≡to≗
+                  (cut⇒L-cases++₁ [] Δ₀ {Λ = MIP.D Fm ∷ []} {Λ₁ = Λ}
+                    {f = ⇐R q} {g = l} {h = kg})))
+            inner =
+              ⇒L refl (~ (cutaxA-left Δ₀ kg refl))
+              ∘ (~ (cut⇒L≗ Δ₀ l ax kg refl))
+        in
+        (((⊗L {Γ = Δ₀ ++ pref} {Δ = Λ} p⇐
+          ∘ ≡to≗ (cut⊗L-cases++₂ Δ₀ [] Λ))
+         ∘ cut-cong₂ Δ₀ refl
+             ((⊗L {Γ = Δ₀ ++ (MIP.D Gm ⇐ MIP.D Fm) ∷ []} {Δ = Λ} inner)
+              ∘ (~ (cut⊗L≗ Δ₀ ((MIP.D Gm ⇐ MIP.D Fm) ∷ []) []
+                    (⇒L {Γ = []} {Δ = _ ∷ _ ∷ []} {Λ = []} l ax)
+                    kg refl)))))
+       ∘ (~ (≡to≗
+           (cut⇒R⇒Lcases++ Δ₀ Λ (B' ⇐ A' ∷ Ω'''))))) ,
+      ⇒R (⇒L
+        (((cut-cong₂ (_ ∷ []) refl
+            ((cut⇐L≗ [] ax ax
+               (mip [] (B' ∷ []) [] g refl .MIP.g) refl)
+             ∘ ⇐L refl
+                 (cutaxA-left [] (mip [] (B' ∷ []) [] g refl .MIP.g) refl)))
+          ∘ ≡to≗
+              (cut⇐L-cases++₁ [] [] {Λ = []} {Λ₁ = []} {Ω = E ∷ Ξ'}
+                {f = mip Ω''' (E ∷ Ξ') [] f refl .MIP.h}
+                {g = ax}
+                {h = mip [] (B' ∷ []) [] g refl .MIP.g}))
+         ∘ ⇐L (cutaxA-right (mip Ω''' (E ∷ Ξ') [] f refl .MIP.h)) refl)
+        refl))
+      ) refl)
+... | F ∷ Λ₁ rewrite ++?-inj₂ (Δ₀ ++ B' ∷ []) Λ₁ (A ⇒ B ∷ Ω' ++ Λ) F |
+                       ++?-inj₂ Ω''' Ξ' (F ∷ Λ₁) E |
+                       cases++-inj₂ (B' ∷ []) Δ₀ Λ₁ F |
+                       cases++-inj₁ Λ₁ Ω' Λ (A ⇒ B) =
+  intrp≗
+    (↝∷
+      (⇒R (⊗L {Γ = _ ∷ []} {Δ = []}
+        (⇒L {Γ = []} {Δ = _ ∷ _ ∷ []} {Λ = []}
+          (⇐L {Γ = []} {Δ = _ ∷ []} {Λ = []} ax ax)
+          ax)) ,
+      ((⊗L {Γ = Δ₀ ++ B' ⇐ A' ∷ Ω'''} {Δ = Λ}
+          (⇐L⇒L-assoc {Γ₀ = []} {Γ₁ = Δ₀}
+                       {Δ = Ω''' ++ _ ∷ []} {Λ₀ = []} {Λ₁ = Λ})
+        ∘
+        let Fm = mip Ω''' (E ∷ Ξ') [] f refl
+            Gm = mip [] (B' ∷ []) (F ∷ Λ₁) g refl
+            Km = mip Δ₀ (B ∷ Ω') Λ h refl
+            q = ⇐L (MIP.g Fm) (MIP.h Gm)
+            l = ⇐L {Γ = []} {Δ = MIP.D Fm ∷ []} {Λ = []} ax ax
+            kg = MIP.g Km
+            pref = B' ⇐ A' ∷ Ω'''
+            p =
+              (((~ (cutaxA-left pref q refl))
+                ∘ cut-cong₂ pref refl (~ (cutaxA-right q)))
+               ∘ (~ (≡to≗
+                   (cut⇐R⇐Lcases++ [] [] (MIP.D Fm ∷ [])
+                     {Δ = pref} {f = q} {g = ax} {h = ax}))))
+            p⇐ =
+              ⇒L p refl
+              ∘ (~ (≡to≗
+                  (cut⇒L-cases++₁ [] Δ₀ {Λ = MIP.D Fm ∷ []} {Λ₁ = Λ}
+                    {f = ⇐R q} {g = l} {h = kg})))
+            inner =
+              ⇒L refl (~ (cutaxA-left Δ₀ kg refl))
+              ∘ (~ (cut⇒L≗ Δ₀ l ax kg refl))
+        in
+        (((⊗L {Γ = Δ₀ ++ pref} {Δ = Λ} p⇐
+          ∘ ≡to≗ (cut⊗L-cases++₂ Δ₀ [] Λ))
+         ∘ cut-cong₂ Δ₀ refl
+             ((⊗L {Γ = Δ₀ ++ (MIP.D Gm ⇐ MIP.D Fm) ∷ []} {Δ = Λ} inner)
+              ∘ (~ (cut⊗L≗ Δ₀ ((MIP.D Gm ⇐ MIP.D Fm) ∷ []) []
+                    (⇒L {Γ = []} {Δ = _ ∷ _ ∷ []} {Λ = []} l ax)
+                    kg refl)))))
+       ∘ (~ (≡to≗
+           (cut⇒R⇒Lcases++ Δ₀ Λ (B' ⇐ A' ∷ Ω'''))))) ,
+      ⇒R (⇒L
+        (((cut-cong₂ (_ ∷ []) refl
+            ((cut⇐L≗ [] ax ax
+               (mip [] (B' ∷ []) (F ∷ Λ₁) g refl .MIP.g) refl)
+             ∘ ⇐L refl
+                 (cutaxA-left [] (mip [] (B' ∷ []) (F ∷ Λ₁) g refl .MIP.g) refl)))
+          ∘ ≡to≗
+              (cut⇐L-cases++₁ [] [] {Λ = []} {Λ₁ = F ∷ Λ₁} {Ω = E ∷ Ξ'}
+                {f = mip Ω''' (E ∷ Ξ') [] f refl .MIP.h}
+                {g = ax}
+                {h = mip [] (B' ∷ []) (F ∷ Λ₁) g refl .MIP.g}))
+         ∘ ⇐L (cutaxA-right (mip Ω''' (E ∷ Ξ') [] f refl .MIP.h)) refl)
+        refl))
+      ) refl)
+mip≗⇐L⇒L-assoc .(Δ₀ ++ (D ∷ Γ₁) ++ (B' ⇐ A') ∷ Ω''') (E ∷ .(Ω ++ A ⇒ B ∷ Ω')) Λ {D ∷ Γ₁} {Δ₀} {Δ₁} {Λ₁} {.(Ω' ++ Λ)} {A} {B} {A'} {B'} {C} {f} {g} {h} refl | inj₂ (E , Ω , refl , refl) | inj₁ (Ω' , refl , refl) | inj₂ (.(D ∷ Γ₁ ++ (B' ⇐ A') ∷ Ω''') , refl , refl) | inj₂ (.(B' ⇐ A') ∷ Ω''' , refl , refl) | inj₁ (Ξ' , refl , refl)
+  rewrite cases++-inj₁ (Δ₀ ++ D ∷ Γ₁) (Ω''' ++ E ∷ Ξ' ++ Λ₁ ++ A ⇒ B ∷ Ω') Λ (B' ⇐ A') |
+          cases++-inj₁ (Δ₀ ++ D ∷ Γ₁) Ω''' (E ∷ Ξ' ++ Λ₁ ++ A ⇒ B ∷ Ω') (B' ⇐ A') |
+          ++?-inj₁ (Λ₁ ++ A ⇒ B ∷ Ω') (Ω''' ++ E ∷ Ξ') Λ |
+          ++?-inj₁ (E ∷ Ξ') Ω''' (Λ₁ ++ A ⇒ B ∷ Ω') |
+          cases++-inj₁ (Ξ' ++ Λ₁) Ω' Λ (A ⇒ B) |
+          cases++-inj₁ Γ₁ Ω''' (E ∷ Ξ' ++ Λ₁) (B' ⇐ A') |
+          ++?-inj₂ Ω''' Ξ' Λ₁ E with Λ₁
+... | [] rewrite ++?-inj₁ [] (Δ₀ ++ D ∷ Γ₁ ++ B' ∷ []) (A ⇒ B ∷ Ω' ++ Λ) =
+  intrp≗
+    (↝∷
+      (⇒R (⊗L {Γ = _ ∷ []} {Δ = []}
+        (⇒L {Γ = []} {Δ = _ ∷ _ ∷ []} {Λ = []}
+          (⇐L {Γ = []} {Δ = _ ∷ []} {Λ = []} ax ax)
+          ax)) ,
+      ((⊗L {Γ = Δ₀ ++ D ∷ Γ₁ ++ B' ⇐ A' ∷ Ω'''} {Δ = Λ}
+          (⇐L⇒L-assoc {Γ₀ = D ∷ Γ₁} {Γ₁ = Δ₀}
+                       {Δ = Ω''' ++ _ ∷ []} {Λ₀ = []} {Λ₁ = Λ})
+        ∘
+        let Fm = mip Ω''' (E ∷ Ξ') [] f refl
+            Gm = mip [] (D ∷ Γ₁ ++ B' ∷ []) [] g refl
+            Km = mip Δ₀ (B ∷ Ω') Λ h refl
+            q = ⇐L (MIP.g Fm) (MIP.h Gm)
+            l = ⇐L {Γ = []} {Δ = MIP.D Fm ∷ []} {Λ = []} ax ax
+            kg = MIP.g Km
+            pref = D ∷ Γ₁ ++ B' ⇐ A' ∷ Ω'''
+            p =
+              (((~ (cutaxA-left pref q refl))
+                ∘ cut-cong₂ pref refl (~ (cutaxA-right q)))
+               ∘ (~ (≡to≗
+                   (cut⇐R⇐Lcases++ [] [] (MIP.D Fm ∷ [])
+                     {Δ = pref} {f = q} {g = ax} {h = ax}))))
+            p⇐ =
+              ⇒L p refl
+              ∘ (~ (≡to≗
+                  (cut⇒L-cases++₁ [] Δ₀ {Λ = MIP.D Fm ∷ []} {Λ₁ = Λ}
+                    {f = ⇐R q} {g = l} {h = kg})))
+            inner =
+              ⇒L refl (~ (cutaxA-left Δ₀ kg refl))
+              ∘ (~ (cut⇒L≗ Δ₀ l ax kg refl))
+        in
+        (((⊗L {Γ = Δ₀ ++ pref} {Δ = Λ} p⇐
+          ∘ ≡to≗ (cut⊗L-cases++₂ Δ₀ [] Λ))
+         ∘ cut-cong₂ Δ₀ refl
+             ((⊗L {Γ = Δ₀ ++ (MIP.D Gm ⇐ MIP.D Fm) ∷ []} {Δ = Λ} inner)
+              ∘ (~ (cut⊗L≗ Δ₀ ((MIP.D Gm ⇐ MIP.D Fm) ∷ []) []
+                    (⇒L {Γ = []} {Δ = _ ∷ _ ∷ []} {Λ = []} l ax)
+                    kg refl)))))
+       ∘ (~ (≡to≗
+           (cut⇒R⇒Lcases++ Δ₀ Λ (D ∷ Γ₁ ++ B' ⇐ A' ∷ Ω'''))))) ,
+      ⇒R (⇒L
+        (((cut-cong₂ (_ ∷ []) refl
+            ((cut⇐L≗ [] ax ax
+               (mip [] (D ∷ Γ₁ ++ B' ∷ []) [] g refl .MIP.g) refl)
+             ∘ ⇐L refl
+                 (cutaxA-left [] (mip [] (D ∷ Γ₁ ++ B' ∷ []) [] g refl .MIP.g) refl)))
+          ∘ ≡to≗
+              (cut⇐L-cases++₁ [] [] {Λ = []} {Λ₁ = []} {Ω = E ∷ Ξ'}
+                {f = mip Ω''' (E ∷ Ξ') [] f refl .MIP.h}
+                {g = ax}
+                {h = mip [] (D ∷ Γ₁ ++ B' ∷ []) [] g refl .MIP.g}))
+         ∘ ⇐L (cutaxA-right (mip Ω''' (E ∷ Ξ') [] f refl .MIP.h)) refl)
+        refl))
+      ) refl)
+... | F ∷ Λ₁ rewrite ++?-inj₂ (Δ₀ ++ D ∷ Γ₁ ++ B' ∷ []) Λ₁ (A ⇒ B ∷ Ω' ++ Λ) F |
+                       cases++-inj₂ (D ∷ Γ₁ ++ B' ∷ []) Δ₀ Λ₁ F |
+                       cases++-inj₁ Λ₁ Ω' Λ (A ⇒ B) =
+  intrp≗
+    (↝∷
+      (⇒R (⊗L {Γ = _ ∷ []} {Δ = []}
+        (⇒L {Γ = []} {Δ = _ ∷ _ ∷ []} {Λ = []}
+          (⇐L {Γ = []} {Δ = _ ∷ []} {Λ = []} ax ax)
+          ax)) ,
+      ((⊗L {Γ = Δ₀ ++ D ∷ Γ₁ ++ B' ⇐ A' ∷ Ω'''} {Δ = Λ}
+          (⇐L⇒L-assoc {Γ₀ = D ∷ Γ₁} {Γ₁ = Δ₀}
+                       {Δ = Ω''' ++ _ ∷ []} {Λ₀ = []} {Λ₁ = Λ})
+        ∘
+        let Fm = mip Ω''' (E ∷ Ξ') [] f refl
+            Gm = mip [] (D ∷ Γ₁ ++ B' ∷ []) (F ∷ Λ₁) g refl
+            Km = mip Δ₀ (B ∷ Ω') Λ h refl
+            q = ⇐L (MIP.g Fm) (MIP.h Gm)
+            l = ⇐L {Γ = []} {Δ = MIP.D Fm ∷ []} {Λ = []} ax ax
+            kg = MIP.g Km
+            pref = D ∷ Γ₁ ++ B' ⇐ A' ∷ Ω'''
+            p =
+              (((~ (cutaxA-left pref q refl))
+                ∘ cut-cong₂ pref refl (~ (cutaxA-right q)))
+               ∘ (~ (≡to≗
+                   (cut⇐R⇐Lcases++ [] [] (MIP.D Fm ∷ [])
+                     {Δ = pref} {f = q} {g = ax} {h = ax}))))
+            p⇐ =
+              ⇒L p refl
+              ∘ (~ (≡to≗
+                  (cut⇒L-cases++₁ [] Δ₀ {Λ = MIP.D Fm ∷ []} {Λ₁ = Λ}
+                    {f = ⇐R q} {g = l} {h = kg})))
+            inner =
+              ⇒L refl (~ (cutaxA-left Δ₀ kg refl))
+              ∘ (~ (cut⇒L≗ Δ₀ l ax kg refl))
+        in
+        (((⊗L {Γ = Δ₀ ++ pref} {Δ = Λ} p⇐
+          ∘ ≡to≗ (cut⊗L-cases++₂ Δ₀ [] Λ))
+         ∘ cut-cong₂ Δ₀ refl
+             ((⊗L {Γ = Δ₀ ++ (MIP.D Gm ⇐ MIP.D Fm) ∷ []} {Δ = Λ} inner)
+              ∘ (~ (cut⊗L≗ Δ₀ ((MIP.D Gm ⇐ MIP.D Fm) ∷ []) []
+                    (⇒L {Γ = []} {Δ = _ ∷ _ ∷ []} {Λ = []} l ax)
+                    kg refl)))))
+       ∘ (~ (≡to≗
+           (cut⇒R⇒Lcases++ Δ₀ Λ (D ∷ Γ₁ ++ B' ⇐ A' ∷ Ω'''))))) ,
+      ⇒R (⇒L
+        (((cut-cong₂ (_ ∷ []) refl
+            ((cut⇐L≗ [] ax ax
+               (mip [] (D ∷ Γ₁ ++ B' ∷ []) (F ∷ Λ₁) g refl .MIP.g) refl)
+             ∘ ⇐L refl
+                 (cutaxA-left [] (mip [] (D ∷ Γ₁ ++ B' ∷ []) (F ∷ Λ₁) g refl .MIP.g) refl)))
+          ∘ ≡to≗
+              (cut⇐L-cases++₁ [] [] {Λ = []} {Λ₁ = F ∷ Λ₁} {Ω = E ∷ Ξ'}
+                {f = mip Ω''' (E ∷ Ξ') [] f refl .MIP.h}
+                {g = ax}
+                {h = mip [] (D ∷ Γ₁ ++ B' ∷ []) (F ∷ Λ₁) g refl .MIP.g}))
+         ∘ ⇐L (cutaxA-right (mip Ω''' (E ∷ Ξ') [] f refl .MIP.h)) refl)
+        refl))
+      ) refl)
+mip≗⇐L⇒L-assoc .(Δ₀ ++ Γ₁ ++ Ω''') (E ∷ .(Ω ++ A ⇒ B ∷ Ω')) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {.(Ω' ++ Λ)} {A} {B} {A'} {B'} {C} {f} {g} {h} refl | inj₂ (E , Ω , refl , refl) | inj₁ (Ω' , refl , refl) | inj₂ (.(Γ₁ ++ Ω''') , refl , refl) | inj₂ (Ω''' , refl , refl) | inj₂ (Ξ' , refl , refl)
+  rewrite cases++-inj₁ (Δ₀ ++ Γ₁) (Δ₁ ++ Ξ' ++ E ∷ Ω ++ A ⇒ B ∷ Ω') Λ (B' ⇐ A') |
+          cases++-inj₁ Ω Ω' Λ (A ⇒ B) |
+          cases++-inj₁ (Δ₀ ++ Γ₁) (Δ₁ ++ Ξ') (E ∷ Ω ++ A ⇒ B ∷ Ω') (B' ⇐ A') |
+          ++?-inj₁ (Ξ' ++ E ∷ Ω ++ A ⇒ B ∷ Ω') Δ₁ Λ
+  with Γ₁ | Ξ'
+... | [] | []
+  rewrite ++?-inj₁ [] Δ₁ (E ∷ Ω ++ A ⇒ B ∷ Ω') |
+          ++?-inj₂ (Δ₀ ++ [] ++ B' ∷ []) Ω (A ⇒ B ∷ Ω' ++ Λ) E |
+          cases++-inj₂ ([] ++ B' ∷ []) Δ₀ Ω E |
+          cases++-inj₁ Ω Ω' Λ (A ⇒ B) |
+          ++?-inj₁ [] Δ₁ (E ∷ Ω) =
+    intrp≗ (↝∷ (⊗L {[]} {[]} (IL {[]} ax) ,
+      (⊗L {Γ = Δ₀ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ} ⇐L⇒L-assoc ∘
+      (⊗L {Γ = Δ₀ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (⇒L (~ (IL⇐L-assoc {Γ = []} {Δ₀ = Δ₁} {Δ₁ = []} {Λ = []})) refl) ∘
+      (⊗L {Γ = Δ₀ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (~ (IL⇒L-assoc {Γ = Δ₀} {Δ₀ = B' ⇐ A' ∷ Δ₁} {Δ₁ = []} {Λ = Λ})) ∘
+      (⊗L {Γ = Δ₀ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (IL {Γ = Δ₀ ++ B' ⇐ A' ∷ Δ₁}
+          {Δ = mip [] (B' ∷ []) (E ∷ Ω) g refl .MIP.D ⇒
+            mip Δ₀ (B ∷ Ω') Λ h refl .MIP.D ∷ Λ}
+          (~ (cutaxA-left (Δ₀ ++ B' ⇐ A' ∷ Δ₁)
+        (⇒L {Δ₀} {B' ⇐ A' ∷ Δ₁} {Λ}
+          (⇐L {[]} {Δ₁} {[]} f (mip [] (B' ∷ []) (E ∷ Ω) g refl .MIP.h))
+          (mip Δ₀ (B ∷ Ω') Λ h refl .MIP.g)) refl))) ∘
+      (⊗L {Γ = Δ₀ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (~ (cutIL≗ (Δ₀ ++ B' ⇐ A' ∷ Δ₁) []
+        (mip [] (B' ∷ []) (E ∷ Ω) g refl .MIP.D ⇒
+         mip Δ₀ (B ∷ Ω') Λ h refl .MIP.D ∷ []) ax
+        (⇒L {Δ₀} {B' ⇐ A' ∷ Δ₁} {Λ}
+          (⇐L {[]} {Δ₁} {[]} f (mip [] (B' ∷ []) (E ∷ Ω) g refl .MIP.h))
+          (mip Δ₀ (B ∷ Ω') Λ h refl .MIP.g)) refl)) ∘
+      (~ (cut⊗L≗ (Δ₀ ++ B' ⇐ A' ∷ Δ₁) [] [] (IL {[]} ax)
+        (⇒L {Δ₀} {B' ⇐ A' ∷ Δ₁} {Λ}
+          (⇐L {[]} {Δ₁} {[]} f (mip [] (B' ∷ []) (E ∷ Ω) g refl .MIP.h))
+          (mip Δ₀ (B ∷ Ω') Λ h refl .MIP.g)) refl))))))) , refl) refl)
+... | D ∷ Γ₂ | []
+  rewrite ++?-inj₁ [] Δ₁ (E ∷ Ω ++ A ⇒ B ∷ Ω') |
+          ++?-inj₂ (Δ₀ ++ D ∷ Γ₂ ++ B' ∷ []) Ω (A ⇒ B ∷ Ω' ++ Λ) E |
+          cases++-inj₂ (D ∷ Γ₂ ++ B' ∷ []) Δ₀ Ω E |
+          cases++-inj₁ Ω Ω' Λ (A ⇒ B) |
+          cases++-inj₁ Γ₂ Δ₁ (E ∷ Ω) (B' ⇐ A') |
+          ++?-inj₁ [] Δ₁ (E ∷ Ω) =
+    intrp≗ (↝∷ (⊗L {[]} {[]} (IL {[]} ax) ,
+      (⊗L {Γ = Δ₀ ++ D ∷ Γ₂ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ} ⇐L⇒L-assoc ∘
+      (⊗L {Γ = Δ₀ ++ D ∷ Γ₂ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (⇒L (~ (IL⇐L-assoc {Γ = D ∷ Γ₂} {Δ₀ = Δ₁} {Δ₁ = []} {Λ = []})) refl) ∘
+      (⊗L {Γ = Δ₀ ++ D ∷ Γ₂ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (~ (IL⇒L-assoc {Γ = Δ₀} {Δ₀ = D ∷ Γ₂ ++ B' ⇐ A' ∷ Δ₁} {Δ₁ = []} {Λ = Λ})) ∘
+      (⊗L {Γ = Δ₀ ++ D ∷ Γ₂ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (IL {Γ = Δ₀ ++ D ∷ Γ₂ ++ B' ⇐ A' ∷ Δ₁}
+          {Δ = mip [] (D ∷ Γ₂ ++ B' ∷ []) (E ∷ Ω) g refl .MIP.D ⇒
+            mip Δ₀ (B ∷ Ω') Λ h refl .MIP.D ∷ Λ}
+          (~ (cutaxA-left (Δ₀ ++ D ∷ Γ₂ ++ B' ⇐ A' ∷ Δ₁)
+        (⇒L {Δ₀} {D ∷ Γ₂ ++ B' ⇐ A' ∷ Δ₁} {Λ}
+          (⇐L {D ∷ Γ₂} {Δ₁} {[]} f
+            (mip [] (D ∷ Γ₂ ++ B' ∷ []) (E ∷ Ω) g refl .MIP.h))
+          (mip Δ₀ (B ∷ Ω') Λ h refl .MIP.g)) refl))) ∘
+      (⊗L {Γ = Δ₀ ++ D ∷ Γ₂ ++ B' ⇐ A' ∷ Δ₁} {Δ = Λ}
+        (~ (cutIL≗ (Δ₀ ++ D ∷ Γ₂ ++ B' ⇐ A' ∷ Δ₁) []
+        (mip [] (D ∷ Γ₂ ++ B' ∷ []) (E ∷ Ω) g refl .MIP.D ⇒
+         mip Δ₀ (B ∷ Ω') Λ h refl .MIP.D ∷ []) ax
+        (⇒L {Δ₀} {D ∷ Γ₂ ++ B' ⇐ A' ∷ Δ₁} {Λ}
+          (⇐L {D ∷ Γ₂} {Δ₁} {[]} f
+            (mip [] (D ∷ Γ₂ ++ B' ∷ []) (E ∷ Ω) g refl .MIP.h))
+          (mip Δ₀ (B ∷ Ω') Λ h refl .MIP.g)) refl)) ∘
+      (~ (cut⊗L≗ (Δ₀ ++ D ∷ Γ₂ ++ B' ⇐ A' ∷ Δ₁) [] [] (IL {[]} ax)
+        (⇒L {Δ₀} {D ∷ Γ₂ ++ B' ⇐ A' ∷ Δ₁} {Λ}
+          (⇐L {D ∷ Γ₂} {Δ₁} {[]} f
+            (mip [] (D ∷ Γ₂ ++ B' ∷ []) (E ∷ Ω) g refl .MIP.h))
+          (mip Δ₀ (B ∷ Ω') Λ h refl .MIP.g)) refl))))))) , refl) refl)
+... | [] | x ∷ Ξ' rewrite ++?-inj₂ Δ₁ Ξ' (E ∷ Ω ++ A ⇒ B ∷ Ω') x |
+                            ++?-inj₂ (Δ₀ ++ B' ∷ x ∷ Ξ') Ω (A ⇒ B ∷ Ω' ++ Λ) E |
+                            ++?-inj₁ (x ∷ Ξ') Δ₁ (E ∷ Ω) |
+                            cases++-inj₂ (B' ∷ x ∷ Ξ') Δ₀ Ω E |
+                            cases++-inj₁ Ω Ω' Λ (A ⇒ B) = intrp≗ (g~ ⇐L⇒L-assoc)
+... | D ∷ Γ₂ | x ∷ Ξ' rewrite ++?-inj₂ Δ₁ Ξ' (E ∷ Ω ++ A ⇒ B ∷ Ω') x |
+                                  ++?-inj₂ (Δ₀ ++ D ∷ Γ₂ ++ B' ∷ x ∷ Ξ') Ω (A ⇒ B ∷ Ω' ++ Λ) E |
+                                  cases++-inj₁ Γ₂ (Δ₁ ++ x ∷ Ξ') (E ∷ Ω) (B' ⇐ A') |
+                                  cases++-inj₂ (D ∷ Γ₂ ++ B' ∷ x ∷ Ξ') Δ₀ Ω E |
+                                  ++?-inj₁ (x ∷ Ξ') Δ₁ (E ∷ Ω) |
+                                  cases++-inj₁ Ω Ω' Λ (A ⇒ B) = intrp≗ (g~ ⇐L⇒L-assoc)
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} eq | inj₂ (F , Ω , eq1 , refl) | inj₂ (Ω' , refl , refl) 
+  with  cases++ Γ Δ₀ (Δ ++ Ω') (Γ₁ ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁) eq1
+... | inj₁ (Ω'' , refl , eq3) 
+  with cases++ (Ω'' ++ Γ₁) Δ (Δ₁ ++ Λ₁) Ω' eq3
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} eq | inj₂ (F , Ω , eq1 , refl) | inj₂ (Ω' , refl , refl) | inj₁ (Ω'' , refl , eq3) | inj₁ (Ω''' , refl , eq5) 
+  with ++? Ω''' Δ₁ Ω' Λ₁ eq5
+mip≗⇐L⇒L-assoc Γ (E ∷ .(Ω'' ++ Γ₁ ++ B' ⇐ A' ∷ Ω''')) .(Ω' ++ A ⇒ B ∷ Ξ) {Γ₁} {.(Γ ++ E ∷ Ω'')} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} refl | inj₂ (E , .((Ω'' ++ Γ₁ ++ B' ⇐ A' ∷ Ω''') ++ Ω') , refl , refl) | inj₂ (Ω' , refl , refl) | inj₁ (Ω'' , refl , refl) | inj₁ (Ω''' , refl , refl) | inj₁ (Ξ' , refl , refl)
+  rewrite cases++-inj₁ (Γ ++ E ∷ Ω'' ++ Γ₁) (Δ₁ ++ Ξ') (Ω' ++ A ⇒ B ∷ Ξ) (B' ⇐ A') |
+          cases++-inj₂ Ω' (Ω'' ++ Γ₁ ++ B' ⇐ A' ∷ Δ₁ ++ Ξ') Ξ (A ⇒ B) |
+          cases++-inj₂ (E ∷ Ω'' ++ Γ₁) Γ (Δ₁ ++ Ξ') (B' ⇐ A') |
+          ++?-inj₁ (Γ₁ ++ B' ⇐ A' ∷ Δ₁ ++ Ξ') Ω'' Ω' |
+          ++?-inj₁ Ξ' Δ₁ (Ω' ++ A ⇒ B ∷ Ξ) |
+          ++?-inj₂ Γ (Ω'' ++ Γ₁ ++ B' ∷ Ξ' ++ Ω') (A ⇒ B ∷ Ξ) E |
+          cases++-inj₁ Γ Ω'' (Γ₁ ++ B' ∷ Ξ' ++ Ω') E |
+          cases++-inj₂ Ω' (Ω'' ++ Γ₁ ++ B' ∷ Ξ') Ξ (A ⇒ B) |
+          ++?-inj₁ (Γ₁ ++ B' ∷ Ξ') Ω'' Ω' with Γ₁
+... | [] rewrite ++?-inj₁ Ξ' Δ₁ Ω' = intrp≗ (h~ ⇐L⊗R₂)
+... | D ∷ Γ₂ rewrite cases++-inj₁ Γ₂ (Δ₁ ++ Ξ') Ω' (B' ⇐ A') |
+                         ++?-inj₁ Ξ' Δ₁ Ω' = intrp≗ (h~ ⇐L⊗R₂)
+mip≗⇐L⇒L-assoc Γ (E ∷ .(Ω'' ++ Γ₁ ++ B' ⇐ A' ∷ Ω''')) .(Ω' ++ A ⇒ B ∷ Ξ) {Γ₁} {.(Γ ++ E ∷ Ω'')} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} {C} {f} {g} {h} refl | inj₂ (E , .((Ω'' ++ Γ₁ ++ B' ⇐ A' ∷ Ω''') ++ Ω') , refl , refl) | inj₂ (Ω' , refl , refl) | inj₁ (Ω'' , refl , refl) | inj₁ (Ω''' , refl , refl) | inj₂ (F , Ξ' , refl , refl)
+  rewrite cases++-inj₁ (Γ ++ E ∷ Ω'' ++ Γ₁) Ω''' (F ∷ Ξ' ++ Λ₁ ++ A ⇒ B ∷ Ξ) (B' ⇐ A') |
+          cases++-inj₂ (F ∷ Ξ' ++ Λ₁) (Ω'' ++ Γ₁ ++ B' ⇐ A' ∷ Ω''') Ξ (A ⇒ B) |
+          cases++-inj₂ (E ∷ Ω'' ++ Γ₁) Γ Ω''' (B' ⇐ A') |
+          ++?-inj₁ (Γ₁ ++ B' ⇐ A' ∷ Ω''') Ω'' (F ∷ Ξ' ++ Λ₁) |
+          ++?-inj₂ Ω''' Ξ' (Λ₁ ++ A ⇒ B ∷ Ξ) F |
+          ++?-inj₂ Γ (Ω'' ++ Γ₁ ++ B' ∷ Λ₁) (A ⇒ B ∷ Ξ) E |
+          cases++-inj₁ Γ Ω'' (Γ₁ ++ B' ∷ Λ₁) E |
+          cases++-inj₂ Λ₁ (Ω'' ++ Γ₁ ++ B' ∷ []) Ξ (A ⇒ B) |
+          ++?-inj₁ (Γ₁ ++ B' ∷ []) Ω'' Λ₁ with Γ₁
+... | [] rewrite ++?-inj₂ Ω''' Ξ' Λ₁ F =
+  intrp≗
+    (↜∷
+      (t , eqg ,
+        ⇐R
+          ((⊗R refl stepCut)
+           ∘ (~ (⇐L⊗R₂ {Γ = []}
+                   {Δ = Ω''' ++ MIP.D Fm ∷ []}
+                   {Λ = []}
+                   {Ω = E ∷ Ω''}))))
+      refl)
+  where
+    Fm = mip Ω''' (F ∷ Ξ') [] f refl
+    Gm = mip [] (B' ∷ []) Λ₁ g refl
+    Km = mip Γ (E ∷ Ω'') (B ∷ Ξ) h refl
+    qh = ⇐L {Γ = []} {Δ = Ω''' ++ MIP.D Fm ∷ []} {Λ = []}
+           (MIP.g Fm) (MIP.h Gm)
+    prefh = B' ⇐ A' ∷ Ω'''
+    stepCut :
+      cut prefh (ax {A = MIP.D Fm}) qh refl ≗ qh
+    stepCut
+      rewrite cases++-inj₂ (B' ⇐ A' ∷ Ω''') [] [] (MIP.D Fm) |
+              cases++-inj₁ Ω''' [] [] (MIP.D Fm) =
+      ⇐L (cutaxA-left Ω''' (MIP.g Fm) refl) refl
+    t : MIP.D Km ⊗ (MIP.D Gm ⇐ MIP.D Fm) ∷ [] ⊢
+        (MIP.D Km ⊗ MIP.D Gm) ⇐ MIP.D Fm
+    t = ⇐R (⊗L {Γ = []} {Δ = MIP.D Fm ∷ []}
+      (⊗R (ax {A = MIP.D Km})
+        (⇐L {Γ = []} {Δ = MIP.D Fm ∷ []} {Λ = []}
+          (ax {A = MIP.D Fm}) (ax {A = MIP.D Gm}))))
+    eqF :
+      cut (MIP.D Gm ⇐ MIP.D Fm ∷ []) (MIP.h Fm)
+        (cut [] (⇐L {Γ = []} {Δ = MIP.D Fm ∷ []} {Λ = []} ax ax)
+          (MIP.g Gm) refl) refl
+      ≗
+      ⇐L {Γ = []} {Δ = F ∷ Ξ'} {Λ = Λ₁} (MIP.h Fm) (MIP.g Gm)
+    eqF =
+      (((cut-cong₂ (_ ∷ []) refl
+          ((cut⇐L≗ [] (ax {A = MIP.D Fm}) (ax {A = MIP.D Gm})
+              (MIP.g Gm) refl)
+           ∘ ⇐L {Γ = []} {Δ = MIP.D Fm ∷ []} {Λ = Λ₁}
+               refl (cutaxA-left [] (MIP.g Gm) refl)))
+        ∘ ≡to≗
+            (cut⇐L-cases++₁ [] [] {Λ = []} {Λ₁ = Λ₁} {Ω = F ∷ Ξ'}
+              {f = MIP.h Fm}
+              {g = ax}
+              {h = MIP.g Gm}))
+       ∘ ⇐L {Γ = []} {Δ = F ∷ Ξ'} {Λ = Λ₁}
+           (cutaxA-right (MIP.h Fm)) refl)
+    eqg :
+      ⊗L
+        (⇒L {Γ = Γ ++ MIP.D Km ∷ []}
+          {Δ = (MIP.D Gm ⇐ MIP.D Fm) ∷ F ∷ Ξ' ++ Λ₁}
+          {Λ = Ξ}
+          (⇐L {Γ = []} {Δ = F ∷ Ξ'} {Λ = Λ₁}
+            (MIP.h Fm) (MIP.g Gm))
+          (MIP.g Km))
+      ≗
+      cut Γ t
+        (⇐L {Γ = Γ} {Δ = F ∷ Ξ'} {Λ = Λ₁ ++ A ⇒ B ∷ Ξ}
+          (MIP.h Fm)
+          (⊗L {Γ = Γ} {Δ = Λ₁ ++ A ⇒ B ∷ Ξ}
+            (⇒L {Γ = Γ ++ MIP.D Km ∷ []}
+              {Δ = MIP.D Gm ∷ Λ₁}
+              {Λ = Ξ}
+              (MIP.g Gm)
+              (MIP.g Km)))) refl
+    eqg
+      rewrite cases++-inj₂ [] Γ (F ∷ Ξ' ++ Λ₁ ++ A ⇒ B ∷ Ξ)
+                ((MIP.D Km ⊗ MIP.D Gm) ⇐ MIP.D Fm) |
+              cases++-inj₂ [] Γ (Λ₁ ++ A ⇒ B ∷ Ξ)
+                (MIP.D Km ⊗ MIP.D Gm) |
+              cases++-inj₁ (Γ ++ MIP.D Km ∷ []) Λ₁ (A ⇒ B ∷ Ξ)
+                (MIP.D Gm) |
+              cases++-inj₂
+                (MIP.D Km ⊗ (MIP.D Gm ⇐ MIP.D Fm) ∷ [])
+                Γ (Λ₁ ++ A ⇒ B ∷ Ξ) (MIP.D Fm) |
+              cases++-inj₂ [] (Γ ++ MIP.D Km ∷ []) Λ₁ (MIP.D Gm) |
+              cases++-inj₁ Γ
+                ((MIP.D Gm ⇐ MIP.D Fm) ∷ MIP.D Fm ∷ Λ₁)
+                (A ⇒ B ∷ Ξ) (MIP.D Km) |
+              cases++-inj₁ Γ []
+                ((MIP.D Gm ⇐ MIP.D Fm) ∷ MIP.D Fm ∷ Λ₁)
+                (MIP.D Km) |
+              cases++-inj₁
+                (Γ ++ MIP.D Km ∷ MIP.D Gm ⇐ MIP.D Fm ∷ [])
+                Λ₁ (A ⇒ B ∷ Ξ) (MIP.D Fm) |
+              cases++-inj₂ ((MIP.D Gm ⇐ MIP.D Fm) ∷ [])
+                (Γ ++ MIP.D Km ∷ []) Λ₁ (MIP.D Fm) =
+      ⊗L
+        (⇒L
+          (~ eqF)
+          (~ (cutaxA-left Γ (MIP.g Km) refl)))
+... | D ∷ Γ₂
+  rewrite cases++-inj₁ Γ₂ Ω''' (F ∷ Ξ' ++ Λ₁) (B' ⇐ A') |
+          ++?-inj₂ Ω''' Ξ' Λ₁ F =
+  intrp≗
+    (↜∷
+      (t , eqg ,
+        ⇐R
+          ((⊗R refl stepCut)
+           ∘ (~ (⇐L⊗R₂ {Γ = D ∷ Γ₂}
+                   {Δ = Ω''' ++ MIP.D Fm ∷ []}
+                   {Λ = []}
+                   {Ω = E ∷ Ω''}))))
+      refl)
+  where
+    Fm = mip Ω''' (F ∷ Ξ') [] f refl
+    Gm = mip [] (D ∷ Γ₂ ++ B' ∷ []) Λ₁ g refl
+    Km = mip Γ (E ∷ Ω'') (B ∷ Ξ) h refl
+    qh = ⇐L {Γ = D ∷ Γ₂} {Δ = Ω''' ++ MIP.D Fm ∷ []} {Λ = []}
+           (MIP.g Fm) (MIP.h Gm)
+    prefh = D ∷ Γ₂ ++ B' ⇐ A' ∷ Ω'''
+    stepCut :
+      cut prefh (ax {A = MIP.D Fm}) qh refl ≗ qh
+    stepCut
+      rewrite cases++-inj₂ (B' ⇐ A' ∷ Ω''') (D ∷ Γ₂) [] (MIP.D Fm) |
+              cases++-inj₁ Ω''' [] [] (MIP.D Fm) =
+      ⇐L (cutaxA-left Ω''' (MIP.g Fm) refl) refl
+    t : MIP.D Km ⊗ (MIP.D Gm ⇐ MIP.D Fm) ∷ [] ⊢
+        (MIP.D Km ⊗ MIP.D Gm) ⇐ MIP.D Fm
+    t = ⇐R (⊗L {Γ = []} {Δ = MIP.D Fm ∷ []}
+      (⊗R (ax {A = MIP.D Km})
+        (⇐L {Γ = []} {Δ = MIP.D Fm ∷ []} {Λ = []}
+          (ax {A = MIP.D Fm}) (ax {A = MIP.D Gm}))))
+    eqF :
+      cut (MIP.D Gm ⇐ MIP.D Fm ∷ []) (MIP.h Fm)
+        (cut [] (⇐L {Γ = []} {Δ = MIP.D Fm ∷ []} {Λ = []} ax ax)
+          (MIP.g Gm) refl) refl
+      ≗
+      ⇐L {Γ = []} {Δ = F ∷ Ξ'} {Λ = Λ₁} (MIP.h Fm) (MIP.g Gm)
+    eqF =
+      (((cut-cong₂ (_ ∷ []) refl
+          ((cut⇐L≗ [] (ax {A = MIP.D Fm}) (ax {A = MIP.D Gm})
+              (MIP.g Gm) refl)
+           ∘ ⇐L {Γ = []} {Δ = MIP.D Fm ∷ []} {Λ = Λ₁}
+               refl (cutaxA-left [] (MIP.g Gm) refl)))
+        ∘ ≡to≗
+            (cut⇐L-cases++₁ [] [] {Λ = []} {Λ₁ = Λ₁} {Ω = F ∷ Ξ'}
+              {f = MIP.h Fm}
+              {g = ax}
+              {h = MIP.g Gm}))
+       ∘ ⇐L {Γ = []} {Δ = F ∷ Ξ'} {Λ = Λ₁}
+           (cutaxA-right (MIP.h Fm)) refl)
+    eqg :
+      ⊗L
+        (⇒L {Γ = Γ ++ MIP.D Km ∷ []}
+          {Δ = (MIP.D Gm ⇐ MIP.D Fm) ∷ F ∷ Ξ' ++ Λ₁}
+          {Λ = Ξ}
+          (⇐L {Γ = []} {Δ = F ∷ Ξ'} {Λ = Λ₁}
+            (MIP.h Fm) (MIP.g Gm))
+          (MIP.g Km))
+      ≗
+      cut Γ t
+        (⇐L {Γ = Γ} {Δ = F ∷ Ξ'} {Λ = Λ₁ ++ A ⇒ B ∷ Ξ}
+          (MIP.h Fm)
+          (⊗L {Γ = Γ} {Δ = Λ₁ ++ A ⇒ B ∷ Ξ}
+            (⇒L {Γ = Γ ++ MIP.D Km ∷ []}
+              {Δ = MIP.D Gm ∷ Λ₁}
+              {Λ = Ξ}
+              (MIP.g Gm)
+              (MIP.g Km)))) refl
+    eqg
+      rewrite cases++-inj₂ [] Γ (F ∷ Ξ' ++ Λ₁ ++ A ⇒ B ∷ Ξ)
+                ((MIP.D Km ⊗ MIP.D Gm) ⇐ MIP.D Fm) |
+              cases++-inj₂ [] Γ (Λ₁ ++ A ⇒ B ∷ Ξ)
+                (MIP.D Km ⊗ MIP.D Gm) |
+              cases++-inj₁ (Γ ++ MIP.D Km ∷ []) Λ₁ (A ⇒ B ∷ Ξ)
+                (MIP.D Gm) |
+              cases++-inj₂
+                (MIP.D Km ⊗ (MIP.D Gm ⇐ MIP.D Fm) ∷ [])
+                Γ (Λ₁ ++ A ⇒ B ∷ Ξ) (MIP.D Fm) |
+              cases++-inj₂ [] (Γ ++ MIP.D Km ∷ []) Λ₁ (MIP.D Gm) |
+              cases++-inj₁ Γ
+                ((MIP.D Gm ⇐ MIP.D Fm) ∷ MIP.D Fm ∷ Λ₁)
+                (A ⇒ B ∷ Ξ) (MIP.D Km) |
+              cases++-inj₁ Γ []
+                ((MIP.D Gm ⇐ MIP.D Fm) ∷ MIP.D Fm ∷ Λ₁)
+                (MIP.D Km) |
+              cases++-inj₁
+                (Γ ++ MIP.D Km ∷ MIP.D Gm ⇐ MIP.D Fm ∷ [])
+                Λ₁ (A ⇒ B ∷ Ξ) (MIP.D Fm) |
+              cases++-inj₂ ((MIP.D Gm ⇐ MIP.D Fm) ∷ [])
+                (Γ ++ MIP.D Km ∷ []) Λ₁ (MIP.D Fm) =
+      ⊗L
+        (⇒L
+          (~ eqF)
+          (~ (cutaxA-left Γ (MIP.g Km) refl)))
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} eq | inj₂ (F , Ω , eq1 , refl) | inj₂ (Ω' , refl , refl) | inj₁ (Ω'' , refl , eq3) | inj₂ (Ω''' , refl , eq5) 
+  with ++? Δ Ω'' Ω''' Γ₁ eq5
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) .((Ω''' ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁) ++ A ⇒ B ∷ Ξ₁) {Γ₁} {.(Γ ++ E ∷ Ω'')} {Δ₁} {Λ₁} {Ξ₁} {A} {B} {A'} {B'} refl | inj₂ (E , .(Δ ++ Ω''' ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁) , refl , refl) | inj₂ (.(Ω''' ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁) , refl , refl) | inj₁ (Ω'' , refl , refl) | inj₂ (Ω''' , refl , refl) | inj₁ (Ξ , refl , refl)
+  rewrite cases++-inj₂ Ω''' (Γ ++ E ∷ Ω'' ++ Ξ)
+            (Δ₁ ++ Λ₁ ++ A ⇒ B ∷ Ξ₁) (B' ⇐ A') |
+          cases++-inj₂ (Ω''' ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁)
+            (Ω'' ++ Ξ) Ξ₁ (A ⇒ B) |
+          ++?-inj₂ Γ (Ω'' ++ Ξ ++ Ω''' ++ B' ∷ Λ₁)
+            (A ⇒ B ∷ Ξ₁) E |
+          ++?-inj₁ Ξ Ω'' (Ω''' ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁) |
+          cases++-inj₁ Γ Ω'' (Ξ ++ Ω''' ++ B' ∷ Λ₁) E |
+          cases++-inj₂ (Ω''' ++ B' ∷ Λ₁) (Ω'' ++ Ξ) Ξ₁
+            (A ⇒ B) |
+          ++?-inj₁ Ξ Ω'' (Ω''' ++ B' ∷ Λ₁) =
+    intrp≗
+      (~-trans
+        (g~ ((~ ⊗L⇐L-comm₁) ∘ ⊗L ⇐L⇒L-assoc))
+        (⇒L~⊗ {Γ₀ = Γ} {Γ₁ = E ∷ Ω''} {Δ₀ = Ξ}
+          {Δ₁ = Ω''' ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁}
+          {Λ = Ξ₁} {A = A} {B = B}
+          (~-sym
+            (mip⇐L~Λ [] Ξ Ω''' Λ₁ {Ω = Δ₁}
+              {A = A'} {B = B'}))
+          refl))
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) .((Ω''' ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁) ++ A ⇒ B ∷ Ξ₁) {Γ₁} {.(Γ ++ E ∷ Ω'')} {Δ₁} {Λ₁} {Ξ₁} {A} {B} {A'} {B'} refl | inj₂ (E , .(Δ ++ Ω''' ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁) , refl , refl) | inj₂ (.(Ω''' ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁) , refl , refl) | inj₁ (Ω'' , refl , refl) | inj₂ (Ω''' , refl , refl) | inj₂ (F , Ξ , refl , refl)
+  rewrite cases++-inj₂ (F ∷ Ξ ++ Γ₁) (Γ ++ E ∷ Δ)
+            (Δ₁ ++ Λ₁ ++ A ⇒ B ∷ Ξ₁) (B' ⇐ A') |
+          cases++-inj₂
+            (F ∷ Ξ ++ Γ₁ ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁)
+            Δ Ξ₁ (A ⇒ B) |
+          ++?-inj₂ Γ (Δ ++ F ∷ Ξ ++ Γ₁ ++ B' ∷ Λ₁)
+            (A ⇒ B ∷ Ξ₁) E |
+          ++?-inj₂ Δ Ξ (Γ₁ ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁)
+            F |
+          cases++-inj₁ Γ (Δ ++ F ∷ Ξ) (Γ₁ ++ B' ∷ Λ₁)
+            E |
+          cases++-inj₂ (F ∷ Ξ ++ Γ₁ ++ B' ∷ Λ₁) Δ Ξ₁
+            (A ⇒ B) |
+          ++?-inj₂ Δ Ξ (Γ₁ ++ B' ∷ Λ₁) F =
+    intrp≗ (g~ ⇐L⇒L-assoc)
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} eq | inj₂ (F , Ω , eq1 , refl) | inj₂ (Ω' , refl , refl)  | inj₂ (Ω'' , eq2 , refl) 
+  with cases++ Ω'' Γ₁ (Δ ++ Ω') (B' ⇐ A' ∷ Δ₁ ++ Λ₁) eq2
+... | inj₁ (Ω''' , refl , eq4) 
+  with cases++ Ω''' Δ (Δ₁ ++ Λ₁) Ω' eq4
+... | inj₁ (Ξ , refl , eq6) 
+  with ++? Ξ Δ₁ Ω' Λ₁ eq6
+mip≗⇐L⇒L-assoc .(Δ₀ ++ Ω'') (E ∷ .(Ω''' ++ B' ⇐ A' ∷ Ξ)) .(Ω' ++ A ⇒ B ∷ Ξ₁) {.(Ω'' ++ E ∷ Ω''')} {Δ₀} {Δ₁} {Λ₁} {Ξ₁} {A} {B} {A'} {B'} refl | inj₂ (E , .((Ω''' ++ B' ⇐ A' ∷ Ξ) ++ Ω') , refl , refl) | inj₂ (Ω' , refl , refl) | inj₂ (Ω'' , refl , refl) | inj₁ (Ω''' , refl , refl) | inj₁ (Ξ , refl , refl) | inj₁ (Ξ' , refl , refl)
+  rewrite cases++-inj₁ (Δ₀ ++ Ω'' ++ E ∷ Ω''') (Δ₁ ++ Ξ')
+            (Ω' ++ A ⇒ B ∷ Ξ₁) (B' ⇐ A') |
+          cases++-inj₂ Ω'
+            (Ω''' ++ B' ⇐ A' ∷ Δ₁ ++ Ξ') Ξ₁
+            (A ⇒ B) |
+          cases++-inj₂ (E ∷ Ω''') (Δ₀ ++ Ω'')
+            (Δ₁ ++ Ξ') (B' ⇐ A') |
+          cases++-inj₁ (Ω'' ++ E ∷ Ω''') (Δ₁ ++ Ξ')
+            Ω' (B' ⇐ A') |
+          ++?-inj₁ Ξ' Δ₁ (Ω' ++ A ⇒ B ∷ Ξ₁) |
+          cases++-inj₂ (E ∷ Ω''') Ω'' (Δ₁ ++ Ξ')
+            (B' ⇐ A') |
+          ++?-inj₂ (Δ₀ ++ Ω'') (Ω''' ++ B' ∷ Ξ' ++ Ω')
+            (A ⇒ B ∷ Ξ₁) E |
+          ++?-inj₁ Ξ' Δ₁ Ω' |
+          cases++-inj₂ Ω'' Δ₀ (Ω''' ++ B' ∷ Ξ' ++ Ω')
+            E |
+          cases++-inj₂ Ω' (Ω''' ++ B' ∷ Ξ') Ξ₁
+            (A ⇒ B) = intrp≗ refl
+mip≗⇐L⇒L-assoc .(Δ₀ ++ Ω'') (E ∷ .(Ω''' ++ B' ⇐ A' ∷ Ξ)) .(Ω' ++ A ⇒ B ∷ Ξ₁) {.(Ω'' ++ E ∷ Ω''')} {Δ₀} {Δ₁} {Λ₁} {Ξ₁} {A} {B} {A'} {B'} refl | inj₂ (E , .((Ω''' ++ B' ⇐ A' ∷ Ξ) ++ Ω') , refl , refl) | inj₂ (Ω' , refl , refl) | inj₂ (Ω'' , refl , refl) | inj₁ (Ω''' , refl , refl) | inj₁ (Ξ , refl , refl) | inj₂ (F , Ξ' , refl , refl)
+  rewrite cases++-inj₁ (Δ₀ ++ Ω'' ++ E ∷ Ω''') Ξ
+            (F ∷ Ξ' ++ Λ₁ ++ A ⇒ B ∷ Ξ₁) (B' ⇐ A') |
+          cases++-inj₂ (F ∷ Ξ' ++ Λ₁)
+            (Ω''' ++ B' ⇐ A' ∷ Ξ) Ξ₁
+            (A ⇒ B) |
+          cases++-inj₂ (E ∷ Ω''') (Δ₀ ++ Ω'') Ξ
+            (B' ⇐ A') |
+          cases++-inj₁ (Ω'' ++ E ∷ Ω''') Ξ
+            (F ∷ Ξ' ++ Λ₁) (B' ⇐ A') |
+          ++?-inj₂ Ξ Ξ' (Λ₁ ++ A ⇒ B ∷ Ξ₁) F |
+          cases++-inj₂ (E ∷ Ω''') Ω'' Ξ (B' ⇐ A') |
+          ++?-inj₂ (Δ₀ ++ Ω'') (Ω''' ++ B' ∷ Λ₁)
+            (A ⇒ B ∷ Ξ₁) E |
+          ++?-inj₂ Ξ Ξ' Λ₁ F |
+          cases++-inj₂ Ω'' Δ₀ (Ω''' ++ B' ∷ Λ₁)
+            E |
+          cases++-inj₂ Λ₁ (Ω''' ++ B' ∷ []) Ξ₁
+            (A ⇒ B) =
+    intrp≗ (g~ ⇐L⇒L-assoc)
+mip≗⇐L⇒L-assoc .(Δ₀ ++ Ω'') (E ∷ Δ) .(Ω' ++ A ⇒ B ∷ Ξ₁) {.(Ω'' ++ E ∷ Ω''')} {Δ₀} {Δ₁} {Λ₁} {Ξ₁} {A} {B} {A'} {B'} {C} {f} {g} {h} refl | inj₂ (E , .(Δ ++ Ω') , refl , refl) | inj₂ (Ω' , refl , refl) | inj₂ (Ω'' , refl , refl) | inj₁ (Ω''' , refl , refl) | inj₂ (Ξ , refl , refl)
+  rewrite cases++-inj₂ Ξ (Δ₀ ++ Ω'' ++ E ∷ Δ)
+            (Δ₁ ++ Λ₁ ++ A ⇒ B ∷ Ξ₁) (B' ⇐ A') |
+          cases++-inj₂ (Ξ ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁)
+            Δ Ξ₁ (A ⇒ B) =
+    intrp≗
+      (~-trans
+        (⇐L~Λ {Γ = Δ₀ ++ Ω''} {Δ = E ∷ Δ}
+          {Λ₀ = Ξ} {Λ₁ = Λ₁ ++ A ⇒ B ∷ Ξ₁}
+          (mip⇒L~ΔΓ Δ₀ Ω'' (E ∷ Δ)
+            (Ξ ++ B' ∷ Λ₁) Ξ₁ {f = g} {g = h})
+          refl)
+        (~-trans
+          (g~ (⇐L⇒L-assoc
+            {Γ₀ = Ω'' ++ mip Ω'' (E ∷ Δ)
+              (Ξ ++ B' ∷ Λ₁) g refl .MIP.D ∷ Ξ}
+            {Γ₁ = Δ₀} {Δ = Δ₁} {Λ₀ = Λ₁}
+            {Λ₁ = Ξ₁} {A = A} {A' = A'}
+            {B = B} {B' = B'} {f = f}
+            {g = mip Ω'' (E ∷ Δ) (Ξ ++ B' ∷ Λ₁) g refl .MIP.g}
+            {h = h}))
+          (⇒L~Δ {Γ = Ω''} {Γ₁ = Δ₀} {Δ = E ∷ Δ}
+            {Λ = Ξ ++ B' ⇐ A' ∷ Δ₁ ++ Λ₁}
+            {Λ₁ = Ξ₁} {A = A} {B = B} {C = C}
+            (~-sym
+              (mip⇐L~Λ Ω'' (E ∷ Δ) Ξ Λ₁
+                {Ω = Δ₁} {A = A'} {B = B'} {f = f}
+                {g = g}))
+            refl)))
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} eq | inj₂ (F , Ω , eq1 , refl) | inj₂ (Ω' , refl , refl)  | inj₂ (Ω'' , eq2 , refl)  | inj₂ ([] , eq3 , refl)
+  with inj∷ eq3
+... | refl , eq3'
+  with ++? Δ Δ₁ Ω' Λ₁ eq3'
+... | inj₁ (Ξ' , refl , refl) rewrite eq | eq1 | eq2 |
+        cases++-inj₁ (Δ₀ ++ Ω'') (Δ₁ ++ Ξ')
+          (Ω' ++ A ⇒ B ∷ Ξ) (B' ⇐ A') |
+        cases++-inj₂ Ω' (Δ₁ ++ Ξ') Ξ
+          (A ⇒ B) |
+        cases++-inj₂ [] (Δ₀ ++ Ω'') (Δ₁ ++ Ξ')
+          (B' ⇐ A') |
+        cases++-inj₁ Ω'' (Δ₁ ++ Ξ') Ω'
+          (B' ⇐ A') |
+        ++?-inj₁ Ξ' Δ₁ (Ω' ++ A ⇒ B ∷ Ξ) |
+        cases++-inj₂ [] Ω'' (Δ₁ ++ Ξ')
+          (B' ⇐ A') |
+        ++?-inj₂ (Δ₀ ++ Ω'') (Ξ' ++ Ω')
+          (A ⇒ B ∷ Ξ) B' |
+        ++?-inj₁ Ξ' Δ₁ Ω' |
+        cases++-inj₂ Ω'' Δ₀ (Ξ' ++ Ω') B' |
+        cases++-inj₂ Ω' Ξ' Ξ (A ⇒ B) = intrp≗ refl
+... | inj₂ (F , Ξ' , refl , refl) rewrite eq | eq1 | eq2 |
+        cases++-inj₁ (Δ₀ ++ Ω'') Δ
+          (F ∷ Ξ' ++ Λ₁ ++ A ⇒ B ∷ Ξ)
+          (B' ⇐ A') |
+        cases++-inj₂ [] (Δ₀ ++ Ω'') Δ (B' ⇐ A') |
+        cases++-inj₂ (F ∷ Ξ' ++ Λ₁) Δ Ξ
+          (A ⇒ B) |
+        ++?-inj₂ Δ Ξ' (Λ₁ ++ A ⇒ B ∷ Ξ) F |
+        cases++-inj₁ Ω'' Δ (F ∷ Ξ' ++ Λ₁)
+          (B' ⇐ A') |
+        ++?-inj₂ (Δ₀ ++ Ω'') Λ₁ (A ⇒ B ∷ Ξ) B' |
+        cases++-inj₂ [] Ω'' Δ (B' ⇐ A') |
+        cases++-inj₂ Ω'' Δ₀ Λ₁ B' |
+        ++?-inj₂ Δ Ξ' Λ₁ F = intrp≗ (g~ ⇐L⇒L-assoc)
+mip≗⇐L⇒L-assoc Γ (E ∷ Δ) Λ {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ} {A} {B} {A'} {B'} eq | inj₂ (F , Ω , eq1 , refl) | inj₂ (Ω' , refl , refl)  | inj₂ (Ω'' , eq2 , refl)  | inj₂ (x ∷ Ω''' , eq3 , refl) 
+  with cases++ Ω''' Δ₁ (Δ ++ Ω') Λ₁ (inj∷ eq3 .proj₂) 
+... | inj₁ (Ξ , refl , eq5) 
+  with ++? Ξ Δ Λ₁ Ω' eq5
+mip≗⇐L⇒L-assoc .(Δ₀ ++ Γ₁ ++ x ∷ Ω''') (E ∷ Δ) .(Ω' ++ A ⇒ B ∷ Ξ₁) {Γ₁} {Δ₀} {.(Ω''' ++ E ∷ Ξ)} {Λ₁} {Ξ₁} {A} {B} {A'} {B'} refl | inj₂ (E , .(Δ ++ Ω') , refl , refl) | inj₂ (Ω' , refl , refl) | inj₂ (.(Γ₁ ++ x ∷ Ω''') , refl , refl) | inj₂ (x ∷ Ω''' , refl , refl) | inj₁ (Ξ , refl , refl) | inj₁ (Ξ' , refl , refl)
+  with Ξ'
+... | []
+  rewrite cases++-inj₁ (Δ₀ ++ Γ₁) (Ω''' ++ E ∷ Δ)
+            (Λ₁ ++ A ⇒ B ∷ Ξ₁) (B' ⇐ A') |
+          cases++-inj₂ Λ₁ Δ Ξ₁ (A ⇒ B) |
+          cases++-inj₁ (Δ₀ ++ Γ₁) Ω''' (E ∷ Δ)
+            (B' ⇐ A') |
+          cases++-inj₁ Γ₁ (Ω''' ++ E ∷ Δ) Λ₁
+            (B' ⇐ A') |
+          ++?-inj₁ [] (Ω''' ++ E ∷ Δ)
+            (Λ₁ ++ A ⇒ B ∷ Ξ₁) |
+          cases++-inj₁ Γ₁ Ω''' (E ∷ Δ)
+            (B' ⇐ A') |
+          ++?-inj₁ (E ∷ Δ) Ω''' [] |
+          ++?-inj₁ [] (Ω''' ++ E ∷ Δ) Λ₁ |
+          ++?-inj₁ (E ∷ Δ) Ω''' [] =
+    intrp≗ (g~ (((⊗L {Γ = Δ₀ ++ Γ₁ ++ B' ⇐ A' ∷ Ω'''}
+                    {Δ = Λ₁ ++ A ⇒ B ∷ Ξ₁}
+                    (⇐L {Γ = Δ₀ ++ Γ₁}
+                       {Δ = Ω''' ++ _ ∷ []}
+                       {Λ = I ∷ Λ₁ ++ A ⇒ B ∷ Ξ₁}
+                       refl
+                       (IL⇒L-assoc {Γ = Δ₀}
+                         {Δ₀ = Γ₁ ++ B' ∷ []}
+                         {Δ₁ = Λ₁}
+                         {Λ = Ξ₁})))
+                 ∘ (⊗L {Γ = Δ₀ ++ Γ₁ ++ B' ⇐ A' ∷ Ω'''}
+                     {Δ = Λ₁ ++ A ⇒ B ∷ Ξ₁}
+                     (⇐L⇒L-assoc {Γ₀ = Γ₁} {Γ₁ = Δ₀}
+                       {Δ = Ω''' ++ _ ∷ []}
+                       {Λ₀ = I ∷ Λ₁}
+                       {Λ₁ = Ξ₁})))
+                ∘ (⊗L⇒L-assoc {Γ = Δ₀}
+                    {Δ₀ = Γ₁ ++ B' ⇐ A' ∷ Ω'''}
+                    {Δ₁ = Λ₁}
+                    {Λ = Ξ₁})))
+... | F ∷ Ξ'
+  rewrite cases++-inj₁ (Δ₀ ++ Γ₁) (Ω''' ++ E ∷ Δ)
+            (F ∷ Ξ' ++ Λ₁ ++ A ⇒ B ∷ Ξ₁) (B' ⇐ A') |
+          cases++-inj₂ (F ∷ Ξ' ++ Λ₁) Δ Ξ₁ (A ⇒ B) |
+          cases++-inj₁ (Δ₀ ++ Γ₁) Ω''' (E ∷ Δ) (B' ⇐ A') |
+          cases++-inj₁ Γ₁ (Ω''' ++ E ∷ Δ) (F ∷ Ξ' ++ Λ₁) (B' ⇐ A') |
+          ++?-inj₂ (Ω''' ++ E ∷ Δ) Ξ' (Λ₁ ++ A ⇒ B ∷ Ξ₁) F |
+          cases++-inj₁ Γ₁ Ω''' (E ∷ Δ) (B' ⇐ A') |
+          ++?-inj₂ (Ω''' ++ E ∷ Δ) Ξ' Λ₁ F =
+    intrp≗ (g~ ⇐L⇒L-assoc)
+mip≗⇐L⇒L-assoc .(Δ₀ ++ Γ₁ ++ x ∷ Ω''') (E ∷ Δ) .(Ω' ++ A ⇒ B ∷ Ξ₁) {Γ₁} {Δ₀} {.(Ω''' ++ E ∷ Ξ)} {Λ₁} {Ξ₁} {A} {B} {A'} {B'} refl | inj₂ (E , .(Δ ++ Ω') , refl , refl) | inj₂ (Ω' , refl , refl) | inj₂ (.(Γ₁ ++ x ∷ Ω''') , refl , refl) | inj₂ (x ∷ Ω''' , refl , refl) | inj₁ (Ξ , refl , refl) | inj₂ (F , Ξ' , refl , refl)
+  rewrite cases++-inj₁ (Δ₀ ++ Γ₁) (Ω''' ++ E ∷ Ξ ++ F ∷ Ξ')
+            (Ω' ++ A ⇒ B ∷ Ξ₁) (B' ⇐ A') |
+          cases++-inj₂ Ω' (Ξ ++ F ∷ Ξ') Ξ₁ (A ⇒ B) |
+          cases++-inj₁ (Δ₀ ++ Γ₁) Ω''' (E ∷ Ξ ++ F ∷ Ξ') (B' ⇐ A') |
+          cases++-inj₁ Γ₁ (Ω''' ++ E ∷ Ξ ++ F ∷ Ξ') Ω' (B' ⇐ A') |
+          ++?-inj₁ (F ∷ Ξ') (Ω''' ++ E ∷ Ξ) (Ω' ++ A ⇒ B ∷ Ξ₁) |
+          cases++-inj₁ Γ₁ Ω''' (E ∷ Ξ ++ F ∷ Ξ') (B' ⇐ A') |
+          ++?-inj₁ (E ∷ Ξ) Ω''' (F ∷ Ξ') |
+          ++?-inj₁ (F ∷ Ξ') (Ω''' ++ E ∷ Ξ) Ω' |
+          ++?-inj₂ (Δ₀ ++ Γ₁ ++ B' ∷ []) (Ξ' ++ Ω') (A ⇒ B ∷ Ξ₁) F |
+          ++?-inj₁ (E ∷ Ξ) Ω''' (F ∷ Ξ') |
+          cases++-inj₂ (Γ₁ ++ B' ∷ []) Δ₀ (Ξ' ++ Ω') F |
+          cases++-inj₂ Ω' Ξ' Ξ₁ (A ⇒ B) =
+    intrp≗ (g~ ((⊗L {Γ = Δ₀ ++ Γ₁ ++ B' ⇐ A' ∷ Ω'''}
+                    {Δ = Ω' ++ A ⇒ B ∷ Ξ₁}
+                    (⇐L⇒L-assoc {Γ₀ = Γ₁} {Γ₁ = Δ₀}
+                      {Δ = Ω''' ++ _ ∷ []}
+                      {Λ₀ = _ ∷ Ω'}
+                      {Λ₁ = Ξ₁}))
+                 ∘ (⊗L⇒L-assoc {Γ = Δ₀}
+                     {Δ₀ = Γ₁ ++ B' ⇐ A' ∷ Ω'''}
+                     {Δ₁ = Ω'}
+                     {Λ = Ξ₁})))
+mip≗⇐L⇒L-assoc .(Δ₀ ++ Γ₁ ++ x ∷ Ω''') (E ∷ Δ) .(Ω' ++ A ⇒ B ∷ Ξ₁) {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ₁} {A} {B} {A'} {B'} refl | inj₂ (E , .(Δ ++ Ω') , refl , refl) | inj₂ (Ω' , refl , refl) | inj₂ (.(Γ₁ ++ x ∷ Ω''') , refl , refl) | inj₂ (x ∷ Ω''' , refl , refl) | inj₂ ([] , refl , refl)
+  rewrite cases++-inj₁ (Δ₀ ++ Γ₁) (Δ₁ ++ E ∷ Δ)
+            (Ω' ++ A ⇒ B ∷ Ξ₁) (B' ⇐ A') |
+          cases++-inj₂ Ω' Δ Ξ₁ (A ⇒ B) |
+          cases++-inj₁ (Δ₀ ++ Γ₁) Δ₁ (E ∷ Δ) (B' ⇐ A') |
+          cases++-inj₁ Γ₁ (Δ₁ ++ E ∷ Δ) Ω' (B' ⇐ A') |
+          ++?-inj₁ (E ∷ Δ) Δ₁ (Ω' ++ A ⇒ B ∷ Ξ₁) |
+          cases++-inj₁ Γ₁ Δ₁ (E ∷ Δ) (B' ⇐ A') |
+          ++?-inj₁ (E ∷ Δ) Δ₁ Ω' |
+          ++?-inj₁ [] Δ₁ (E ∷ Δ) |
+          ++?-inj₂ (Δ₀ ++ Γ₁ ++ B' ∷ []) (Δ ++ Ω') (A ⇒ B ∷ Ξ₁) E |
+          cases++-inj₂ (Γ₁ ++ B' ∷ []) Δ₀ (Δ ++ Ω') E |
+          cases++-inj₂ Ω' Δ Ξ₁ (A ⇒ B) =
+    intrp≗ (g~ ((⊗L {Γ = Δ₀ ++ Γ₁ ++ B' ⇐ A' ∷ Ω'''}
+                    {Δ = Ω' ++ A ⇒ B ∷ Ξ₁}
+                    (⇐L⇒L-assoc {Γ₀ = Γ₁} {Γ₁ = Δ₀}
+                      {Δ = Ω''' ++ I ∷ []}
+                      {Λ₀ = _ ∷ Ω'}
+                      {Λ₁ = Ξ₁}))
+                 ∘ (⊗L⇒L-assoc {Γ = Δ₀}
+                     {Δ₀ = Γ₁ ++ B' ⇐ A' ∷ Ω'''}
+                     {Δ₁ = Ω'}
+                     {Λ = Ξ₁})))
+mip≗⇐L⇒L-assoc .(Δ₀ ++ Γ₁ ++ x ∷ Ω''') (E ∷ Δ) .(Ω' ++ A ⇒ B ∷ Ξ₁) {Γ₁} {Δ₀} {Δ₁} {Λ₁} {Ξ₁} {A} {B} {A'} {B'} refl | inj₂ (E , .(Δ ++ Ω') , refl , refl) | inj₂ (Ω' , refl , refl) | inj₂ (.(Γ₁ ++ x ∷ Ω''') , refl , refl) | inj₂ (x ∷ Ω''' , refl , refl) | inj₂ (F ∷ Ξ , refl , refl)
+  rewrite cases++-inj₁ (Δ₀ ++ Γ₁) (Δ₁ ++ F ∷ Ξ ++ E ∷ Δ)
+            (Ω' ++ A ⇒ B ∷ Ξ₁) (B' ⇐ A') |
+          cases++-inj₂ Ω' Δ Ξ₁ (A ⇒ B) |
+          cases++-inj₁ (Δ₀ ++ Γ₁) (Δ₁ ++ F ∷ Ξ) (E ∷ Δ) (B' ⇐ A') |
+          cases++-inj₁ Γ₁ (Δ₁ ++ F ∷ Ξ ++ E ∷ Δ) Ω' (B' ⇐ A') |
+          ++?-inj₁ (F ∷ Ξ ++ E ∷ Δ) Δ₁ (Ω' ++ A ⇒ B ∷ Ξ₁) |
+          cases++-inj₁ Γ₁ (Δ₁ ++ F ∷ Ξ) (E ∷ Δ) (B' ⇐ A') |
+          ++?-inj₁ (F ∷ Ξ ++ E ∷ Δ) Δ₁ Ω' |
+          ++?-inj₂ Δ₁ Ξ (E ∷ Δ) F |
+          ++?-inj₂ (Δ₀ ++ Γ₁ ++ B' ∷ F ∷ Ξ) (Δ ++ Ω') (A ⇒ B ∷ Ξ₁) E |
+          cases++-inj₂ (Γ₁ ++ B' ∷ F ∷ Ξ) Δ₀ (Δ ++ Ω') E |
+          cases++-inj₂ Ω' Δ Ξ₁ (A ⇒ B) = intrp≗ (g~ ⇐L⇒L-assoc)

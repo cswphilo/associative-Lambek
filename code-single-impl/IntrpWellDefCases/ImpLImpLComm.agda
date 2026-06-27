@@ -5,6 +5,16 @@ module IntrpWellDefCases.ImpLImpLComm where
 open import IntrpWellDefCases.Base
 open import Data.Sum
 
+mip⇒L~Γ : ∀ Γ₀ Γ₁ Δ Λ
+  {Ω : Cxt} {A B C : Fma}
+  {f : Ω ⊢ A} {g : Γ₀ ++ B ∷ Γ₁ ++ Δ ++ Λ ⊢ C}
+  → mip (Γ₀ ++ Ω ++ A ⇒ B ∷ Γ₁) Δ Λ
+      (⇒L {Γ₀} {Ω} {Γ₁ ++ Δ ++ Λ} f g) refl
+      ~ ⇒L~Γ' {Γ₀ = Γ₀} {Γ₁ = Γ₁} (mip (Γ₀ ++ B ∷ Γ₁) Δ Λ g refl) f
+mip⇒L~Γ Γ₀ Γ₁ [] Λ = g~ IL⇒L-comm₂
+mip⇒L~Γ Γ₀ Γ₁ (E ∷ Δ) Λ {Ω} {A} {B}
+  rewrite ++?-inj₁ (A ⇒ B ∷ Γ₁) (Γ₀ ++ Ω) (E ∷ Δ ++ Λ) = refl
+
 mip≗⇒L⇒L-comm : ∀ Γ Δ Λ
   {Γ₁ Δ₀ Δ₁ Λ₁ Ξ : Cxt} {A B A' B' C : Fma}
   {f : Δ₀ ⊢ A} {f' : Δ₁ ⊢ A'} {g : Γ₁ ++ B ∷ Λ₁ ++ B' ∷ Ξ ⊢ C}

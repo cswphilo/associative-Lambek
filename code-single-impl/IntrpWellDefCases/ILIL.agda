@@ -8,6 +8,13 @@ open import IntrpWellDefCases.Base
 -- mip commutes with an IL whose I lands in the first (Γ) interpolation block:
 -- interpolating IL {Γ₀} f is the same (up to ~) as IL~Γ'-transporting the
 -- interpolation of f.  The buried difference is exactly one ILIL permutation.
+mipIL~Γ : ∀ Γ₀ Γ₁ Δ Λ {C} {f : Γ₀ ++ Γ₁ ++ Δ ++ Λ ⊢ C}
+  → mip (Γ₀ ++ I ∷ Γ₁) Δ Λ (IL {Γ₀} {Γ₁ ++ Δ ++ Λ} f) refl
+      ~ IL~Γ' {Γ₀} {Γ₁} {Δ} {Λ} (mip (Γ₀ ++ Γ₁) Δ Λ f refl)
+mipIL~Γ Γ₀ Γ₁ [] Λ = g~ ILIL
+mipIL~Γ Γ₀ Γ₁ (A ∷ Δ) Λ 
+  rewrite ++?-inj₁ (I ∷ Γ₁) Γ₀ (A ∷ Δ ++ Λ) = refl
+
 mip≗ILIL : ∀ Γ Δ Λ
   {Γ₁ Δ₁ Λ₁ : Cxt} {C : Fma}
   {f : Γ₁ ++ Δ₁ ++ Λ₁ ⊢ C}

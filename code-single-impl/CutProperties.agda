@@ -8,7 +8,6 @@ open import Data.Sum
 open import Data.Empty
 open import Data.Product
 
-open import Fma
 open import SeqCalc
 open import Cut
 open import Utilities
@@ -44,16 +43,6 @@ cutaxA-left' Γ {._} (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₁ (Ω ,
 cutaxA-left' Γ {._} (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₁ (Ω , refl , refl) | inj₂ (Ω' , refl , refl) = cong (λ x → ⇒L x g) (cutaxA-left' Ω' f refl)
 cutaxA-left' Γ {Λ} (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₂ ([] , refl , refl) = refl
 cutaxA-left' Γ {Λ} (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₂ (_ ∷ Ω , refl , refl) = cong (λ x → ⇒L f x) (cutaxA-left' (Γ₁ ++ B ∷ Ω) g refl)
-cutaxA-left' Γ (⇐R f) refl = cong ⇐R (cutaxA-left' Γ f refl)
-cutaxA-left' Γ {Λ} (⇐L {Γ₁} {Δ} {Λ₁} {A} {B} f g) eq with cases++ Γ Γ₁ Λ (B ⇐ A ∷ Δ ++ Λ₁) eq
-cutaxA-left' Γ {Λ} (⇐L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₁ (Ω , refl , refl) =
-  cong (λ x → ⇐L {Γ ++ _ ∷ Ω} f x) (cutaxA-left' Γ g refl)
-cutaxA-left' Γ {Λ} (⇐L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₂ ([] , refl , refl) = refl
-... | inj₂ (_ ∷ Ω , eq₁ , refl) with cases++ Ω Δ Λ Λ₁ (inj∷ eq₁ .proj₂)
-cutaxA-left' ._ {Λ} (⇐L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₂ (_ ∷ Ω , refl , refl) | inj₁ (Ξ , refl , refl)
-  rewrite cutaxA-left' Ω f refl = refl
-cutaxA-left' ._ {Λ} (⇐L {Γ₁} {Δ} {Λ₁} {A} {B} f g) refl | inj₂ (_ ∷ Ω , refl , refl) | inj₂ (Ξ , refl , refl)
-  rewrite cutaxA-left' (Γ₁ ++ B ∷ Ξ) g refl = refl
 cutaxA-left' [] ax refl = refl
 cutaxA-left' (x ∷ Γ) ax eq = ⊥-elim ([]disj∷ Γ (inj∷ eq .proj₂))
 
@@ -135,55 +124,6 @@ cut⇒R⇒Lcases++ : (Γ Λ Ω : Cxt) → ∀ {Δ A B C}
 cut⇒R⇒Lcases++ Γ Λ Ω {A = A} {B}
   rewrite cases++-inj₂ [] (Γ ++ Ω) Λ (A ⇒ B) = refl
 
-cut⇐L-cases++ : (Γ Λ Ω Ω' : Cxt) → ∀ {Ω'' A B C E F}
-  → {h : Ω'' ⊢ E} {g : Ω ++ E ∷ [] ⊢ A}
-  → (h₁ : Ω' ++ B ∷ [] ⊢ F) (g₁ : Γ ++ F ∷ Λ ⊢ C)
-  → cut (Γ ++ Ω' ++ B ⇐ A ∷ Ω) h (⇐L {Γ ++ Ω'} g (cut Γ h₁ g₁ refl)) refl ≡ 
-    ⇐L {Γ ++ Ω'} (cut Ω h g refl) (cut Γ h₁ g₁ refl)
-cut⇐L-cases++ Γ Λ Ω Ω' {A = A} {B} {E = E} h₁ g₁ 
-  rewrite cases++-inj₂ (B ⇐ A ∷ Ω) (Γ ++ Ω') Λ E |
-          cases++-inj₁ Ω [] Λ E = refl
-
-cut⇐L-cases++-comm₁ : (Γ₀ : Cxt) → ∀ {Γ₁ Δ Λ Ω A B C D}
-  → {f : Ω ⊢ D}
-  → {g : Δ ⊢ A} {h : Γ₀ ++ B ∷ Γ₁ ++ D ∷ Λ ⊢ C}
-  → cut (Γ₀ ++ B ⇐ A ∷ Δ ++ Γ₁) f (⇐L {Γ₀} g h) refl ≡
-    ⇐L {Γ₀} g (cut (Γ₀ ++ B ∷ Γ₁) f h refl)
-cut⇐L-cases++-comm₁ Γ₀ {Γ₁} {Δ} {Λ} {A = A} {B} {D = D}
-  rewrite cases++-inj₂ (B ⇐ A ∷ Δ ++ Γ₁) Γ₀ Λ D |
-          cases++-inj₂ Γ₁ Δ Λ D = refl
-
-cut⇐L-cases++₁ : (Γ Γ₁ : Cxt) → ∀ {Λ Λ₁ Ω A B C D}
-  → {f : Ω ⊢ D}
-  → {g : Γ ++ D ∷ Λ ⊢ A} {h : Γ₁ ++ B ∷ Λ₁ ⊢ C}
-  → cut (Γ₁ ++ B ⇐ A ∷ Γ) f (⇐L g h) refl ≡ ⇐L (cut Γ f g refl) h
-cut⇐L-cases++₁ Γ Γ₁ {Λ} {Λ₁} {A = A} {B} {D = D}
-  rewrite cases++-inj₂ (B ⇐ A ∷ Γ) Γ₁ (Λ ++ Λ₁) D |
-          cases++-inj₁ Γ Λ Λ₁ D = refl
-
-cut⇐L-cases++-comm₂ : (Γ Λ₀ : Cxt) → ∀ {Δ Λ₁ Ω A B C D}
-  → {f : Ω ⊢ D}
-  → {g : Δ ⊢ A} {h : Γ ++ D ∷ Λ₀ ++ B ∷ Λ₁ ⊢ C}
-  → cut Γ f (⇐L {Γ ++ D ∷ Λ₀} g h) refl ≡
-    ⇐L {Γ ++ Ω ++ Λ₀} g (cut Γ f h refl)
-cut⇐L-cases++-comm₂ Γ Λ₀ {Δ} {Λ₁} {A = A} {B} {D = D}
-  rewrite cases++-inj₁ Γ Λ₀ (B ⇐ A ∷ Δ ++ Λ₁) D = refl
-
-cut⇐R⇐Lcases++ : (Γ Λ Ω : Cxt) → ∀ {Δ A B C}
-  → {f : Δ ++ A ∷ [] ⊢ B}
-  → {g : Ω ⊢ A} {h : Γ ++ B ∷ Λ ⊢ C}
-  → cut Γ (⇐R f) (⇐L g h) refl ≡ cut (Γ ++ Δ) g (cut Γ f h refl) refl
-cut⇐R⇐Lcases++ Γ Λ Ω {A = A} {B}
-  rewrite cases++-inj₂ [] Γ (Ω ++ Λ) (B ⇐ A) = refl
-
-cut⇐L-cases++-assoc : (Γ₀ Γ₁ : Cxt) → ∀ {Λ₀ Λ₁ Ω A B C D}
-  → {f : Ω ⊢ D}
-  → {g : Γ₀ ++ D ∷ Λ₀ ⊢ A} {h : Γ₁ ++ B ∷ Λ₁ ⊢ C}
-  → cut (Γ₁ ++ B ⇐ A ∷ Γ₀) f (⇐L g h) refl ≡ ⇐L (cut Γ₀ f g refl) h
-cut⇐L-cases++-assoc Γ₀ Γ₁ {Λ₀ = Λ₀} {Λ₁} {A = A} {B} {D = D}
-  rewrite cases++-inj₂ (B ⇐ A ∷ Γ₀) Γ₁ (Λ₀ ++ Λ₁) D |
-          cases++-inj₁ Γ₀ Λ₀ Λ₁ D = refl
-
 cut⇒L-cases++-assoc : (Γ₀ Γ₁ : Cxt) → ∀ {Λ₀ Λ₁ Ω A B C D}
   → {f : Ω ⊢ D}
   → {g : Γ₀ ++ D ∷ Λ₀ ⊢ A} {h : Γ₁ ++ B ∷ Λ₁ ⊢ C}
@@ -237,21 +177,6 @@ cutIL≗ Γ Δ₀ Δ₁ f (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} g h) refl | inj₂ 
 cutIL≗ Γ Δ₀ Δ₁ {Λ = Λ} f (⇒L {Γ₁} {Δ} {Λ₁} {A} {B} g h) refl | inj₂ (A ⇒ B ∷ Ω , refl , refl) =
   ⇒L refl (cutIL≗ (Γ₁ ++ B ∷ Ω) Δ₀ Δ₁ f h refl)
   ∘ (~ (IL⇒L-comm₂ {Γ = Γ₁} {Δ = Δ} {Λ = Ω ++ Δ₀} {Ω = Δ₁ ++ Λ}))
-cutIL≗ Γ Δ₀ Δ₁ {Λ = Λ} f (⇐R g) refl =
-  ⇐R (cutIL≗ Γ Δ₀ Δ₁ f g refl)
-  ∘ (~ (IL⇐R {Γ = Γ ++ Δ₀} {Δ = Δ₁ ++ Λ}))
-cutIL≗ Γ Δ₀ Δ₁ f (⇐L {Γ₁} {Δ} {Λ₁} {A} {B} g h) eq with cases++ Γ Γ₁ _ (B ⇐ A ∷ Δ ++ Λ₁) eq
-cutIL≗ Γ Δ₀ Δ₁ f (⇐L {Γ₁} {Δ} {Λ₁} {A} {B} g h) refl | inj₁ (Ω , refl , refl) =
-  ⇐L {Γ ++ Δ₀ ++ I ∷ Δ₁ ++ Ω} refl (cutIL≗ Γ Δ₀ Δ₁ f h refl)
-  ∘ (~ (IL⇐L-comm₁ {Γ = Γ ++ Δ₀} {Λ = Δ₁ ++ Ω}))
-cutIL≗ Γ Δ₀ Δ₁ f (⇐L {Γ₁} {Δ} {Λ₁} {A} {B} g h) refl | inj₂ ([] , refl , refl) = refl
-... | inj₂ (D ∷ Ω , eq₁ , refl) with cases++ Ω Δ _ Λ₁ (inj∷ eq₁ .proj₂)
-cutIL≗ ._ Δ₀ Δ₁ f (⇐L {Γ₁} {Δ} {Λ₁} {A} {B} g h) refl | inj₂ (D ∷ Ω , refl , refl) | inj₁ (Ξ , refl , refl) =
-  ⇐L (cutIL≗ Ω Δ₀ Δ₁ f g refl) refl
-  ∘ (~ (IL⇐L-assoc {Γ = Γ₁} {Δ₀ = Ω ++ Δ₀} {Δ₁ = Δ₁ ++ Ξ}))
-cutIL≗ ._ Δ₀ Δ₁ {Λ = Λ} f (⇐L {Γ₁} {Δ} {Λ₁} {A} {B} g h) refl | inj₂ (D ∷ Ω , refl , refl) | inj₂ (Ξ , refl , refl) =
-  ⇐L refl (cutIL≗ (Γ₁ ++ B ∷ Ξ) Δ₀ Δ₁ f h refl)
-  ∘ (~ (IL⇐L-comm₂ {Γ = Γ₁} {Δ = Δ} {Λ = Ξ ++ Δ₀} {Ω = Δ₁ ++ Λ}))
 cutIL≗ [] Δ₀ Δ₁ f ax refl = refl
 cutIL≗ (D ∷ Γ) Δ₀ Δ₁ f ax eq = ⊥-elim ([]disj∷ Γ (inj∷ eq .proj₂))
 
@@ -298,21 +223,6 @@ cut⊗L≗ Γ Δ₀ Δ₁ f (⇒L {Γ₁} {Δ} {Λ₁} {A'} {B'} g h) refl | inj
 cut⊗L≗ Γ Δ₀ Δ₁ {Λ = Λ} {A = A} {B} f (⇒L {Γ₁} {Δ} {Λ₁} {A'} {B'} g h) refl | inj₂ (A' ⇒ B' ∷ Ω , refl , refl) =
   ⇒L refl (cut⊗L≗ (Γ₁ ++ B' ∷ Ω) Δ₀ Δ₁ f h refl)
   ∘ (~ (⊗L⇒L-comm₂ {Γ = Γ₁} {Δ = Δ} {Λ = Ω ++ Δ₀} {Ω = Δ₁ ++ Λ}))
-cut⊗L≗ Γ Δ₀ Δ₁ {Λ = Λ} f (⇐R g) refl =
-  ⇐R (cut⊗L≗ Γ Δ₀ Δ₁ f g refl)
-  ∘ (~ (⊗L⇐R {Γ = Γ ++ Δ₀} {Δ = Δ₁ ++ Λ}))
-cut⊗L≗ Γ Δ₀ Δ₁ {A = A} {B} f (⇐L {Γ₁} {Δ} {Λ₁} {A'} {B'} g h) eq with cases++ Γ Γ₁ _ (B' ⇐ A' ∷ Δ ++ Λ₁) eq
-cut⊗L≗ Γ Δ₀ Δ₁ {A = A} {B} f (⇐L {Γ₁} {Δ} {Λ₁} {A'} {B'} g h) refl | inj₁ (Ω , refl , refl) =
-  ⇐L {Γ ++ Δ₀ ++ A ⊗ B ∷ Δ₁ ++ Ω} refl (cut⊗L≗ Γ Δ₀ Δ₁ f h refl)
-  ∘ (~ (⊗L⇐L-comm₁ {Γ = Γ ++ Δ₀} {Λ = Δ₁ ++ Ω}))
-cut⊗L≗ Γ Δ₀ Δ₁ f (⇐L {Γ₁} {Δ} {Λ₁} {A'} {B'} g h) refl | inj₂ ([] , refl , refl) = refl
-... | inj₂ (D ∷ Ω , eq₁ , refl) with cases++ Ω Δ _ Λ₁ (inj∷ eq₁ .proj₂)
-cut⊗L≗ ._ Δ₀ Δ₁ {A = A} {B} f (⇐L {Γ₁} {Δ} {Λ₁} {A'} {B'} g h) refl | inj₂ (D ∷ Ω , refl , refl) | inj₁ (Ξ , refl , refl) =
-  ⇐L (cut⊗L≗ Ω Δ₀ Δ₁ f g refl) refl
-  ∘ (~ (⊗L⇐L-assoc {Γ = Γ₁} {Δ₀ = Ω ++ Δ₀} {Δ₁ = Δ₁ ++ Ξ}))
-cut⊗L≗ ._ Δ₀ Δ₁ {Λ = Λ} {A = A} {B} f (⇐L {Γ₁} {Δ} {Λ₁} {A'} {B'} g h) refl | inj₂ (D ∷ Ω , refl , refl) | inj₂ (Ξ , refl , refl) =
-  ⇐L refl (cut⊗L≗ (Γ₁ ++ B' ∷ Ξ) Δ₀ Δ₁ f h refl)
-  ∘ (~ (⊗L⇐L-comm₂ {Γ = Γ₁} {Δ = Δ} {Λ = Ξ ++ Δ₀} {Ω = Δ₁ ++ Λ}))
 cut⊗L≗ [] Δ₀ Δ₁ f ax refl = refl
 cut⊗L≗ (D ∷ Γ) Δ₀ Δ₁ f ax eq = ⊥-elim ([]disj∷ Γ (inj∷ eq .proj₂))
 
@@ -361,86 +271,8 @@ cut⇒L≗ Γ f f₁ (⇒L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) refl | inj₂ ([
 cut⇒L≗ Γ {Δ₀ = Δ₀} {Δ₁} {Λ = Λ} f f₁ (⇒L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) refl | inj₂ (A' ⇒ B' ∷ Ω , refl , refl) =
   ⇒L refl (cut⇒L≗ (Γ₁ ++ B' ∷ Ω) f f₁ h refl)
   ∘ ⇒L⇒L-comm {Γ = Γ₁} {Λ = Ω ++ Δ₀} {Ξ = Δ₁ ++ Λ}
-cut⇒L≗ Γ {Δ₀ = Δ₀} {Δ₁} {Λ = Λ} f f₁ (⇐R g) refl =
-  ⇐R (cut⇒L≗ Γ f f₁ g refl)
-  ∘ (~ (⇒L⇐R {Γ = Γ ++ Δ₀} {Λ = Δ₁ ++ Λ}))
-cut⇒L≗ Γ {Δ = Δ} {Δ₀} {Δ₁} f f₁ (⇐L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) eq with cases++ Γ Γ₁ _ (B' ⇐ A' ∷ Δ' ++ Λ₁) eq
-cut⇒L≗ Γ {Δ = Δ} {Δ₀} {Δ₁} {A = A} {B} f f₁ (⇐L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) refl | inj₁ (Ω , refl , refl) =
-  ⇐L {Γ ++ Δ₀ ++ Δ ++ A ⇒ B ∷ Δ₁ ++ Ω} refl (cut⇒L≗ Γ f f₁ h refl)
-  ∘ (~ (⇒L⇐L-comm {Γ = Γ ++ Δ₀} {Λ = Δ₁ ++ Ω}))
-cut⇒L≗ Γ f f₁ (⇐L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) refl | inj₂ ([] , refl , refl) = refl
-... | inj₂ (D ∷ Ω , eq₁ , refl) with cases++ Ω Δ' _ Λ₁ (inj∷ eq₁ .proj₂)
-cut⇒L≗ ._ {Δ₀ = Δ₀} {Δ₁} f f₁ (⇐L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) refl | inj₂ (D ∷ Ω , refl , refl) | inj₁ (Ξ , refl , refl) =
-  ⇐L (cut⇒L≗ Ω f f₁ g refl) refl
-  ∘ (~ (⇒L⇐L-assoc {Γ₀ = Ω ++ Δ₀} {Γ₁ = Γ₁} {Λ₀ = Δ₁ ++ Ξ}))
-cut⇒L≗ ._ {Δ₀ = Δ₀} {Δ₁} {Λ = Λ} f f₁ (⇐L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) refl | inj₂ (D ∷ Ω , refl , refl) | inj₂ (Ξ , refl , refl) =
-  ⇐L refl (cut⇒L≗ (Γ₁ ++ B' ∷ Ξ) f f₁ h refl)
-  ∘ ⇐L⇒L-comm {Γ = Γ₁} {Λ = Ξ ++ Δ₀} {Ξ = Δ₁ ++ Λ}
 cut⇒L≗ [] f f₁ ax refl = refl
 cut⇒L≗ (D ∷ Γ) f f₁ ax eq = ⊥-elim ([]disj∷ Γ (inj∷ eq .proj₂))
-
-cut⇐L≗ : (Γ : Cxt) → ∀ {Δ Δ₀ Δ₁ Λ Ω A B C D}
-  → (f : Δ ⊢ A) (f₁ : Δ₀ ++ B ∷ Δ₁ ⊢ D)
-  → (g : Ω ⊢ C)
-  → (eq : Ω ≡ Γ ++ D ∷ Λ)
-  → cut Γ (⇐L f f₁) g eq ≗ ⇐L {Γ ++ Δ₀} f (cut Γ f₁ g eq)
-cut⇐L≗ Γ f f₁ IR eq = ⊥-elim ([]disj∷ Γ eq)
-cut⇐L≗ Γ {Δ = Δ} {Δ₀ = Δ₀} {Δ₁} f f₁ (IL {Γ₁} {Δ'} g) eq with cases++ Γ Γ₁ _ (I ∷ Δ') eq
-cut⇐L≗ Γ {Δ = Δ} {Δ₀ = Δ₀} {Δ₁} {A = A} {B} f f₁ (IL {Γ₁} {Δ'} g) refl | inj₁ (Ω , refl , refl) =
-  IL {Γ ++ Δ₀ ++ B ⇐ A ∷ Δ ++ Δ₁ ++ Ω} {Δ'} (cut⇐L≗ Γ f f₁ g refl)
-  ∘ IL⇐L-comm₂ {Γ = Γ ++ Δ₀} {Δ = Δ} {Λ = Δ₁ ++ Ω} {Ω = Δ'}
-cut⇐L≗ Γ f f₁ (IL {Γ₁} {Δ'} g) refl | inj₂ ([] , refl , refl) = refl
-cut⇐L≗ Γ {Δ = Δ} {Δ₀ = Δ₀} {Δ₁} {Λ = Λ} {A = A} {B} f f₁ (IL {Γ₁} {Δ'} g) refl | inj₂ (I ∷ Ω , refl , refl) =
-  IL {Γ₁} {Ω ++ Δ₀ ++ B ⇐ A ∷ Δ ++ Δ₁ ++ Λ}
-    (cut⇐L≗ (Γ₁ ++ Ω) f f₁ g refl)
-  ∘ IL⇐L-comm₁ {Γ = Γ₁} {Λ = Ω ++ Δ₀}
-cut⇐L≗ Γ {Δ₀ = Δ₀} {Δ₁} f f₁ (⊗R {Γ₁} {Δ'} g h) eq with cases++ Γ Γ₁ _ Δ' eq
-cut⇐L≗ Γ {Δ₀ = Δ₀} {Δ₁} f f₁ (⊗R {Γ₁} {Δ'} g h) refl | inj₁ (Ω , refl , refl) =
-  ⊗R (cut⇐L≗ Γ f f₁ g refl) refl
-  ∘ (~ (⇐L⊗R₁ {Γ = Γ ++ Δ₀} {Λ = Δ₁ ++ Ω} {Ω = Δ'}))
-cut⇐L≗ Γ {Δ₀ = Δ₀} {Δ₁} {Λ = Λ} f f₁ (⊗R {Γ₁} {Δ'} g h) refl | inj₂ (Ω , refl , refl) =
-  ⊗R refl (cut⇐L≗ Ω f f₁ h refl)
-  ∘ (~ (⇐L⊗R₂ {Γ = Ω ++ Δ₀} {Λ = Δ₁ ++ Λ} {Ω = Γ₁}))
-cut⇐L≗ Γ {Δ₀ = Δ₀} {Δ₁} f f₁ (⊗L {Γ₁} {Δ'} {A'} {B'} g) eq with cases++ Γ Γ₁ _ (A' ⊗ B' ∷ Δ') eq
-cut⇐L≗ Γ {Δ = Δ} {Δ₀ = Δ₀} {Δ₁} {A = A} {B} f f₁ (⊗L {Γ₁} {Δ'} {A'} {B'} g) refl | inj₁ (Ω , refl , refl) =
-  ⊗L {Γ ++ Δ₀ ++ B ⇐ A ∷ Δ ++ Δ₁ ++ Ω} {Δ'} (cut⇐L≗ Γ f f₁ g refl)
-  ∘ ⊗L⇐L-comm₂ {Γ = Γ ++ Δ₀} {Λ = Δ₁ ++ Ω}
-cut⇐L≗ Γ f f₁ (⊗L {Γ₁} {Δ'} {A'} {B'} g) refl | inj₂ ([] , refl , refl) = refl
-cut⇐L≗ Γ {Δ₀ = Δ₀} {Δ₁} {Λ = Λ} f f₁ (⊗L {Γ₁} {Δ'} {A'} {B'} g) refl | inj₂ (A' ⊗ B' ∷ Ω , refl , refl) =
-  ⊗L {Γ₁} (cut⇐L≗ (Γ₁ ++ A' ∷ B' ∷ Ω) f f₁ g refl)
-  ∘ ⊗L⇐L-comm₁ {Γ = Γ₁} {Λ = Ω ++ Δ₀}
-cut⇐L≗ Γ {Δ₀ = Δ₀} {Δ₁} {Λ = Λ} f f₁ (⇒R g) refl =
-  ⇒R (cut⇐L≗ (_ ∷ Γ) f f₁ g refl)
-  ∘ (~ (⇐L⇒R {Γ = Γ ++ Δ₀} {Λ = Δ₁ ++ Λ}))
-cut⇐L≗ Γ {Δ = Δ} {Δ₀} {Δ₁} f f₁ (⇒L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) eq with cases++ Γ (Γ₁ ++ Δ') _ (A' ⇒ B' ∷ Λ₁) eq
-... | inj₁ (Ω , eq₁ , refl) with cases++ Γ Γ₁ Ω Δ' eq₁
-cut⇐L≗ Γ {Δ = Δ} {Δ₀} {Δ₁} {A = A} {B} f f₁ (⇒L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) refl | inj₁ (Ω , refl , refl) | inj₁ (Ξ , refl , refl) =
-  ⇒L {Γ ++ Δ₀ ++ B ⇐ A ∷ Δ ++ Δ₁ ++ Ξ} refl (cut⇐L≗ Γ f f₁ h refl)
-  ∘ (~ (⇐L⇒L-comm {Γ = Γ ++ Δ₀} {Λ = Δ₁ ++ Ξ}))
-cut⇐L≗ Γ {Δ = Δ} {Δ₀} {Δ₁} f f₁ (⇒L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) refl | inj₁ (Ω , refl , refl) | inj₂ (Ξ , refl , refl) =
-  ⇒L (cut⇐L≗ Ξ f f₁ g refl) refl
-  ∘ (~ (⇐L⇒L-assoc {Γ₀ = Ξ ++ Δ₀} {Γ₁ = Γ₁} {Λ₀ = Δ₁ ++ Ω}))
-cut⇐L≗ Γ f f₁ (⇒L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) refl | inj₂ ([] , refl , refl) = refl
-cut⇐L≗ Γ {Δ₀ = Δ₀} {Δ₁} {Λ = Λ} f f₁ (⇒L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) refl | inj₂ (A' ⇒ B' ∷ Ω , refl , refl) =
-  ⇒L refl (cut⇐L≗ (Γ₁ ++ B' ∷ Ω) f f₁ h refl)
-  ∘ ⇒L⇐L-comm {Γ = Γ₁} {Λ = Ω ++ Δ₀} {Ξ = Δ₁ ++ Λ}
-cut⇐L≗ Γ {Δ₀ = Δ₀} {Δ₁} {Λ = Λ} f f₁ (⇐R g) refl =
-  ⇐R (cut⇐L≗ Γ f f₁ g refl)
-  ∘ (~ (⇐L⇐R {Γ = Γ ++ Δ₀} {Λ = Δ₁ ++ Λ}))
-cut⇐L≗ Γ {Δ = Δ} {Δ₀} {Δ₁} f f₁ (⇐L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) eq with cases++ Γ Γ₁ _ (B' ⇐ A' ∷ Δ' ++ Λ₁) eq
-cut⇐L≗ Γ {Δ = Δ} {Δ₀} {Δ₁} {A = A} {B} f f₁ (⇐L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) refl | inj₁ (Ω , refl , refl) =
-  ⇐L {Γ ++ Δ₀ ++ B ⇐ A ∷ Δ ++ Δ₁ ++ Ω} refl (cut⇐L≗ Γ f f₁ h refl)
-  ∘ (~ (⇐L⇐L-comm {Γ = Γ ++ Δ₀} {Λ = Δ₁ ++ Ω}))
-cut⇐L≗ Γ f f₁ (⇐L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) refl | inj₂ ([] , refl , refl) = refl
-... | inj₂ (D ∷ Ω , eq₁ , refl) with cases++ Ω Δ' _ Λ₁ (inj∷ eq₁ .proj₂)
-cut⇐L≗ ._ {Δ₀ = Δ₀} {Δ₁} f f₁ (⇐L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) refl | inj₂ (D ∷ Ω , refl , refl) | inj₁ (Ξ , refl , refl) =
-  ⇐L (cut⇐L≗ Ω f f₁ g refl) refl
-  ∘ (~ (⇐L⇐L-assoc {Γ₀ = Ω ++ Δ₀} {Γ₁ = Γ₁} {Λ₀ = Δ₁ ++ Ξ}))
-cut⇐L≗ ._ {Δ₀ = Δ₀} {Δ₁} {Λ = Λ} f f₁ (⇐L {Γ₁} {Δ'} {Λ₁} {A'} {B'} g h) refl | inj₂ (D ∷ Ω , refl , refl) | inj₂ (Ξ , refl , refl) =
-  ⇐L refl (cut⇐L≗ (Γ₁ ++ B' ∷ Ξ) f f₁ h refl)
-  ∘ ⇐L⇐L-comm {Γ = Γ₁} {Λ = Ξ ++ Δ₀} {Ξ = Δ₁ ++ Λ}
-cut⇐L≗ [] f f₁ ax refl = refl
-cut⇐L≗ (D ∷ Γ) f f₁ ax eq = ⊥-elim ([]disj∷ Γ (inj∷ eq .proj₂))
 
 postulate
   cut-cong₂ : (Γ : Cxt) → ∀ {Δ Λ Ω C D}

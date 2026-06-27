@@ -3,6 +3,7 @@
 module IntrpWellDefCases.ILImpLComm2 where
 
 open import IntrpWellDefCases.Base
+open import IntrpWellDefCases.ImpLImpLComm using (mip⇒L~Γ)
 
 
 mip≗IL⇒L-comm₂ : ∀ Γ Δ Λ

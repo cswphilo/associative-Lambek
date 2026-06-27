@@ -3,6 +3,7 @@
 module IntrpWellDefCases.ILTensorR2 where
 
 open import IntrpWellDefCases.Base
+open import IntrpWellDefCases.ILIL using (mipIL~Γ)
 
 cut⊗R⊗L⊗RIR : ∀ Γ Λ {A B D : Fma}
   {f : Γ ++ D ∷ [] ⊢ A} {g : Λ ⊢ B}

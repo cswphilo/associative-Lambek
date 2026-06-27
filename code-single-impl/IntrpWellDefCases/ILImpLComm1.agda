@@ -3,6 +3,59 @@
 module IntrpWellDefCases.ILImpLComm1 where
 
 open import IntrpWellDefCases.Base
+open import IntrpWellDefCases.ImpLImpLAssoc using (mip⇒L~Λ∷)
+
+IL⇒L⊗R-seed : ∀ Γ Δ Λ {A B C : Fma}
+  {f : Δ ⊢ A} {g : Γ ++ B ∷ Λ ⊢ C}
+  → IL (⇒L f g) ≗
+      cut Γ (IL {[]} {[]} (⊗R IR IR))
+        (⊗L {Γ} {Δ ++ A ⇒ B ∷ Λ}
+          (⇒L {Γ ++ I ∷ []} {I ∷ Δ} {Λ}
+            (IL {[]} {Δ} f) (IL {Γ} {B ∷ Λ} g))) refl
+IL⇒L⊗R-seed Γ Δ Λ {A} {B}
+  rewrite cases++-inj₂ [] Γ (Δ ++ A ⇒ B ∷ Λ) (I ⊗ I) |
+          cases++-inj₁ (Γ ++ I ∷ []) Δ (A ⇒ B ∷ Λ) I |
+          cases++-inj₂ [] (Γ ++ I ∷ []) Δ I |
+          cases++-inj₁ Γ Δ (A ⇒ B ∷ Λ) I |
+          cases++-inj₁ Γ [] Δ I |
+          cases++-inj₂ [] Γ (B ∷ Λ) I = refl
+
+cut⊗RIR⊗L⇒L : ∀ Γ Δ Λ {A B C D : Fma}
+  {f : D ∷ Δ ⊢ A} {g : Γ ++ B ∷ Λ ⊢ C}
+  → ⇒L {Γ} {D ∷ Δ} {Λ} f g ≗
+      cut Γ (⊗R IR ax)
+        (⊗L {Γ} {Δ ++ A ⇒ B ∷ Λ}
+          (⇒L {Γ ++ I ∷ []} {D ∷ Δ} {Λ}
+            f (IL {Γ} {B ∷ Λ} g))) refl
+cut⊗RIR⊗L⇒L Γ Δ Λ {A} {B} {C} {D} {f = f} {g}
+  rewrite cases++-inj₂ [] Γ (Δ ++ A ⇒ B ∷ Λ) (I ⊗ D) |
+          cases++-inj₁ (Γ ++ I ∷ []) Δ (A ⇒ B ∷ Λ) D |
+          cases++-inj₂ [] (Γ ++ I ∷ []) Δ D |
+          cases++-inj₁ Γ (D ∷ Δ) (A ⇒ B ∷ Λ) I |
+          cases++-inj₁ Γ [] (D ∷ Δ) I |
+          cases++-inj₂ [] Γ (B ∷ Λ) I =
+    ⇒L (~ cutaxA-left [] f refl) refl
+
+mip⇒L~⊗midΓ : ∀ Γ Γ₀ Δ₀ Δ₁ Λ
+  {A B C : Fma}
+  {f : Δ₀ ++ Δ₁ ⊢ A} {g : Γ ++ Γ₀ ++ B ∷ Λ ⊢ C}
+  → mip Γ (Γ₀ ++ Δ₀) (Δ₁ ++ A ⇒ B ∷ Λ)
+      (⇒L {Γ ++ Γ₀} {Δ₀ ++ Δ₁} {Λ} f g) refl
+      ~ ⇒L~⊗' (mip [] Δ₀ Δ₁ f refl) (mip Γ Γ₀ (B ∷ Λ) g refl)
+mip⇒L~⊗midΓ Γ [] [] [] Λ {A} {B} {f = f} {g} =
+  ↝∷ (IL {[]} {[]} (⊗R IR IR) , IL⇒L⊗R-seed Γ [] Λ , refl) refl
+mip⇒L~⊗midΓ Γ [] [] (E ∷ Δ₁) Λ {f = f} {g} =
+  ↝∷ (IL {[]} {[]} (⊗R IR IR) , IL⇒L⊗R-seed Γ (E ∷ Δ₁) Λ , refl) refl
+mip⇒L~⊗midΓ Γ [] (D ∷ Δ₀) Δ₁ Λ {A} {B} {f = f} {g}
+  rewrite ++?-inj₂ Γ (Δ₀ ++ Δ₁) (A ⇒ B ∷ Λ) D |
+          cases++-inj₂ [] Γ (Δ₀ ++ Δ₁) D |
+          cases++-inj₂ Δ₁ Δ₀ Λ (A ⇒ B) =
+    ↝∷ (⊗R IR ax , cut⊗RIR⊗L⇒L Γ Δ₁ Λ , refl) refl
+mip⇒L~⊗midΓ Γ (H ∷ Γ₀) Δ₀ Δ₁ Λ {A} {B} {f = f} {g}
+  rewrite ++?-inj₂ Γ (Γ₀ ++ Δ₀ ++ Δ₁) (A ⇒ B ∷ Λ) H |
+          cases++-inj₁ Γ Γ₀ (Δ₀ ++ Δ₁) H |
+          cases++-inj₂ Δ₁ (Γ₀ ++ Δ₀) Λ (A ⇒ B) |
+          ++?-inj₁ Δ₀ Γ₀ Δ₁ = refl
 
 mip≗IL⇒L-comm₁ : ∀ Γ Δ Λ
   {Γ₁ Δ₁ Λ₁ Ω₁ : Cxt} {A B C : Fma}
@@ -69,34 +122,12 @@ mip≗IL⇒L-comm₁ Γ₁ (I ∷ .(Λ₁ ++ Ψ)) .(Ξ ++ A ⇒ B ∷ Ω₁) {Γ
           cases++-inj₁ Γ₁ Λ₁ (Ψ ++ Ξ) I |
           cases++-inj₂ Ξ (Λ₁ ++ Ψ) Ω₁ (A ⇒ B) |
           ++?-inj₁ Ψ Λ₁ Ξ |
-          ++?-inj₁ [] Γ₁ (I ∷ Λ₁ ++ B ∷ Ω₁)
-  with Λ₁
-... | [] with Ψ
-... | [] =
+          ++?-inj₁ [] Γ₁ (I ∷ Λ₁ ++ B ∷ Ω₁) =
     intrp≗
       (~-trans
-        (IL~Δ {Δ₀ = []} {Δ₁ = []}
-          (↝∷ (IL {[]} {[]} (⊗R IR IR) , IL⇒L⊗R-seed Γ₁ Ξ Ω₁ , refl) refl))
-        (h~ (IL⊗R₁ {Γ = []} {Δ = []} {Λ = []})))
-... | D ∷ Ψ₁
-  rewrite ++?-inj₂ Γ₁ (Ψ₁ ++ Ξ) (A ⇒ B ∷ Ω₁) D |
-          cases++-inj₂ [] Γ₁ (Ψ₁ ++ Ξ) D |
-          cases++-inj₂ Ξ Ψ₁ Ω₁ (A ⇒ B) =
-    intrp≗
-      (~-trans
-        (IL~Δ {Δ₀ = []} {Δ₁ = D ∷ Ψ₁}
-          (↝∷ (⊗R IR ax , cut⊗RIR⊗L⇒L Γ₁ Ξ Ω₁ , refl) refl))
-        (h~ (IL⊗R₁ {Γ = []} {Δ = []} {Λ = D ∷ Ψ₁})))
-mip≗IL⇒L-comm₁ Γ₁ (I ∷ .(Λ₁₀ ++ Ψ)) .(Ξ ++ A ⇒ B ∷ Ω₁) {Γ₁} {.(Ψ ++ Ξ)} {Λ₁₀} {Ω₁} {A} {B} {C} refl
-  | inj₁ ([] , refl , refl) | inj₁ (refl , refl , refl) | inj₂ (Ξ , refl , refl) | inj₁ (Ψ , refl , refl) | F ∷ Λ₁
-  rewrite ++?-inj₂ Γ₁ (Λ₁ ++ Ψ ++ Ξ) (A ⇒ B ∷ Ω₁) F |
-          cases++-inj₁ Γ₁ Λ₁ (Ψ ++ Ξ) F |
-          cases++-inj₂ Ξ (Λ₁ ++ Ψ) Ω₁ (A ⇒ B) |
-          ++?-inj₁ Ψ Λ₁ Ξ =
-    intrp≗
-      (~-trans
-        (IL~Δ {Δ₀ = []} {Δ₁ = F ∷ Λ₁ ++ Ψ} refl)
-        (h~ (IL⊗R₁ {Γ = []} {Δ = F ∷ Λ₁} {Λ = Ψ})))
+        (IL~Δ {Δ₀ = []} {Δ₁ = Λ₁ ++ Ψ}
+          (mip⇒L~⊗midΓ Γ₁ Λ₁ Ψ Ξ Ω₁))
+        (h~ (IL⊗R₁ {Γ = []} {Δ = Λ₁} {Λ = Ψ})))
 mip≗IL⇒L-comm₁ Γ₁ (I ∷ Δ) .(Ξ ++ A ⇒ B ∷ Ω₁) {Γ₁} {Δ₁} {Λ₁} {Ω₁} {A} {B} {C} refl
   | inj₁ ([] , refl , refl) | inj₁ (refl , refl , refl) | inj₂ (Ξ , refl , refl) | inj₂ (G , Ψ , refl , refl)
   rewrite ++?-inj₂ Γ₁ (Δ ++ G ∷ Ψ ++ Δ₁) (A ⇒ B ∷ Ω₁) I |
@@ -262,15 +293,11 @@ mip≗IL⇒L-comm₁ Γ (E ∷ .(Ω ++ I ∷ Λ₁ ++ Ψ)) .(Ω' ++ A ⇒ B ∷ 
           cases++-inj₂ Ω' (Ω ++ I ∷ Λ₁ ++ Ψ) Ω₁ (A ⇒ B) |
           ++?-inj₁ Ψ (Ω ++ I ∷ Λ₁) Ω' |
           ++?-inj₂ Γ Ω (I ∷ Λ₁ ++ B ∷ Ω₁) E |
-          cases++-inj₁ Ω Λ₁ (B ∷ Ω₁) I |
-          ++?-inj₂ Γ (Ω ++ Λ₁ ++ Ψ ++ Ω') (A ⇒ B ∷ Ω₁) E |
-          cases++-inj₁ Γ (Ω ++ Λ₁) (Ψ ++ Ω') E |
-          cases++-inj₂ Ω' (Ω ++ Λ₁ ++ Ψ) Ω₁ (A ⇒ B) |
-          ++?-inj₁ Ψ (Ω ++ Λ₁) Ω' =
+          cases++-inj₁ Ω Λ₁ (B ∷ Ω₁) I =
     intrp≗
       (~-trans
         (IL~Δ {Δ₀ = E ∷ Ω} {Δ₁ = Λ₁ ++ Ψ}
-          refl)
+          (mip⇒L~⊗midΓ Γ (E ∷ Ω ++ Λ₁) Ψ Ω' Ω₁))
         (h~ (IL⊗R₁ {Γ = E ∷ Ω} {Δ = Λ₁} {Λ = Ψ})))
 mip≗IL⇒L-comm₁ Γ (E ∷ .(Ω ++ I ∷ Λ₁ ++ Δ₁ ++ A ⇒ B ∷ Ω')) Λ
   {.(Γ ++ E ∷ Ω)} {Δ₁} {Λ₁} {.(Ω' ++ Λ)} {A} {B} {C} refl

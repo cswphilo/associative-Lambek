@@ -3,6 +3,7 @@
 module IntrpWellDefCases.ILTensorLComm1 where
 
 open import IntrpWellDefCases.Base
+open import IntrpWellDefCases.ILIL using (mipIL~Γ)
 
 
 mip≗IL⊗L-comm₁ : ∀ Γ Δ Λ

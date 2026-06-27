@@ -2,23 +2,29 @@
 
 module Main where
 
--- Sequent calculus and the congruence relation of derivation (≗) 
--- of the right implication fragment of associative Lambek calculus (Lam⇒)
+-- Formulae and contexts of associative Lambek calculus L.
+import Fma
+
+-- Sequent calculus and the congruence relation of derivations (≗) for L.
 import SeqCalc
 
--- Cut is admissible in Lam⇒
+-- Cut admissibility for L.
 import Cut
 
--- Maehara interpolation procedure of Lam⇒, which is a function mip
--- where given any f : Γ , Δ , Λ ⊢ C, there exist
--- a formula D and two derivations g : Γ , D , Λ ⊢ C and h : Δ ⊢ D,
--- where (D , g , h) is called as interpolation triples.
+-- Properties of cut used by the interpolation development.
+import CutProperties
+
+-- Maehara interpolation procedure for L, implemented as mip.
+-- Given any f : Γ ++ Δ ++ Λ ⊢ C, it produces an interpolant D
+-- with derivations g : Γ ++ D ∷ Λ ⊢ C and h : Δ ⊢ D.
 import Mip
 
--- The equivalence relation of interpolation triples (∼)
+-- Proof-relevant interaction between cut and Maehara interpolation.
+import CutIntrp
+
+-- The equivalence relation of interpolation triples (∼).
 import IntrpTriples
 
--- Maehara interpolation procedure defined in Mip is well-defined wrt. ≗, i.e.
--- if f ≗ f', then (D , g , h) ∼ (D' , g' , h') where
--- mip f = (D , g , h) and mip f' = (D' , g' , h')
+-- Maehara interpolation is well-defined wrt. ≗: equivalent derivations
+-- are sent by mip to equivalent interpolation triples.
 import IntrpWellDef
