@@ -170,8 +170,8 @@ A logic $\mc{L}$ enjoys Craig interpolation if for any theorem $A \to C$ (where 
 A generalization of Craig interpolation is \emph{Maehara interpolation}, also known as strong deductive interpolation. In \L, this property states that for a derivation $f : \GG , \GD , \GL \vd C$ with a specified sublist $\GD$ of the antecedent, there exist a formula $D$ and two derivations $g : \GG, D, \GL \vdash C$ and $h : \GD \vdash D$ such that $\vars{D} \subseteq \vars{\GD} \cap \vars{\GG, \GL, C}$.
 The Maehara interpolation property is usually proved by Maehara's method \cite{maehara1961}, i.e.\ by induction on the derivation $f$. We call this method \emph{Maehara's interpolation procedure}.
 
-The applicability of the method usually relies on the existence of a cut-free sequent calculus for the logic under investigation while there are some recent work generalize the idea to calculi with primitive cut rules, including \cite{KOWALSKI2016,Hetzl2024,Saurin2025,Corbard2025}.
-The triple $(D,g,h)$ consisting of a formula $D$ and derivations $g$ and $h$ outputted by the interpolation procedure is called an \emph{interpolation triple}.
+The applicability of the method usually relies on the existence of a cut-free sequent calculus for the logic under investigation although recent work extends the idea to calculi with primitive cut rules \cite{KOWALSKI2016,Hetzl2024,Saurin2025,Corbard2025}.
+The triple $(D,g,h)$ consisting of a formula $D$ and derivations $g$ and $h$ produced by the interpolation procedure is called an \emph{interpolation triple}.
 
 
 %given a derivation $f : \Gamma$ further allows the antecedent of the consequence relation to be a set, a multiset or a list, depending on $\mc{L}$.
@@ -190,27 +190,27 @@ and has been recently revived by Saurin, who proved proof-relevant interpolation
 Veltri and Wan studied proof-relevant interpolation for a semi-associative fragment of \L~\cite{VW2025}, as well as for the nonassociative Lambek calculus (\NL) \cite{VW2025Tableaux}.
 
 In this paper, we generalize this analysis to the associative Lambek calculus.
-We also ask what is invariant under the interpolation procedure when the input derivation is changed by proof equivalence.
-We call this the \emph{well-definedness} of Maehara's interpolation procedure.
-For \NL, Veltri and Wan showed that the invariant is the interpolant formula itself \cite{VW2025Tableaux}.
-Equivalent derivations produce the same interpolant formula, up to the expected equivalence of the accompanying derivations.
+We also ask a second question: how are interpolation triples related when the input derivations are equivalent?
+We call this the \emph{well-definedness} of Maehara interpolation procedure.
+Conceptually, this is about what remains stable in Maehara interpolation when the input derivations are equivalent.
+
+For \NL, Veltri and Wan showed that two interpolation triples $(D , g, h)$ and $(D' , g', h')$ can be considered equivalent if $D = D'$, $g \circeq g'$ and $h \circeq h'$ \cite{VW2025Tableaux}. In particular, the interpolant formulae $D$ and $D'$ produced by equivalent derivations $f \circeq f'$ are the same.
+
 In \L\ this is no longer true.
 Equivalent derivations may produce different, and even logically inequivalent, interpolant formulae, e.g.\ the pair of equivalent derivations in (\ref{eq:ct:example}) has distinct and logically inequivalent interpolation formulae.
-We therefore propose a \emph{zig-zag} equivalence of interpolation triples which implies the well-definedness of the interpolation procedure in \L.
+We therefore propose a \emph{zig-zag} equivalence of interpolation triples.
 The equivalence of triples $(D , g, h) \sim (D' , g', h')$ is the symmetric transitive closure of the relation stating that there exists a derivation $t : D \vd D'$ such that $g \circeq \cut \ (t , g')$ and $\cut \ (h , t) \circeq h'$.
-Thus the well-definedness result identifies the level at which Maehara interpolation remains canonical in the associative setting.
+The well-definedness result thus states that if $f \circeq f'$, then $(D , g, h) \sim (D' , g', h')$, where $(D , g, h)$ and $(D' , g', h')$ are the interpolation triples of $f$ and $f'$, respectively.
 
 Finally, we look at the \emph{product-free} Lambek calculus (\LPfree), i.e. the fragment of \L\ without multiplicative conjunction.
 Pentus showed that \LPfree\ does not enjoy Maehara interpolation, but Craig interpolation can still be proved using a more complex \emph{Maehara multi-interpolation} property \cite{Pentus1997}. We conclude our paper by establishing a proof-relevant version of Pentus' multi-interpolation and studying an appropriate equivalence of multi-interpolation tuples that implies well-definedness of the multi-interpolation procedure. 
 
 \subsection*{Formalization}
-The proof of Theorem \ref{thm:welldef:L} requires a great amount of case distinction.
-The relation $\circeq$ contains 30 generating equations and each of them requires further case analyses on the location of the interpolation context $\Delta$.
-Equation (\ref{eq:rl:comm}) alone has 15 possible subcases.
-Keeping track of all these cases is therefore error-prone.
-
-To increase our confidence in the correctness of the theorem, we formalized all cases of the result for \L\ in Agda 2.8.0.
-The formalization covers the calculus, cut admissibility, Maehara interpolation, proof-relevant interpolation, and well-definedness result discussed above; the code is available in the \href{https://anonymous.4open.science/r/code-associative-Lambek/}{repository} on Anonymous GitHub.
+% The proof of Theorem \ref{thm:welldef:L} requires a great amount of case distinction.
+% The relation $\circeq$ contains 30 generating equations and each of them requires further case analyses on the location of the interpolation context $\Delta$.
+% Equation (\ref{eq:rl:comm}) alone has 15 possible subcases.
+% Keeping track of all these cases is therefore error-prone.
+To increase our confidence in the correctness of the theorems, we formalized the following results for \L: the calculus, cut admissibility (Theorem \ref{thm:cut}), Maehara interpolation (Theorem \ref{thm:MIP}), proof-relevant interpolation (Theorem \ref{thm:cut:intrp:L}), and well-definedness (Theorem \ref{thm:welldef:L}). The code is available in the \href{https://anonymous.4open.science/r/code-associative-Lambek/}{repository} on Anonymous GitHub.
 
 We postulate that, if $g \circeq g'$, then $\cut\ (f,g) \circeq \cut\ (f,g')$. We expect the proof to follow the same induction-and-case-analysis pattern as Theorem \ref{thm:welldef:L}.
 
@@ -227,8 +227,8 @@ The whole project type-checks in 5 minutes on an M2 Pro MacBook Pro 16-inch with
 \section{Sequent Calculus of Lambek Calculus}\label{sec:seqcalc}
 We briefly recall the sequent calculus for the Lambek calculus (\L), especially the effective procedures for proving cut admissibility \cite{moot:categorial:2012} and Maehara interpolation \cite{roorda1991,ono:proof:nonclassical:1998,moot:categorial:2012}, which will be employed in later sections.
 
-Formulae of \L\ are inductively generated by the grammar (\agdaref{Fma.agda\#L23})
-$$A, B ::= X \ | \ A \Rarr B \ | \ B \Larr A \ | \ A \ot B$$
+Formulae of \L\ are inductively generated by the grammar (\agdaref{Fma.agda\#L23}):
+\[A, B ::= X \ | \ \I \ | \ A \Rarr B \ | \ B \Larr A \ | \ A \ot B\]
 where $X$ is drawn from a set $\mathsf{At}$ of atomic formulae, ${\Rarr}$ and ${\Larr}$ are implications/residuals and ${\ot}$ is fusion/multiplicative conjunction.
 Sequents in \L\ have the form $\GG \vd C$ where the antecedent (or context) $\GG$ is a (possibly empty) list of formulae and $C$ is a single formula.
 %In the rest of the paper, we sometimes call $\GG$ a context.
