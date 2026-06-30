@@ -179,26 +179,26 @@ The triple $(D,g,h)$ consisting of a formula $D$ and derivations $g$ and $h$ out
 %We call $(D , g : \GG , D , \GL \vd C , h : \GD \vd D)$ the interpolation triple of $f : \GG , \GD , \GL \vd C$ if it is obtained by applying \MIP\ on $f$.
  
 Traditionally, the Maehara interpolation property gives an interpolation triple $(D,g,h)$, but it does not say how the input derivation relates to this triple.
-In this work, we are interested in a \emph{proof-relevant} version of  Maehara interpolation, also known as \emph{Maehara-\cub\ interpolation}, that exhibits such a relationship.
+In this work, we are interested in a \emph{proof-relevant} version of Maehara interpolation, also known as \emph{Maehara-\cub\ interpolation}, that exhibits such a relationship.
 In \L, proof-relevant interpolation states that, if the interpolation procedure on $f$ produces an interpolation triple $(D,g,h)$, then $\cut \ (h , g) \circeq f$.
 Here $\cut \ (h,g)$ denotes the cut-free derivation produced from $h$ and $g$ by the cut-admissibility procedure.
-% In other words, the interpolation procedure is a right inverse of the admissible cut, up to $\circeq$.
-This line of work has been initiated in the 90s by \cub~\cite{vcubric1993results,Cubric1994}, who proved proof-relevant interpolation for the simply typed $\lambda$-calculus with sum types,
+In \cite{Saurin2024}, this is understood as the introduction of instances of cut.
+The equivalence between $\cut (h , g)$ and $f$ shows that such cut-introduction is safe at the level of proof equivalence.
+This line of work was initiated in the 90s by \cub~\cite{vcubric1993results,Cubric1994}, who proved proof-relevant interpolation for the simply typed $\lambda$-calculus with sum types,
 %and its relation to categorical models.
 and has been recently revived by Saurin, who proved proof-relevant interpolation for (extensions) of classical linear logic \cite{Saurin2024} and considered generalizations to sequent calculi with primitive cut rule and to proof nets \cite{Saurin2025}.
 Veltri and Wan studied proof-relevant interpolation for a semi-associative fragment of \L~\cite{VW2025}, as well as for the nonassociative Lambek calculus (\NL) \cite{VW2025Tableaux}.
 
-In \cite{VW2025Tableaux}, Veltri and Wan also raised the question of \emph{well-definedness} of the Maehara interpolation procedure.
-When a deductive system comes equipped with an equivalence of derivations $\circeq$, so that equivalent proofs are to be considered equal, then the interpolation procedure should send equivalent derivations to equivalent interpolation triples.
-But what is the right notion of equivalence for these triples that makes the interpolation procedure well-defined?
-For \NL, Veltri and Wan showed that two interpolation triples $(D , g, h)$ and $(D' , g', h')$ can be considered equivalent if $D = D'$, $g \circeq g'$ and $h \circeq h'$ \cite{VW2025Tableaux}. In particular, the interpolant formulae $D$ and $D'$ produced by equivalent derivations $f \circeq f'$ are the same.
-%Then a question arises: is the equivalence of derivations preserved by \MIP? In other words, for any $f$ and $f'$, if $f \circeq f'$, then are their interpolation triples are equivalent? We call this \emph{well-definedness} of \MIP.
-%In \NL, the answer is positive and the definition of equivalent interpolation triples is appropriate. 
-
-However, this notion of equivalence of interpolation triples is not appropriate in \L. It is possible to show that there exist equivalent derivations $f \circeq f'$ that have distinct interpolation formulae $D \not= D'$. Moreover, $D$ and $D'$ may not be logically equivalent, e.g.\ the pair of equivalent derivations in (\ref{eq:ct:example}) has distinct and logically inequivalent interpolation formulae.
-%Consider the example equation of derivations $\tr \ (\Rl \ (f , f'),f'') \circeq \Rl \ (f, \tr \ (f',f''))$ in (\ref{eq:ct:example}). The interpolant formulae of the two derivations are $(D \Rarr E) \ot F$ and $D \Rarr (E \ot F)$, respectively.
-%Therefore it leads to a more relaxed equivalence on interpolation triples.
-We therefore propose a different \emph{zig-zag} equivalence of interpolation triples which implies the well-definedness of the interpolation procedure in \L. The equivalence of triples $(D , g, h) \sim (D' , g', h')$ is the symmetric transitive closure of the relation stating that there exists a derivation $t : D \vd D'$ such that $g \circeq \cut \ (t , g')$ and $\cut \ (h , t) \circeq h'$.
+In this paper, we generalize this analysis to the associative Lambek calculus.
+We also ask what is invariant under the interpolation procedure when the input derivation is changed by proof equivalence.
+We call this the \emph{well-definedness} of Maehara's interpolation procedure.
+For \NL, Veltri and Wan showed that the invariant is the interpolant formula itself \cite{VW2025Tableaux}.
+Equivalent derivations produce the same interpolant formula, up to the expected equivalence of the accompanying derivations.
+In \L\ this is no longer true.
+Equivalent derivations may produce different, and even logically inequivalent, interpolant formulae, e.g.\ the pair of equivalent derivations in (\ref{eq:ct:example}) has distinct and logically inequivalent interpolation formulae.
+We therefore propose a \emph{zig-zag} equivalence of interpolation triples which implies the well-definedness of the interpolation procedure in \L.
+The equivalence of triples $(D , g, h) \sim (D' , g', h')$ is the symmetric transitive closure of the relation stating that there exists a derivation $t : D \vd D'$ such that $g \circeq \cut \ (t , g')$ and $\cut \ (h , t) \circeq h'$.
+Thus the well-definedness result identifies the level at which Maehara interpolation remains canonical in the associative setting.
 
 Finally, we look at the \emph{product-free} Lambek calculus (\LPfree), i.e. the fragment of \L\ without multiplicative conjunction.
 Pentus showed that \LPfree\ does not enjoy Maehara interpolation, but Craig interpolation can still be proved using a more complex \emph{Maehara multi-interpolation} property \cite{Pentus1997}. We conclude our paper by establishing a proof-relevant version of Pentus' multi-interpolation and studying an appropriate equivalence of multi-interpolation tuples that implies well-definedness of the multi-interpolation procedure. 
@@ -798,8 +798,8 @@ This is the smallest congruence relation generated by the following equations: %
 % \caption{Examples of $\eta$-expansion and permutative conversions}
 % \label{fig:conv}
 % \end{figure}
-The admissible cut rule is proved to satisfy a number of equivalences (\agdaref{CutProperties.agda\#L258}), stating that $\cut$ commutes with left introduction rules in the first premise up to $\circeq$, e.g.
-$\cut\ (\Rl \ (f' , f''), g) \circeq \Rl \ (f',\cut \ (f'',g))$.
+The admissible cut rule is proved to satisfy a number of equivalences , stating that $\cut$ commutes with left introduction rules in the first premise up to $\circeq$, e.g.
+$\cut\ (\Rl \ (f' , f''), g) \circeq \Rl \ (f',\cut \ (f'',g))$ (\agdaref{CutProperties.agda\#L319}).
 The analogous equivalences hold for $\Ll$ and $\tl$.
 The congruence relation $\circeq$ does not include generating equations for $\beta$-equivalences, but these are visible in the cut admissibility theorem, they are the \emph{syntactic equalities} in (\ref{eq:beta}).
 
@@ -2191,8 +2191,11 @@ This is achieved by providing an appropriate equivalence relation quotienting th
 An interesting finding is the discrepancy between non-associative and associative Lambek calculi wrt. equivalence of interpolation triples.
 In \NL, the equivalence of interpolation triples is strict, i.e.\ the interpolant formulae are exactly the same and the derivations are pairwise equivalent.
 In \L, we have to introduce a more relaxed zig-zag equivalence relation, and an even more complex relation in \LPfree. 
-At first glance the zig-zag relation might look quite unusual, but it is actually very natural from a category-theoretic perspective, since it characterizes the collection of interpolation triples as some kind of colimit/coend \cite{Loregian_2021}. We plan to expand on this categorical characterization in future work.
 
+At first glance the zig-zag relation might look quite unusual, but it is actually very natural from a category-theoretic perspective, since it characterizes the collection of interpolation triples as some kind of colimit/coend \cite{Loregian_2021}.
+The sequent calculus of \L\ presents a multicategory, where derivations are multimorphisms and admissible cut is the composition of multimorphisms.
+From this perspective, the statement of Maehara interpolation is reminiscent of Roman's \emph{malleable multicategory} \cite{Roman2023}.  Interpolation triples can be viewed as factorizations of a multimorphism through an intermediate object, and the zig-zag equivalence is the appropriate quotient of such factorizations. 
+We plan to expand on this categorical characterization in future work.
 %The definitions and results we had in this work, including \MIP\ (\MmIP) being a right inverse of the admissible cut, definition of equivalence of interpolation triples (quadruples), and \MIP\ (\MmIP) being well-defined wrt.\ $\circeq$ can all be generalized to Lambek calculus with multiplicative unit and additive multiplication, disjunction and their units.
 
 For the future, it will be interesting to see the computational behavior of equivalent interpolation triples for Lambek calculus.
@@ -2202,6 +2205,7 @@ Equivalent interpolation triples of two closed terms $\Gl x.t,\Gl x. t' : A \to 
 The term assignment calculus will be a variant of Curien-Herbelin's $\lambda\mu\tilde{\mu} $ calculus \cite{Curien2000}.
 We would also like to study the well-definedness of interpolation triples in more permissive systems, e.g.\ sequent calculi with cuts \cite{Saurin2025} and the calculi with complete Maehara interpolation procedures \cite{Hetzl2024}.
 It will also be interesting to have a general theory on well-definedness of families of calculi from the universal proof-theoretic perspective \cite{tabatabai2018,Tabatabai2025}.
+
 % For the future, it will be interesting to see what should be the correct notion of equivalence on interpolation triples for the complete calculi in the sense of Hetzl and Jalali \cite{Hetzl2024}. 
 
 % will the interpolation triples in complete calculi by \cite{Hetzl2024} are just collection of logically equivalent formulae?
