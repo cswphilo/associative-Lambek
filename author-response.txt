@@ -30,7 +30,7 @@ In the proofs of Theorem 4 and 7, we only show one of the many possible cases fo
 
 The zig-zag is necessary because equivalent derivations need not produce interpolant formulae that are connected by a simple, directed chain of derivations. In particular, there are equivalent derivations whose interpolants do not imply each other, but can imply or be implied by the interpolant extracted from a third equivalent derivation.
 
-For example, we found two equivalent derivations f and f', to which Maehara's method assign interpolant formulae ((D₀ ⇒ E₀) ⊗ F₀) ⊗ ((D₁ ⊗ F₁) ⇐ E₁) and (D₀ ⇒ (E₀ ⊗ F₀)) ⊗ (D₁ ⊗ (F₁ ⇐ E₁)), respectively. These formulae do not imply each other. However, they are both implied by ((D₀ ⇒ E₀) ⊗ F₀) ⊗ ((D₁ ⊗ F₁) ⇐ E₁), which is the interpolant formula of another derivation f'' equivalent to both f and f'.
+For example, we found two equivalent derivations f and f', to which Maehara's method assign interpolant formulae ((D₀ ⇒ E₀) ⊗ F₀) ⊗ ((D₁ ⊗ F₁) ⇐ E₁) and (D₀ ⇒ (E₀ ⊗ F₀)) ⊗ (D₁ ⊗ (F₁ ⇐ E₁)), respectively. These formulae do not imply each other. However, they are both implied by (D₀ ⇒ (E₀ ⊗ F₀)) ⊗ ((D₁ ⊗ F₁) ⇐ E₁), which is the interpolant formula of another derivation f'' equivalent to both f and f'.
 
 We will add this concrete example motivating the need of zig-zags after Definition 1.
 
