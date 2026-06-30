@@ -136,7 +136,7 @@
 \begin{abstract}
 This work investigates technical aspects of the Maehara interpolation property and Maehara's method, typically employed as an effective proof-theoretic method for establishing Craig interpolation in substructural logics.
   %that pushes a step further from ordinary Maehara (multi-)interpolation in the literature.
-  We show that, in the sequent calculus formulation of Lambek calculus, the admissible cut rule is a left inverse of the procedure underlying Maehara's methods, a property recently named ``proof-relevant'' or ``Maehara-Čubrić'' interpolation.
+  We show that, in the sequent calculus formulation of Lambek calculus, the Maehara interpolation procedure is a right inverse of the admissible cut rule, a property recently named ``proof-relevant'' or ``Maehara-Čubrić'' interpolation.
   %which recently is also known as Maehara-Čubrić interpolation.
   We also prove that the interpolation procedure is well-defined wrt.\ a natural notion of equivalence of derivations.
   This is done by imposing an appropriate ``zig-zag'' equivalence relation on %interpolation triples, i.e.
@@ -214,7 +214,7 @@ To increase our confidence in the correctness of the theorems, we formalized the
 
 We postulate that, if $g \circeq g'$, then $\cut\ (f,g) \circeq \cut\ (f,g')$. We expect the proof to follow the same induction-and-case-analysis pattern as Theorem \ref{thm:welldef:L}.
 
-The formalization was implemented in collaboration with Anthropic Claude Opus 4.8 and OpenAI GPT 5.5.
+% The formalization was implemented in collaboration with Anthropic Claude Opus 4.8 and OpenAI GPT 5.5.
 The whole project type-checks in 5 minutes on an M2 Pro MacBook Pro 16-inch with 32GB RAM.
 %\paragraph{Contributions} In this paper, we establish the following results: 
 %\begin{enumerate}
@@ -502,9 +502,9 @@ The sequent calculus has an underlying \emph{multicategory} \cite{Lambek1969} wi
 %  For example, if $\GD$ is contained in $\GD'$, i.e.\
   Then $\GD'$ is of the form  $\GD'_0 , \GD , \GD'_1$ and the recursive call on $f'$ gives
   $$\mf{mip}\ (\GD,f') = (D,\ \ g' : \GD'_0 , D , \GD'_1 \vd A,\ \ h' : \GD \vd D)$$
-  with $\vars{D} \in \vars{\GD} \cap \vars{\GD'_0, \GD'_1,A}$.
+  with $\vars{D} \subseteq \vars{\GD} \cap \vars{\GD'_0, \GD'_1,A}$.
   Then $\mf{mip}\ (\GD,f) = (D,g,h')$ where $g = \Rl \ (g' , f'')$.
-  The variable condition is satisfied since $\vars{D} \in \vars{\GD'_0, \GD'_1,A} \subseteq \vars{\GD'_0, \GD'_1,A\Rarr B, C}$.
+  The variable condition is satisfied since $\vars{D} \subseteq \vars{\GD'_0, \GD'_1,A} \subseteq \vars{\GD'_0, \GD'_1,A\Rarr B, C}$.
 %   \[
 %     \begin{array}{c}
 %     g = \proofbox{
@@ -567,7 +567,7 @@ Case $(v)$: $\GD$ splits between $\GG'$ and $\GD'$. This implies that $\GG'$ has
   \end{equation}
  % The variable condition is easy to check.
 
-  Case $(vi)$: $\GD$ splits between $\GD'$ and $\GL'$ and contains $A \Rarr B$. Then $\GD'$ has the form $\GD'_0 , \GD'_1$ and $\GL'$ has the form $\GL'_0 , \GD'_1$ so that $\GD = \GD'_1 , A \Rarr B , \GL'_0$.
+  Case $(vi)$: $\GD$ splits between $\GD'$ and $\GL'$ and contains $A \Rarr B$. Then $\GD'$ has the form $\GD'_0 , \GD'_1$ and $\GL'$ has the form $\GL'_0 , \GL'_1$ so that $\GD = \GD'_1 , A \Rarr B , \GL'_0$.
   The recursive calls on $f'$ and $f''$ give
   \[
   \begin{array}{l}
@@ -1631,7 +1631,7 @@ Given a list of contexts $[\GD_1,\dots,\GD_n]$, we say that it \emph{partitions}
   \begin{itemize}
   \item a list of contexts $[\GG'_{1_1}, \dots , \GG'_{1_m}]$ partitioning $\GG'_1$,
   \item formulae $E_1, \dots,E_m$,
-  \item a derivation $g'' : \GG'_0 , E_1, \dots,E_m, B , \GL' \vd A$,
+  \item a derivation $g'' : \GG'_0 , E_1, \dots,E_m, B , \GL' \vd C$,
   \item derivations $h''_j : \GG'_{1j} \vdash E_j$ for $j\in\{1,\dots,m\}$ such that
   \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG'_0 , B , \GL' , C}$
   \end{itemize}
@@ -1655,19 +1655,19 @@ Given a list of contexts $[\GD_1,\dots,\GD_n]$, we say that it \emph{partitions}
   \item a list of contexts $\GD'_{0_1}, \dots , \GD'_{0_n}$ partitioning $\GD'_0$,
   \item formulae $D_1,\dots,D_n$,
   \item a derivation $g' : D_1,\dots,D_n , \GD'_1 \vd A$,
-  \item derivations $h'_i : \GD'_{0_i} \vdash D_i$ for $\in \{1,\dots,n\}$ such that
+  \item derivations $h'_i : \GD'_{0_i} \vdash D_i$ for $i \in \{1,\dots,n\}$ such that
   \item $\vars{D_1 , \dots, D_n} \subseteq \vars{\GD'_0} \cap \vars{\GD'_1, A}$
   \end{itemize}
   \begin{itemize}
   \item a list of contexts $\GL'_{0_1}, \dots , \GL'_{0_m}$ partitioning $\GL'_0$, where $\GL'_{0_j}$ has the form $B , \GL''_{0_1}$,
   \item formulae $E_1,\dots,E_m$ for $j\in\{1,\dots,m\}$,
-  \item a derivation $g'' : \GG' , E_1,\dots,E_m, \GL'_1 \vd A$,
+  \item a derivation $g'' : \GG' , E_1,\dots,E_m, \GL'_1 \vd C$,
   \item derivations $h''_j : \GL'_{0_j} \vdash E_j$ for $j \in \{1,\dots,m\}$ such that
   \item $\vars{E_1 , \dots, E_m} \subseteq \vars{\GG'_1} \cap \vars{\GG,  \GL'_1 , C}$
   \end{itemize}
   % The desired partition of $\GD'_1 , A \Rarr B , \GL'_1$ is $\langle (\GD'_1, A \Rarr B , \GL''_{0_1}), \GL'_{0_2}, \dots \GL'_{0_m}\rangle$ and the list of interpolant formulae is $[[D_i] \Rs E_1 , E_2 , \dots , E_j]$. The desired derivations are $\Rsl \ ([h'_i] , g'')$ and $[\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m]$.
   % The variable condition is easy to check.
-  We return $\mf{mmip}\ (\GD,f) = (m,\vec{\GD},\vec{F},g,\vec{h})$, where the list of contexts $\vec{\GD}$ is $(\GD'_1, A \Rarr B , \GL''_{0_1}), \GL'_{0_2}, \dots \GL'_{0_m}$ (which partitions $\GD$), the interpolant formulae  $\vec{F}$ are $(D_1,\dots,D_n) \Rs E_1 , E_2 , \dots , E_j$, the derivation $g = \Rsl \ (\vec{h'} , g'')$ and derivations $\vec{h}$ are $\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m$.
+  We return $\mf{mmip}\ (\GD,f) = (m,\vec{\GD},\vec{F},g,\vec{h})$, where the list of contexts $\vec{\GD}$ is $(\GD'_1, A \Rarr B , \GL''_{0_1}), \GL'_{0_2}, \dots \GL'_{0_m}$ (which partitions $\GD$), the interpolant formulae  $\vec{F}$ are $(D_1,\dots,D_n) \Rs E_1 , E_2 , \dots , E_m$, the derivation $g = \Rsl \ (\vec{h'} , g'')$ and derivations $\vec{h}$ are $\Rsr \ (\Rl \ (g' , h''_1)), h''_2, \dots , h''_m$.
 The variable condition is easy to verify.
 \end{proof}
 %The proof of Theorem \ref{thm:MIP:LPfree} describes the construction of a function $\mf{mmip}$ producing a multi-interpolation tuple $(n,[\GD_i],[D_i],g,[h_i])$, where the lists have index $i \in \{1,\dots,n\}$, for each derivation $f : \Gamma,\Delta,\Lambda \vdash C$, in which case we write $\mf{mmip}\ (\GD,f) = (n,[\GD_i],[D_i],g,[h_i])$.
